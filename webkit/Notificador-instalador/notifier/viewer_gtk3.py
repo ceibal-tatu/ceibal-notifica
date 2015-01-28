@@ -184,7 +184,11 @@ class WebViewer:
     def __init__ (self,win):
         self.win = win
         self.view = WebKit.WebView()
-        self.win.box.pack_start(self.view, True, True, 0)
+
+        self.sw = Gtk.ScrolledWindow()
+        self.sw.add(self.view)
+        self.win.box.pack_start(self.sw, True, True, 0)
+
         self.message_mgr = Messages()
         self.current_msg = None
         self.show_msg('first')
