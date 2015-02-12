@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=CeibalNotifica
+GenericName=CeibalNotifica
+Exec=/usr/local/bin/CeibalNotifica
+Terminal=false
+Type=Application
+Icon=/usr/local/share/CeibalNotifica/Iconos/ceibal.png
+Categories=GNOME;GTK;Utility
+StartupNotify=true

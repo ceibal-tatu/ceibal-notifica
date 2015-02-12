@@ -1,0 +1,25 @@
+#! /usr/bin/python
+# -*- coding:utf-8 -*-
+#  notificador-obtener V2.0
+# Author: Matias Basso <mbasso@plan.ceibal.edu.uy>
+#-----------------------------------------------------------------------------------------
+# Obtiene las Notificaciones del Web Service. 
+# Es posible indicarle por parametro si se quiere obtener Notificaciones sin restriccion.
+#-----------------------------------------------------------------------------------------
+
+import sys
+
+# Importamos la clase W_S_Conexion para conectarons al Web Service.
+from ceibal.notifier.web_service_conexion import W_S_Conexion
+
+# Importamos las Constantes.
+from ceibal.notifier.constantes import WEB_SERVICE_URL
+
+# Realizamos la coneccion con el Web Service.
+web=W_S_Conexion(WEB_SERVICE_URL)
+
+# Verificamos los parametros de entrada. Si es on demand obtenemos las notificaciones sin restricción. 
+if len(sys.argv) > 1 and sys.argv[1] == '--on-demand':
+    web.Obtener_notificaciones(True)
+else:
+    web.Obtener_notificaciones(False)

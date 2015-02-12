@@ -1,0 +1,8 @@
+[Activity]
+name = CeibalNotifica
+activity_version = 1
+service_name = org.laptop.CeibalNotifica
+class = CeibalNotifica.CeibalNotifica
+icon = ceibal
+show_launcher = yes
+license = GPLv3+

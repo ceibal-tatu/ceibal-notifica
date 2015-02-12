@@ -1,0 +1,12 @@
+#! /usr/bin/python
+# -*- coding:utf-8 -*-
+# notificador-mostrar V2.0
+# Author: Matias Basso <mbasso@plan.ceibal.edu.uy>
+#----------------------------------------------------------------------
+# Muestra los mensajes vigentes dentro de la Base de Datos para Gnome.
+#----------------------------------------------------------------------
+
+from ceibal.notifier import Notifier
+
+n = Notifier()
+n.show_messages_from_python()
