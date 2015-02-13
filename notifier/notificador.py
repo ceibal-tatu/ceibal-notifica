@@ -200,7 +200,7 @@ if __name__ == "__main__":
     log.setLevel(logging.DEBUG)
 
     kind = len(sys.argv) > 1 and sys.argv[1] or None
-    notificar('Prueba', 'Esto es una prueba', 'dialog-warning', { 
+    notificar('Prueba', "<b>Esto</b> una <i>prueba</i>", 'dialog-warning', { 
         'Firefox': '/usr/bin/firefox',
         'Wall': 'wall foo'
     }, kind)
