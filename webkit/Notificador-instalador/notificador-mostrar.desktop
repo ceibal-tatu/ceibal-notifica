@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/sbin/notificador-mostrar-html
+Hidden=false
+Icon=100
+X-GNOME-Autostart-enable=true
+Name[es_UY]=Menajes Ceibal
+Name=Mensajes Ceibal
+Comment[es_UY]=Muestra las Notificaciones obtenidas desde ceibal

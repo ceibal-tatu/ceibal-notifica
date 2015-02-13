@@ -1,0 +1,5 @@
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DISPLAY=:0
+
+* */6 * * * root /usr/bin/python /usr/sbin/notificador-obtener

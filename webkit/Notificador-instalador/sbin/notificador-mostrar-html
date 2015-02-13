@@ -1,0 +1,23 @@
+#! /usr/bin/python
+# -*- coding:utf-8 -*-
+# notificador-mostrar V2.0
+# Author: Matias Basso <mbasso@plan.ceibal.edu.uy>
+#----------------------------------------------------------------------
+# Muestra los mensajes vigentes dentro de la Base de Datos para Gnome.
+#----------------------------------------------------------------------
+import imp
+
+def find_module(mod):
+    try:
+        imp.find_module(mod)
+    except ImportError:
+        return False
+    else:
+        return True
+    
+if find_module('gtk') and find_module('webkit'):
+    from ceibal.notifier.viewer_gtk2 import *
+else:
+    from ceibal.notifier.viewer_gtk3 import *
+
+win = VentanaBoton()

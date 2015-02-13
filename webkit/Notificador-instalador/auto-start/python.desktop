@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/python /usr/sbin/notificador-mostrar
+Hidden=false
+X-GNOME-Autostart-enabled=true
+Name[es_UY]=Notificador
+Name=Notificador
+Comment[es_UY]=Muestra Notificaciones
+Comment=Muestra Notificaciones
