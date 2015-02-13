@@ -15,6 +15,7 @@ from ceibal.notifier import env
 from ceibal.notifier.data_base import Db
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import DB_FILE,IMAGEN_NOTOFY,BTN_GENERAL,BTN_LINK,TIME_ENTRE_MSJ, TIME_ESPERA, FUNCIONES_PRIORIDAD
+from ceibal.notifier import notificador
 
 class Notifier:
     def __init__(self, db_filename=os.path.join(env.get_data_root(),DB_FILE)):
@@ -81,30 +82,7 @@ class Notifier:
             time.sleep(TIME_ENTRE_MSJ)
     
     def notify_send(self, titulo, texto, icono=None, url=None, texto_link=None):
-        '''
-        @param titulo: El titulo de la Notificacion.
-        @param texto: El texto de la Notificacion.
-        @param icono: EL icono de la Notificacion. Puede no tener.
-        @param url: La url vinculada a la Notificacion. Puede no tener.
-        @param texto_link: Texto que tendrá el vinculo.
-        
-        @summary: Funcion especifica a mandar al servicio la notificacion.
-        '''
-        
-        # Comando Bash que comunica la notificacion la servicio "notification-daemon"
-        comando="notify-send "
-        
-        if icono:
-            if url:
-                comando = comando + str("--icon="+icono) + " \"" + str(titulo) + "\" \"" + str(texto) + "\n" + str(" <a href='"+url+"'>"+texto_link+"</a>\"")
-            else:
-                comando = comando + str("--icon="+icono) + " \"" + str(titulo) + "\" \"" + str(texto) + "\""
-        else:
-            if url:
-                comando = comando + "\"" + str(titulo) + "\" \"" + str(texto) + "\n" + str(" <a href='"+url+"'>"+texto_link+"</a>\"")
-            else:
-                comando = comando + "\"" + str(titulo) + "\" \"" + str(texto) + "\""
-        os.system(comando)
+        notificador.notificar(titulo, texto, icono)
 
 if __name__ == "__main__":
     n = Notifier()
