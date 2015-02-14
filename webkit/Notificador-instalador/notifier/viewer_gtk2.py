@@ -11,6 +11,7 @@ from ceibal.notifier import env
 from ceibal.notifier.data_base import Db
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import READ_FILE,DB_FILE,IMAGEN_NOTOFY,BTN_GENERAL,BTN_LINK,TIME_ENTRE_MSJ, TIME_ESPERA, FUNCIONES_PRIORIDAD
+from os.path import expanduser
 
 
 
@@ -21,22 +22,22 @@ class Messages:
         if Messages.db is None:
             db_filename = os.path.join(env.get_data_root(),DB_FILE)        
             Messages.db = Db(db_filename)
+            self.file_name = os.path.join(expanduser("~"),READ_FILE)    
 
 
     def _save_notification_read(self, id):
-        file_name = os.path.join(env.get_data_root(),READ_FILE)    
         try:
             # Cargo el diccionario desde el archivo json
-            fp = open(file_name, "r")
+            fp = open(self.file_name, "r")
             notif_read_record = json.load(fp)
             fp.close()
             
             # Borro el archivo json
-            open(file_name,'w').close()
-            fp = open(file_name,'r+')
+            open(self.file_name,'w').close()
+            fp = open(self.file_name,'r+')
         except:
             # El archivo json no existe, lo creo.
-            fp = open(file_name, "w+")
+            fp = open(self.file_name, "w+")
             notif_read_record = {}
         
         notif_read_record[id] = 'read'
@@ -48,9 +49,8 @@ class Messages:
     def _check_notification_is_unread (self, message):
         id = str (message['id'])
         
-        file_name = os.path.join(env.get_data_root(),READ_FILE)    
         try:
-            fp = open(file_name, "r") 
+            fp = open(self.file_name, "r") 
             notif_read_record = json.load(fp)
         except:
             print "No existe el archivo de registro ...."

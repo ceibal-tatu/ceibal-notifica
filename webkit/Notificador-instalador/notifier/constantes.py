@@ -39,7 +39,7 @@ ALERTA_ERROR="No se pudieron obtener los datos \n necesarios para obtener las no
 ALERTA_SN="No se pudo obtener el Número de Serie."
 
 # Archivo que registra los messages marcados como leidos
-READ_FILE = 'files_read.json'
+READ_FILE = '.notificaciones_leidas.json'
 
 # -----------------------------------------------
 # Claves que llegan en el json del Web Service.
