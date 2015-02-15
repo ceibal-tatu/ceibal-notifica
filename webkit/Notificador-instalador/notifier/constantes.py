@@ -41,6 +41,9 @@ ALERTA_SN="No se pudo obtener el Número de Serie."
 # Archivo que registra los messages marcados como leidos
 READ_FILE = '.notificaciones_leidas.json'
 
+# Imagen del boton de notificaciones
+NOTIF_IMG_BTN = '.boton_notificaciones.png'
+
 # -----------------------------------------------
 # Claves que llegan en el json del Web Service.
 JSON_KEYS=['mensaje_id',

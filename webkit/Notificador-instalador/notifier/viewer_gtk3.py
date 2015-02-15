@@ -10,7 +10,7 @@ import time
 from ceibal.notifier import env
 from ceibal.notifier.data_base import Db
 from ceibal.notifier.utilidades import *
-from ceibal.notifier.constantes import READ_FILE,DB_FILE,IMAGEN_NOTOFY,BTN_GENERAL,BTN_LINK,TIME_ENTRE_MSJ, TIME_ESPERA, FUNCIONES_PRIORIDAD
+from ceibal.notifier.constantes import * 
 from os.path import expanduser
 
 
@@ -18,10 +18,11 @@ class Messages:
     db = None
 
     def __init__(self):
+        db_filename = os.path.join(env.get_data_root(),DB_FILE)        
+        self.file_name = os.path.join(expanduser("~"),READ_FILE)    
+       
         if Messages.db is None:
-            db_filename = os.path.join(env.get_data_root(),DB_FILE)        
             Messages.db = Db(db_filename)
-            self.file_name = os.path.join(expanduser("~"),READ_FILE)    
 
 
     def _save_notification_read(self, id):
@@ -127,6 +128,8 @@ class VentanaBoton(Gtk.Window):
 
     def __init__(self):
         Gtk.Window.__init__(self, title="Notificador de novedades Ceibal")
+        self.image_btn = os.path.join (expanduser("~"),NOTIF_IMG_BTN)
+        
         self.message_mgr = Messages()
         
         #Evita que aparezca en la lista de ventanas
@@ -145,10 +148,16 @@ class VentanaBoton(Gtk.Window):
 
 
     def create_button(self):
-        self.button = Gtk.Button(label="Novedades Ceibal")
+        self.button = Gtk.Button()
         self.button.connect("clicked", self.on_button_clicked)
+        
+        image = Gtk.Image()
+        image.set_from_file(self.image_btn)
+        image.show()
+        self.button.add(image)
+        
         self.add(self.button)
-
+    
     def on_button_clicked(self, widget):
         visor = Visor()
 
