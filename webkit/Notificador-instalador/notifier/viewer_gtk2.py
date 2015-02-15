@@ -139,11 +139,11 @@ class VentanaBoton(gtk.Window):
             return
     
         self.set_decorated(False)
-        self.move(950,20)
         self.set_accept_focus(False)
         self.connect("delete-event", gtk.main_quit)
         self.create_button()
         self.show_all()
+        self.move(gtk.gdk.screen_width()- self.get_size()[0] ,0)
         gtk.main()
 
 
@@ -177,12 +177,12 @@ class Visor(gtk.Window):
         self.set_decorated(False)
 
         self.resize(400,300)
-        self.move(900,20)
         self.set_accept_focus(False)
         self.box = gtk.VBox(spacing=6)
         self.add(self.box) 
         self.tool_bar    = ToolBar(self)
         self.html_viewer = WebViewer(self)
+        self.move(gtk.gdk.screen_width()- self.get_size()[0] ,0)
         self.show_all()
 
 

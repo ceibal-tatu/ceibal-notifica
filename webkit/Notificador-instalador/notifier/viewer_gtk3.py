@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from gi.repository import WebKit
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GObject
 import os
 import json
@@ -139,13 +140,15 @@ class VentanaBoton(Gtk.Window):
             return
     
         self.set_decorated(False)
-        self.move(950,20)
+
         self.set_accept_focus(False)
         self.connect("delete-event", Gtk.main_quit)
         self.create_button()
         self.show_all()
+        # especificar un tamanio fijo para la ventana si se quiere
+        # mover esta seccion antes del show_all
+        self.move(Gdk.Screen.get_default().get_width() - self.get_size()[0] ,0)
         Gtk.main()
-
 
     def create_button(self):
         self.button = Gtk.Button()
@@ -177,7 +180,8 @@ class Visor(Gtk.Window):
         self.set_decorated(False)
 
         self.resize(400,300)
-        self.move(900,20)
+        self.move(Gdk.Screen.get_default() - self.get_size()[0] ,0)
+
         self.set_accept_focus(False)
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.add(self.box) 
