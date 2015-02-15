@@ -122,6 +122,11 @@ else
     cp notificador-mostrar.desktop /home/$usuario/.config/autostart
     chown $usuario:$usuario /home/$usuario/.config/autostart/notificador-mostrar.desktop
 fi
+echo "*"
+echo "*"
+echo "* AGREGO la imagen del boton ..."
+echo "*"
+    cp boton_notificaciones.png /home/$usuario/.boton_notificaciones.png
 
 echo "*****************************************************************************"
 echo "*************************  TERMINO LA INSTALACION  **************************"
