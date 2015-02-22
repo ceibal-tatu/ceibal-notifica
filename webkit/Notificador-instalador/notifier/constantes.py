@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS "notifications" ("id" INTEGER PRIMARY KEY NOT NULL,
 #-----------------------------------------------------------------------------------------
 #---------------- Constantes usadas en utilidades.py -------------------------------------
 
-LISTA_XO=["XO-1","XO-1.5","XO-1.5HS","XO-1.5-Lite","XO-1.75","XO-4 Touch"]
+LISTA_XO=["XO-1","XO-1.5","XO-1.5HS","XO-1.5-Lite","XO-1.75","XO-4Touch"]
 LISTA_CLASSMATE=["MG1","MG2","MG3","MG4","MG6","JumPC","Magallanes2"]
 LISTA_POSITIVO=["Positivo BGH"]
 
