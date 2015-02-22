@@ -90,6 +90,8 @@ class WebViewer:
         self.win = win
         self.view = WebKit.WebView()
 
+        self.view.connect("navigation-policy-decision-requested", self.navigate)
+
         self.sw = Gtk.ScrolledWindow()
         self.sw.add(self.view)
         self.win.box.pack_start(self.sw, True, True, 0)
@@ -116,6 +118,26 @@ class WebViewer:
     
     def set_msg_read(self):
         self.message_mgr.set_read(self.current_msg)
+
+
+    def navigate(self, view, frame, request, action, decision):
+        
+        print "Llamar al navegador para abrir link"
+        """
+        uri = request.get_uri()
+        if (uri.startswith("notesmd://")):
+            decision.ignore()
+            uri = request.get_uri().replace("notesmd://", "").replace("[", "").replace("]", "")
+            subprocess.call(["gnome-open", uri])
+            return True
+        if (uri.startswith("basket:")):
+            decision.ignore()
+            uri = request.get_uri().replace("basket:", "")
+        """      
+        return False
+
+
+
 
 class ToolBar(Gtk.Toolbar):
     
