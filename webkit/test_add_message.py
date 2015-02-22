@@ -4,8 +4,8 @@ from ceibal.notifier.constantes import DIC_KEYS
 
 base = Db()
 
-html_txt1 = "<html><header><body>texto del mensaje 1...</body></header></html>"
-html_txt2 = "<html><header><body>texto del mensaje 2...</body></header></html>"
+html_txt1 = "<html><header><body><h1>TITULO 1</h1> <h2>texto del mensaje 1...</h2></body></header></html>"
+html_txt2 = "<html><header><body><h1 style='font-size:1.5em'>TITULO 2</h1> <h2 style='font-size:1.2em'>texto del mensaje 2...</h2></body></header></html>"
 html_txt3 = "<html><header><body>texto del mensaje 3...</body></header></html>"
 html_txt4 = "<html><header><body>texto del mensaje 4...</body></header></html>"
 html_txt5 = "<html><header><body>texto del mensaje 5...</body></header></html>"
