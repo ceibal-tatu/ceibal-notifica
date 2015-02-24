@@ -55,6 +55,8 @@ class VentanaBoton(gtk.Window):
 class Visor(gtk.Window):
  
     def __init__(self):
+        self.width  = 400
+        self.height = 300
         #GObject.threads_init()
         gtk.Window.__init__(self)
 
@@ -64,9 +66,9 @@ class Visor(gtk.Window):
         # Decorators
         self.set_decorated(False)
 
-        self.resize(400,300)
+        self.resize(self.width,self.height)
         self.set_accept_focus(False)
-        self.box = gtk.VBox(spacing=6)
+        self.box = gtk.VBox()
         self.add(self.box) 
         self.tool_bar    = ToolBar(self)
         self.html_viewer = WebViewer(self)
@@ -82,24 +84,28 @@ class WebViewer:
         self.view = webkit.WebView()
          
         self.sw = gtk.ScrolledWindow()
+        self.sw.set_size_request(0,(self.win.height - 20))
         self.sw.add(self.view)
         self.btn_leido = self.create_btn_leido() 
-
-        self.fixed = gtk.Fixed()
-        self.fixed.put(self.sw,0,0)
-        self.fixed.put(self.btn_leido, 80,80)
-    
-        self.win.box.pack_start(self.fixed, True, True, 0)
+        
+        self.win.box.pack_start(self.sw, True, True, 0)
+        self.win.box.pack_start(self.btn_leido, True, True, 0)
         
         self.message_mgr = Messages()
         self.current_msg = None
         self.show_msg('first')
     
     def create_btn_leido(self):
-        button = gtk.Button()
-        button.set_label ('Marcar como Leido')
+        button = gtk.ToggleButton(label='Marcar como Leido')
+        button.connect("toggled", self.btn_leido_cb, "Boton leido presionado")
         return button
-    
+
+    def btn_leido_cb(self, widget, data=None):
+        if widget.get_active():
+            widget.set_label('Leido')
+        else:
+            widget.set_label ('Marcar como Leido')
+        
          
     def show_msg (self, pos):
         
