@@ -24,25 +24,27 @@ echo "*"
 echo "*"
 echo "* VERIFICANDO E INSTALANDO SISTEMA DE NOTIFICACIONES ..."
 if [ "$SO" = "Fedora" ];then
-    if [[ -d /usr/lib/python2.7/site-packages/ceibal ]]; then
-        cp -r notifier /usr/lib/python2.7/site-packages/ceibal
-        chmod -R 755 /usr/lib/python2.7/site-packages/ceibal/notifier
-    else
-    	echo
-    	echo "* - No se pudieron instalar los archivos del notifier"
-	fi
+    if [[ ! -d /usr/lib/python2.7/site-packages/ceibal ]]; then
+        cp -r ceibal /usr/lib/python2.7/site-packages
+    fi
+    cp -r notifier /usr/lib/python2.7/site-packages/ceibal
+    chmod -R 755 /usr/lib/python2.7/site-packages/ceibal/notifier
 else
-	if [[ -d /usr/lib/python2.7/dist-packages/ceibal ]]; then
-    	    cp -r notifier /usr/lib/python2.7/dist-packages/ceibal
-    	    chmod -R 755 /usr/lib/python2.7/dist-packages/ceibal/notifier
-    else
-    	if [[ -d /usr/lib/python2.6/dist-packages/ceibal ]]; then
-    		cp -r notifier /usr/lib/python2.6/dist-packages/ceibal
-    	    chmod -R 755 /usr/lib/python2.6/dist-packages/ceibal/notifier
-    	else
-    		echo
-    		echo "* - No se pudieron instalar los archivos del notifier"
+	if [[ -d /usr/lib/python2.7 ]]; then
+	    if [[ ! -d /usr/lib/python2.7/dist-packages/ceibal ]]; then
+    	    cp -r ceibal /usr/lib/python2.7/dist-packages
         fi
+        cp -r notifier /usr/lib/python2.7/dist-packages/ceibal
+        chmod -R 755 /usr/lib/python2.7/dist-packages/ceibal/notifier
+	elif [[ -d /usr/lib/python2.6 ]]; then
+    	if [[ ! -d /usr/lib/python2.6/dist-packages/ceibal ]]; then
+    		cp -r ceibal /usr/lib/python2.6/dist-packages
+        fi
+        cp -r notifier /usr/lib/python2.6/dist-packages/ceibal
+        chmod -R 755 /usr/lib/python2.6/dist-packages/ceibal/notifier
+    else
+        echo
+        echo "* - No se pudieron instalar los archivos del notifier"
 	fi
 fi
 echo "*"
