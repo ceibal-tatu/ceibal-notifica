@@ -63,6 +63,9 @@ class VentanaBoton(Gtk.Window):
 class Visor(Gtk.Window):
  
     def __init__(self):
+        self.width = 400
+        self.height = 300
+
         #GObject.threads_init()
         Gtk.Window.__init__(self, title="Visor de novedades Ceibal")
 
@@ -72,7 +75,7 @@ class Visor(Gtk.Window):
         # Decorators
         self.set_decorated(False)
 
-        self.resize(400,300)
+        self.resize(self.width,self.height)
         self.move(Gdk.Screen.get_default().get_width() - self.get_size()[0] ,0)
 
         self.set_accept_focus(False)
@@ -88,11 +91,9 @@ class WebViewer:
 
     def __init__ (self,win):
         self.win = win
-        overlay = Gtk.Overlay()
-        
         self.view = WebKit.WebView()
-
         self.sw = Gtk.ScrolledWindow()
+        self.sw.set_size_request(0,(self.win.height - 20))
         self.sw.add(self.view)
         
         self.btn_leido = self.create_btn_leido()
