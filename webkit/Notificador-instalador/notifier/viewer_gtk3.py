@@ -93,18 +93,12 @@ class WebViewer:
         self.view = WebKit.WebView()
 
         self.sw = Gtk.ScrolledWindow()
-        self.sw.set_halign(Gtk.Align.START) 
-        self.sw.set_valign(Gtk.Align.START) 
-        
         self.sw.add(self.view)
         
-        overlay.add(self.sw)
-
         self.btn_leido = self.create_btn_leido()
-        self.btn_leido.set_halign(Gtk.Align.END) 
-        self.btn_leido.set_valign(Gtk.Align.END) 
-        overlay.add(self.btn_leido)
-        self.win.box.pack_start(overlay, True, True, 0)
+        
+        self.win.box.pack_start(self.sw, True, True, 0)
+        self.win.box.pack_start(self.btn_leido, True, True, 0)
         
         
         self.message_mgr = Messages()
@@ -112,9 +106,15 @@ class WebViewer:
         self.show_msg('first')
         
     def create_btn_leido(self):
-        button = Gtk.Button()
-        button.set_label ('Marcar como Leido')
+        button = Gtk.ToggleButton(label='Marcar como Leido')
+        button.connect("toggled", self.btn_leido_cb, "Boton leido presionado")
         return button
+
+    def btn_leido_cb(self, widget, data=None):
+        if widget.get_active():
+            widget.set_label('Leido')
+        else:
+            widget.set_label ('Marcar como Leido')
 
      
     def show_msg (self, pos):
