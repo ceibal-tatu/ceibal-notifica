@@ -91,7 +91,8 @@ class WebViewer:
         self.view = WebKit.WebView()
 
         self.view.connect("navigation-policy-decision-requested", self.navigate)
-
+        self.view.set_full_content_zoom(True)
+        
         self.sw = Gtk.ScrolledWindow()
         self.sw.add(self.view)
         self.win.box.pack_start(self.sw, True, True, 0)
@@ -115,7 +116,8 @@ class WebViewer:
             self.current_msg = current_msg
             self.win.tool_bar.clean_read_check()
             self.view.load_string(self.current_msg['html'], 'text/html', 'UTF-8','/')
-    
+            print "decremento zoom .."
+            self.view.zoom_out()
     def set_msg_read(self):
         self.message_mgr.set_read(self.current_msg)
 
@@ -134,7 +136,7 @@ class WebViewer:
             decision.ignore()
             uri = request.get_uri().replace("basket:", "")
         """      
-        return False
+        return True
 
 
 
