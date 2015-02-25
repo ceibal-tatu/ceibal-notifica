@@ -21,7 +21,7 @@ class Messages:
         self.file_name = os.path.join(expanduser("~"),READ_FILE)    
 
 
-    def _save_notification_read(self, id):
+    def _save_notification_status(self, id, status):
         try:
             # Cargo el diccionario desde el archivo json
             fp = open(self.file_name, "r")
@@ -36,7 +36,7 @@ class Messages:
             fp = open(self.file_name, "w+")
             notif_read_record = {}
         
-        notif_read_record[id] = 'read'
+        notif_read_record[id] = status
         json.dump(notif_read_record, fp)
         fp.flush()
         fp.close()
@@ -140,7 +140,9 @@ class Messages:
                 return msg_prev
  
         return msg_prev 
-       
+
+    def is_unread(self, msg):
+        return self._check_notification_is_unread(msg) 
    
     def get_all(self):
         return Messages.db.get_messages({})
@@ -150,5 +152,8 @@ class Messages:
         return ('file://' + os.path.join(wdir, 'message.html'))
     
     def set_read(self, message):
-        self._save_notification_read(message['id'])
+        self._save_notification_status(message['id'], 'read')
+    
+    def set_unread(self, message):
+        self._save_notification_status(message['id'], 'unread')
 
