@@ -27,10 +27,6 @@ class VentanaBoton(Gtk.Window):
         #Evita que aparezca en la lista de ventanas
         self.set_skip_taskbar_hint(True)
         
-        if self.message_mgr.get_first_unread() is None:
-            print "No hay mensajes o estan todos leidos ..."
-            return
-    
         self.set_decorated(False)
 
         self.set_accept_focus(False)
@@ -77,6 +73,7 @@ class Visor(Gtk.Window):
 
         self.set_accept_focus(False)
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self.message_mgr = Messages()
         self.add(self.box) 
         self.tool_bar    = ToolBar(self)
         self.html_viewer = WebViewer(self)
@@ -99,8 +96,6 @@ class WebViewer:
         
         self.win.box.pack_start(self.sw, True, True, 0)
         self.win.box.pack_start(self.btn_leido, True, True, 0)
-        
-        self.message_mgr = Messages()
         self.current_msg = None
         
     def create_btn_leido(self):
@@ -110,31 +105,43 @@ class WebViewer:
 
     def btn_leido_cb(self, widget, data=None):
         if widget.get_active():
-            self.set_msg_read()
+            self.win.message_mgr.set_read(self.current_msg)
             widget.set_label('Leido')
         else:
+            self.win.message_mgr.set_unread(self.current_msg)
             widget.set_label ('Marcar como Leido')
 
+    def update_read_button(self, msg):
+        if self.win.message_mgr.is_unread(msg):
+            self.btn_leido.set_active(False)        
+        else:     
+            self.btn_leido.set_active(True)        
      
     def show_msg (self, pos):
+        if self.current_msg is None:
+            self.current_msg = self.win.message_mgr.get_first()
 
+        
         if pos == 'next':
-            current_msg = self.message_mgr.get_next_unread(self.current_msg) if (self.mode == 'unread') else self.message_mgr.get_next(self.current_msg)
+            current_msg = self.win.message_mgr.get_next_unread(self.current_msg) if (self.mode == 'unread') else self.win.message_mgr.get_next(self.current_msg)
         elif pos == 'prev':
-            current_msg = self.message_mgr.get_prev_unread(self.current_msg) if (self.mode == 'unread') else self.message_mgr.get_prev(self.current_msg)
+            current_msg = self.win.message_mgr.get_prev_unread(self.current_msg) if (self.mode == 'unread') else self.win.message_mgr.get_prev(self.current_msg)
         elif pos == 'first':
-            current_msg = self.message_mgr.get_first_unread() if (self.mode == 'unread') else self.message_mgr.get_first()
+            current_msg = self.win.message_mgr.get_first_unread() if (self.mode == 'unread') else self.win.message_mgr.get_first()
         else:
             current_msg = None
         
         if current_msg is not None:
             self.current_msg = current_msg
             self.view.load_string(self.current_msg['html'], 'text/html', 'UTF-8','/')
-        self.win.tool_bar.update_next_back_buttons(current_msg)
+      
+        self.win.tool_bar.update_next_back_buttons(self.current_msg)
+        self.update_read_button(self.current_msg)
+
         return current_msg
     
     def set_msg_read(self):
-        self.message_mgr.set_read(self.current_msg)
+        self.win.message_mgr.set_read(self.current_msg)
 
     def set_mode(self, mode):
         self.mode = mode
@@ -147,7 +154,6 @@ class ToolBar(Gtk.Toolbar):
     
     def __init__(self, win):
         Gtk.Toolbar.__init__(self)
-        self.message_mgr = Messages()
         self.set_style(Gtk.ToolbarStyle.ICONS)
         self.win = win
         self.win.box.pack_start(self, False, False, 0)
@@ -184,6 +190,8 @@ class ToolBar(Gtk.Toolbar):
             self.win.html_viewer.set_mode('all')
         else:
             self.win.html_viewer.set_mode('unread')
+        self.update_next_back_buttons(self.win.html_viewer.show_msg('next'))
+        self.update_next_back_buttons(self.win.html_viewer.show_msg('prev'))
  
     def on_next_clicked(self, widget):
         print("Siguiente")
@@ -196,29 +204,28 @@ class ToolBar(Gtk.Toolbar):
     def on_close_clicked(self, widget):
         print("Goodbye")            
         self.win.destroy() 
-        message_mgr = Messages()
-        if message_mgr.get_first_unread() is None:
+        if self.win.message_mgr.get_first_unread() is None:
             Gtk.main_quit()
 
     def update_next_back_buttons(self, msg):
         
         if self.win.html_viewer.mode == 'all':
-            if self.message_mgr.get_prev(msg) is None:
+            if self.win.message_mgr.get_prev(msg) is None:
                 self.back.set_sensitive(False)
             else:
                 self.back.set_sensitive(True)
             
-            if self.message_mgr.get_next(msg) is None:
+            if self.win.message_mgr.get_next(msg) is None:
                 self.next.set_sensitive(False)
             else:
                 self.next.set_sensitive(True)
         else:
-            if self.message_mgr.get_prev_unread(msg) is None:
+            if self.win.message_mgr.get_prev_unread(msg) is None:
                 self.back.set_sensitive(False)
             else:
                 self.back.set_sensitive(True)
             
-            if self.message_mgr.get_next_unread(msg) is None:
+            if self.win.message_mgr.get_next_unread(msg) is None:
                 self.next.set_sensitive(False)
             else:
                 self.next.set_sensitive(True)

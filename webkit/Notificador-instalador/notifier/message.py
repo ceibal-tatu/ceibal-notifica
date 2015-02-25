@@ -44,7 +44,7 @@ class Messages:
     def get_first (self, args={}):
         messages = filter(self._date_valid,Messages.db.get_messages(args))
         
-        if len(messages_unread) > 0:
+        if len(messages) > 0:
             return messages[0]
         else:
             return None 

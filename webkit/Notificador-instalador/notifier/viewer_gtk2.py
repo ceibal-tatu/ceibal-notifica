@@ -21,11 +21,6 @@ class VentanaBoton(gtk.Window):
         #Evita que aparezca en la lista de ventanas
         self.set_skip_taskbar_hint(True)
 
-        self.message_mgr = Messages()
-        if self.message_mgr.get_first_unread() is None:
-            print "No hay mensajes o estan todos leidos ..."
-            return
-    
         self.set_decorated(False)
         self.set_accept_focus(False)
         self.connect("delete-event", gtk.main_quit)
@@ -115,6 +110,9 @@ class WebViewer:
             self.btn_leido.set_active(True)        
     
     def show_msg (self, pos):
+        if self.current_msg is None:
+            self.current_msg = self.win.message_mgr.get_first()
+
         if pos == 'next':
             current_msg = self.win.message_mgr.get_next_unread(self.current_msg) if (self.mode == 'unread') else self.win.message_mgr.get_next(self.current_msg)
         elif pos == 'prev':
@@ -128,9 +126,9 @@ class WebViewer:
         if current_msg is not None:
             self.current_msg = current_msg
             self.view.load_string(self.current_msg['html'], 'text/html', 'UTF-8','/')
-
-        self.win.tool_bar.update_next_back_buttons(current_msg)
-        self.update_read_button(current_msg)
+       
+        self.win.tool_bar.update_next_back_buttons(self.current_msg)
+        self.update_read_button(self.current_msg)
 
         return current_msg
     
@@ -182,6 +180,8 @@ class ToolBar(gtk.Toolbar):
             self.win.html_viewer.set_mode('all')
         else: 
             self.win.html_viewer.set_mode('unread')
+        self.update_next_back_buttons(self.win.html_viewer.show_msg('next'))
+        self.update_next_back_buttons(self.win.html_viewer.show_msg('prev'))
 
     def on_next_clicked(self, widget):
         print("Siguiente")
