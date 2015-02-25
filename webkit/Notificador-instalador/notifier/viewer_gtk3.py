@@ -2,7 +2,6 @@
 from gi.repository import WebKit
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GObject
 import os
 import json
 
@@ -37,10 +36,8 @@ class VentanaBoton(Gtk.Window):
         self.set_accept_focus(False)
         self.connect("delete-event", Gtk.main_quit)
         self.create_button()
-        self.show_all()
-        # especificar un tamanio fijo para la ventana si se quiere
-        # mover esta seccion antes del show_all
         self.move(Gdk.Screen.get_default().get_width() - self.get_size()[0] ,0)
+        self.show_all()
         Gtk.main()
 
     def create_button(self):
@@ -83,6 +80,7 @@ class Visor(Gtk.Window):
         self.add(self.box) 
         self.tool_bar    = ToolBar(self)
         self.html_viewer = WebViewer(self)
+        self.html_viewer.show_msg('first')
         self.show_all()
 
 
@@ -92,6 +90,7 @@ class WebViewer:
     def __init__ (self,win):
         self.win = win
         self.view = WebKit.WebView()
+        self.mode = 'unread'
         self.sw = Gtk.ScrolledWindow()
         self.sw.set_size_request(0,(self.win.height - 20))
         self.sw.add(self.view)
@@ -101,10 +100,8 @@ class WebViewer:
         self.win.box.pack_start(self.sw, True, True, 0)
         self.win.box.pack_start(self.btn_leido, True, True, 0)
         
-        
         self.message_mgr = Messages()
         self.current_msg = None
-        self.show_msg('first')
         
     def create_btn_leido(self):
         button = Gtk.ToggleButton(label='Marcar como Leido')
@@ -113,32 +110,38 @@ class WebViewer:
 
     def btn_leido_cb(self, widget, data=None):
         if widget.get_active():
+            self.set_msg_read()
             widget.set_label('Leido')
         else:
             widget.set_label ('Marcar como Leido')
 
      
     def show_msg (self, pos):
-        
+
         if pos == 'next':
-            current_msg = self.message_mgr.get_next_unread(self.current_msg)
+            current_msg = self.message_mgr.get_next_unread(self.current_msg) if (self.mode == 'unread') else self.message_mgr.get_next(self.current_msg)
         elif pos == 'prev':
-            current_msg = self.message_mgr.get_prev_unread(self.current_msg)
+            current_msg = self.message_mgr.get_prev_unread(self.current_msg) if (self.mode == 'unread') else self.message_mgr.get_prev(self.current_msg)
         elif pos == 'first':
-            current_msg = self.message_mgr.get_first_unread()
+            current_msg = self.message_mgr.get_first_unread() if (self.mode == 'unread') else self.message_mgr.get_first()
         else:
             current_msg = None
-
+        
         if current_msg is not None:
             self.current_msg = current_msg
-            self.win.tool_bar.clean_read_check()
             self.view.load_string(self.current_msg['html'], 'text/html', 'UTF-8','/')
-        
         self.win.tool_bar.update_next_back_buttons(current_msg)
         return current_msg
     
     def set_msg_read(self):
         self.message_mgr.set_read(self.current_msg)
+
+    def set_mode(self, mode):
+        self.mode = mode
+
+
+
+
 
 class ToolBar(Gtk.Toolbar):
     
@@ -160,7 +163,7 @@ class ToolBar(Gtk.Toolbar):
         
         check_item = Gtk.ToolItem ()
         self.check_btn = Gtk.CheckButton ()
-        self.check_btn.set_label ('Leido')
+        self.check_btn.set_label ('Mostrar todos')
         self.check_btn.connect ('toggled' , self.toggled)
         check_item.add (self.check_btn)
 
@@ -175,12 +178,12 @@ class ToolBar(Gtk.Toolbar):
         self.insert(check_item,3)
         self.insert(self.close, 4)
 
-    def clean_read_check(self):
-        self.check_btn.set_active(False)
 
     def toggled (self, obj):
-         if obj.get_active ():
-            self.win.html_viewer.set_msg_read()
+        if obj.get_active ():
+            self.win.html_viewer.set_mode('all')
+        else:
+            self.win.html_viewer.set_mode('unread')
  
     def on_next_clicked(self, widget):
         print("Siguiente")
@@ -198,13 +201,25 @@ class ToolBar(Gtk.Toolbar):
             Gtk.main_quit()
 
     def update_next_back_buttons(self, msg):
-        if self.message_mgr.get_prev_unread(msg) is None:
-            self.back.set_sensitive(False)
-        else:
-            self.back.set_sensitive(True)
+        
+        if self.win.html_viewer.mode == 'all':
+            if self.message_mgr.get_prev(msg) is None:
+                self.back.set_sensitive(False)
+            else:
+                self.back.set_sensitive(True)
             
-        if self.message_mgr.get_next_unread(msg) is None:
-            self.next.set_sensitive(False)
+            if self.message_mgr.get_next(msg) is None:
+                self.next.set_sensitive(False)
+            else:
+                self.next.set_sensitive(True)
         else:
-            self.next.set_sensitive(True)
+            if self.message_mgr.get_prev_unread(msg) is None:
+                self.back.set_sensitive(False)
+            else:
+                self.back.set_sensitive(True)
+            
+            if self.message_mgr.get_next_unread(msg) is None:
+                self.next.set_sensitive(False)
+            else:
+                self.next.set_sensitive(True)
 
