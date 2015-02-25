@@ -6,7 +6,6 @@ import time
 from ceibal.notifier import env
 from ceibal.notifier.data_base import Db
 from ceibal.notifier.constantes import * 
-from os.path import expanduser
 
 
 
@@ -16,51 +15,20 @@ class Messages:
 
     def __init__(self):
         if Messages.db is None:
-            Messages.db = Db(os.path.join(env.get_data_root(),DB_FILE))
-        
-        self.file_name = os.path.join(expanduser("~"),READ_FILE)    
-
+            Messages.db = Db(os.path.join(env.get_data_root(), DB_FILE))
 
     def _save_notification_status(self, id, status):
-        try:
-            # Cargo el diccionario desde el archivo json
-            fp = open(self.file_name, "r")
-            notif_read_record = json.load(fp)
-            fp.close()
-            
-            # Borro el archivo json
-            open(self.file_name,'w').close()
-            fp = open(self.file_name,'r+')
-        except:
-            # El archivo json no existe, lo creo.
-            fp = open(self.file_name, "w+")
-            notif_read_record = {}
-        
-        notif_read_record[id] = status
-        json.dump(notif_read_record, fp)
-        fp.flush()
-        fp.close()
-        
+        Messages.db.run_query('update notifications set estado="{1}" where id="{0}"'.format(id, status))
 
     def _check_notification_is_unread (self, message):
         id = str (message['id'])
         
-        try:
-            fp = open(self.file_name, "r") 
-            notif_read_record = json.load(fp)
-        except:
-            print "No existe el archivo de registro ...."
+        msg = Messages.db.get_messages({'id':id})    
+        if msg[0]['estado'] == 'unread':
             return True
-          
-        if fp is not None:
-          fp.close()
-
-        if id in notif_read_record:
-            return notif_read_record[id] == 'unread'
         else:
-            print "No encuentro id en el registro ..." + id
-            return True
-
+            return False
+    
     def _date_valid(self,message):
         '''
         @param message: Mensaje a validar.

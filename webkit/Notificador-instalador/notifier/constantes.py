@@ -77,7 +77,8 @@ CREATE TABLE IF NOT EXISTS "notifications" ("id" INTEGER PRIMARY KEY NOT NULL,
 "titulo" TEXT NOT NULL DEFAULT '',
 "texto" TEXT NOT NULL DEFAULT '',
 "html" TEXT DEFAULT '',
-"imagen" TEXT DEFAULT '');
+"imagen" TEXT DEFAULT '',
+"estado" TEXT DEFAULT 'unread');
 """
 
 #-----------------------------------------------------------------------------------------
