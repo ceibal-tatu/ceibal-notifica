@@ -73,6 +73,13 @@ class Messages:
         today = datetime.datetime.strftime(datetime.date.today(), "%Y-%m-%d")
         return today <= expires
 
+    def get_first (self, args={}):
+        messages = filter(self._date_valid,Messages.db.get_messages(args))
+        
+        if len(messages_unread) > 0:
+            return messages[0]
+        else:
+            return None 
 
     def get_first_unread(self, args={}):
         messages = filter(self._date_valid,Messages.db.get_messages(args))
@@ -82,6 +89,16 @@ class Messages:
         else:
             return None 
     
+    def get_next(self, message):
+        if message is None:
+            return None
+        messages = filter(self._date_valid,Messages.db.get_messages({}))
+        for msg in messages:
+            if msg['id'] > message['id']:
+                return msg
+        else:
+            return None
+ 
     def get_next_unread(self, message):
         if message is None:
             return None
@@ -94,6 +111,19 @@ class Messages:
                 return msg
         else:
             return None 
+    
+    def get_prev(self, message):
+        if message is None:
+            return None
+        
+        messages = filter(self._date_valid,Messages.db.get_messages({}))
+        msg_prev = None 
+        for msg in messages:
+            if msg['id'] < message['id']:
+                msg_prev = msg
+            else:
+                return msg_prev
+        return msg_prev 
     
     def get_prev_unread(self, message):
         if message is None:
