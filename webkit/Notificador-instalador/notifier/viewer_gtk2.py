@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import webkit
 import gtk
-import gobject
 import os
 import json
 from time import sleep
@@ -16,7 +15,6 @@ from os.path import expanduser
 class VentanaBoton(gtk.Window):
 
     def __init__(self):
-        gobject.threads_init()
         gtk.Window.__init__(self)
         self.image_btn = os.path.join (expanduser("~"),NOTIF_IMG_BTN)
 
@@ -81,7 +79,6 @@ class Visor(gtk.Window):
 class WebViewer:
 
     def __init__ (self,win):
-        gobject.threads_init()
         self.win = win
         self.view = webkit.WebView()
         self.mode = 'unread'
@@ -145,7 +142,6 @@ class WebViewer:
 class ToolBar(gtk.Toolbar):
     
     def __init__(self, win):
-        gobject.threads_init()
         self.message_mgr = Messages()
         gtk.Toolbar.__init__(self)
         self.set_style(gtk.TOOLBAR_ICONS)
