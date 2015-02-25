@@ -83,6 +83,9 @@ class Messages:
             return None 
     
     def get_next_unread(self, message):
+        if message is None:
+            return None
+
         messages = filter(self._date_valid,Messages.db.get_messages({}))
         messages_unread = filter(self._check_notification_is_unread, messages)
         
@@ -93,6 +96,9 @@ class Messages:
             return None 
     
     def get_prev_unread(self, message):
+        if message is None:
+            return None
+        
         messages = filter(self._date_valid,Messages.db.get_messages({}))
         messages_unread = filter(self._check_notification_is_unread, messages)
 

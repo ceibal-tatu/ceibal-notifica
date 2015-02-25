@@ -133,6 +133,9 @@ class WebViewer:
             self.current_msg = current_msg
             self.win.tool_bar.clean_read_check()
             self.view.load_string(self.current_msg['html'], 'text/html', 'UTF-8','/')
+        
+        self.win.tool_bar.update_next_back_buttons(current_msg)
+        return current_msg
     
     def set_msg_read(self):
         self.message_mgr.set_read(self.current_msg)
@@ -141,6 +144,7 @@ class ToolBar(Gtk.Toolbar):
     
     def __init__(self, win):
         Gtk.Toolbar.__init__(self)
+        self.message_mgr = Messages()
         self.set_style(Gtk.ToolbarStyle.ICONS)
         self.win = win
         self.win.box.pack_start(self, False, False, 0)
@@ -180,11 +184,11 @@ class ToolBar(Gtk.Toolbar):
  
     def on_next_clicked(self, widget):
         print("Siguiente")
-        self.win.html_viewer.show_msg('next')
+        self.update_next_back_buttons(self.win.html_viewer.show_msg('next'))
 
     def on_back_clicked(self, widget):
         print("Atras")            
-        self.win.html_viewer.show_msg('prev')
+        self.update_next_back_buttons(self.win.html_viewer.show_msg('prev'))
     
     def on_close_clicked(self, widget):
         print("Goodbye")            
@@ -193,4 +197,14 @@ class ToolBar(Gtk.Toolbar):
         if message_mgr.get_first_unread() is None:
             Gtk.main_quit()
 
+    def update_next_back_buttons(self, msg):
+        if self.message_mgr.get_prev_unread(msg) is None:
+            self.back.set_sensitive(False)
+        else:
+            self.back.set_sensitive(True)
+            
+        if self.message_mgr.get_next_unread(msg) is None:
+            self.next.set_sensitive(False)
+        else:
+            self.next.set_sensitive(True)
 

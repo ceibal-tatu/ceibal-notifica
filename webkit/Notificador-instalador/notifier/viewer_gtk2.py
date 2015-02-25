@@ -122,23 +122,8 @@ class WebViewer:
             self.current_msg = current_msg
             self.win.tool_bar.clean_read_check()
             self.view.load_string(self.current_msg['html'], 'text/html', 'UTF-8','/')
-        return current_msg
-    
-    def is_there_next_msg (self, pos):
-        
-        if pos == 'next':
-            current_msg = self.message_mgr.get_next_unread(self.current_msg)
-        elif pos == 'prev':
-            current_msg = self.message_mgr.get_prev_unread(self.current_msg)
-        elif pos == 'first':
-            current_msg = self.message_mgr.get_first_unread()
-        else:
-            current_msg = None
 
-        if current_msg is not None:
-            self.current_msg = current_msg
-            self.win.tool_bar.clean_read_check()
-            self.view.load_string(self.current_msg['html'], 'text/html', 'UTF-8','/')
+        self.win.tool_bar.update_next_back_buttons(current_msg)
         return current_msg
     
     def set_msg_read(self):
@@ -179,8 +164,6 @@ class ToolBar(gtk.Toolbar):
         self.insert(check_item,3)
         self.insert(self.close, 4)
 
-    def is_there_next_msg
-
 
     def clean_read_check(self):
         self.check_btn.set_active(False)
@@ -188,25 +171,16 @@ class ToolBar(gtk.Toolbar):
     def toggled (self, obj):
          if obj.get_active ():
             self.win.html_viewer.set_msg_read()
- 
+
     def on_next_clicked(self, widget):
         print("Siguiente")
-        msg = self.win.html_viewer.show_msg('next')
-        if msg is not None:
-            if self.message_mgr.get_next_unread(msg) is None:
-                widget.set_sensitive(False)
-        else:
-            widget.set_sensitive(False)
+        self.update_next_back_buttons(self.win.html_viewer.show_msg('next'))
+        
 
     def on_back_clicked(self, widget):
         print("Atras")            
-        msg = self.win.html_viewer.show_msg('prev')
-        if msg is not None:
-            if self.message_mgr.get_prev_unread(msg) is None:
-                widget.set_sensitive(False)
-        else:
-            widget.set_sensitive(False)
-           
+        self.update_next_back_buttons(self.win.html_viewer.show_msg('prev'))
+   
     
     def on_close_clicked(self, widget):
         print("Goodbye")            
@@ -215,4 +189,13 @@ class ToolBar(gtk.Toolbar):
         if message_mgr.get_first_unread() is None:
             gtk.main_quit()
 
-
+    def update_next_back_buttons(self, msg):
+        if self.message_mgr.get_prev_unread(msg) is None:
+            self.back.set_sensitive(False)
+        else:
+            self.back.set_sensitive(True)
+            
+        if self.message_mgr.get_next_unread(msg) is None:
+            self.next.set_sensitive(False)
+        else:
+            self.next.set_sensitive(True)
