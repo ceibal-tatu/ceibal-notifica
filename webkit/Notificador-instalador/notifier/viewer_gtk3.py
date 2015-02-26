@@ -3,10 +3,9 @@ from gi.repository import WebKit
 from gi.repository import Gtk
 from gi.repository import Gdk
 import os
-import json
+import urlparse
+import subprocess
 
-import datetime
-import time
 from ceibal.notifier import env
 from ceibal.notifier.data_base import Db
 from ceibal.notifier.utilidades import *
@@ -86,8 +85,9 @@ class WebViewer:
 
     def __init__ (self,win):
         self.win = win
-        self.view = WebKit.WebView()
         self.mode = 'unread'
+        self.view = WebKit.WebView()
+        self.view.connect("navigation-policy-decision-requested",self.navigate)
         self.sw = Gtk.ScrolledWindow()
         self.sw.set_size_request(0,(self.win.height - 20))
         self.sw.add(self.view)
@@ -151,6 +151,14 @@ class WebViewer:
     def set_mode(self, mode):
         self.mode = mode
 
+    def navigate(self, view, frame, request, action, decision):
+        uri = request.get_uri()
+        parts = urlparse.urlsplit(uri)
+        if parts.scheme and parts.netloc: 
+            subprocess.call(["gnome-open", uri])
+            return True
+
+        return False
 
 
 

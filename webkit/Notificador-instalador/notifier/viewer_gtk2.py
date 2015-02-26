@@ -2,8 +2,8 @@
 import webkit
 import gtk
 import os
-import json
-from time import sleep
+import subprocess
+import urlparse
 
 from ceibal.notifier.message  import * 
 from ceibal.notifier.utilidades import *
@@ -75,9 +75,11 @@ class Visor(gtk.Window):
 class WebViewer:
 
     def __init__ (self,win):
+        self.mode = 'unread'
         self.win = win
         self.view = webkit.WebView()
-        self.mode = 'unread'
+        self.view.connect("navigation-policy-decision-requested",self.navigate)
+        #self.view.set_full_content_zoom(True)
   
         self.sw = gtk.ScrolledWindow()
         self.sw.set_size_request(0,(self.win.height - 20))
@@ -134,14 +136,19 @@ class WebViewer:
        
         self.win.tool_bar.update_next_back_buttons(current_msg)
         self.update_read_button(current_msg)
-    
         return current_msg
     
     def set_mode(self, mode):
         self.mode = mode
 
+    def navigate(self, view, frame, request, action, decision):
+        uri = request.get_uri()
+        parts = urlparse.urlsplit(uri)
+        if parts.scheme and parts.netloc: 
+            subprocess.call(["gnome-open", uri])
+            return True
 
-
+        return False
 
 
 
