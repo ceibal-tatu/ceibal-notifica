@@ -76,7 +76,6 @@ echo "*"
 echo "*"
 echo "* VERIFICANDO E INSTALANDO LOS ARCHIVOS DE EJECUCION ..."
 cp sbin/* /usr/sbin/
-chmod 755 /usr/sbin/notificador-mostrar
 chmod 755 /usr/sbin/notificador-mostrar-html
 chmod 755 /usr/sbin/notificador-obtener
 echo "*"
@@ -128,7 +127,7 @@ echo "*"
 echo "*"
 echo "* AGREGO la imagen del boton ..."
 echo "*"
-    cp boton_notificaciones.png /home/$usuario/.boton_notificaciones.png
+    cp boton_notificaciones.png /etc/notifier/images/boton_notificaciones.png
 
 echo "*****************************************************************************"
 echo "*************************  TERMINO LA INSTALACION  **************************"

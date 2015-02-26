@@ -11,7 +11,6 @@ from ceibal.notifier.data_base import Db
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import * 
 from ceibal.notifier.message  import * 
-from os.path import expanduser
 
 
 
@@ -19,7 +18,7 @@ class VentanaBoton(Gtk.Window):
 
     def __init__(self):
         Gtk.Window.__init__(self, title="Notificador de novedades Ceibal")
-        self.image_btn = os.path.join (expanduser("~"),NOTIF_IMG_BTN)
+        self.image_btn = os.path.join (get_images_root(),NOTIF_IMG_BTN)
         
         self.message_mgr = Messages()
         

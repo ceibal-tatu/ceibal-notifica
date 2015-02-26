@@ -8,7 +8,6 @@ import urlparse
 from ceibal.notifier.message  import * 
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import * 
-from os.path import expanduser
 
 
 
@@ -16,7 +15,7 @@ class VentanaBoton(gtk.Window):
 
     def __init__(self):
         gtk.Window.__init__(self)
-        self.image_btn = os.path.join (expanduser("~"),NOTIF_IMG_BTN)
+        self.image_btn = os.path.join (get_images_root(),NOTIF_IMG_BTN)
 
         #Evita que aparezca en la lista de ventanas
         self.set_skip_taskbar_hint(True)
