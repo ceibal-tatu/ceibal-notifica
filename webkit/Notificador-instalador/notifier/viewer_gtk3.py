@@ -110,12 +110,16 @@ class WebViewer:
         else:
             self.win.message_mgr.set_unread(self.current_msg)
             widget.set_label ('Marcar como Leido')
-
+    
     def update_read_button(self, msg):
-        if self.win.message_mgr.is_unread(msg):
-            self.btn_leido.set_active(False)        
-        else:     
-            self.btn_leido.set_active(True)        
+        if msg is None:
+            self.btn_leido.set_sensitive(False)
+        else:
+            self.btn_leido.set_sensitive(True)
+            if self.win.message_mgr.is_unread(msg):
+                self.btn_leido.set_active(False)        
+            else:     
+                self.btn_leido.set_active(True)        
      
     def show_msg (self, pos):
         if self.current_msg is None:
@@ -135,8 +139,8 @@ class WebViewer:
             self.current_msg = current_msg
             self.view.load_string(self.current_msg['html'], 'text/html', 'UTF-8','/')
       
-        self.win.tool_bar.update_next_back_buttons(self.current_msg)
-        self.update_read_button(self.current_msg)
+        self.win.tool_bar.update_next_back_buttons(current_msg)
+        self.update_read_button(current_msg)
 
         return current_msg
     
