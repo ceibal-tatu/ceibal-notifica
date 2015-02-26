@@ -76,6 +76,9 @@ def get_model_laptop():
         model = open(PROC_MODEL_TREE).read().strip()[0:-1]
     elif os.path.exists(CLASSMATE_MODELO):
         model = open(CLASSMATE_MODELO).read().strip()
+    else:
+        model = 'PC'
+
     return re.sub(" ","",model)
 
 def get_sn_classmate():
@@ -169,4 +172,51 @@ def notificacion(texto):
     comando = "notify-send Atención! "
     comando = comando + "\""+texto+"\""
     os.system(comando)
+
+
+def get_active_desktop():
+    ACTIVE_DESKTOP_FILE = "/home/olpc/.olpc-active-desktop"
+    desktop = "sugar"
+
+    if "SUGAR_BUNDLE_ID" in os.environ:
+        return "Sugar"
+
+    try:
+        fd = open(ACTIVE_DESKTOP_FILE, "r")
+        desktop = fd.read().strip()
+        fd.close()
+    except IOError, e:
+        if e.errno != 2:
+            desktop = "unknown"
+
+    if "DESKTOP_SESSION" in os.environ:
+        desktop = os.getenv('DESKTOP_SESSION')
+
+    if desktop == "sugar":
+        return "Sugar"
+    if desktop == "sweets":
+        return "Sugar"
+    if desktop == "gnome":
+        return "GNOME"
+    if desktop == "gnome-classic":
+        return "GNOME"
+    if desktop == "gnome-fallback":
+        return "GNOME"
+    return "Unknown"  
+
+def get_window_size():
+    tipo = get_tipo_laptop()
     
+    if tipo == 0:
+        #XO
+        return (640, 480)
+    if tipo == 1:
+        # Clasmate
+        return (400,300)
+    if tipo == 2:
+        # Positivo
+        return (400,300)
+    
+    return (400,300) 
+        
+  

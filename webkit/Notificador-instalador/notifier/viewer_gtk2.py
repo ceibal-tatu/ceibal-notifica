@@ -50,9 +50,8 @@ class VentanaBoton(gtk.Window):
 class Visor(gtk.Window):
  
     def __init__(self):
-        self.width  = 640
-        self.height = 480
         gtk.Window.__init__(self)
+        (self.width, self.height) = get_window_size()
 
         #Evita que aparezca en la lista de ventanas
         self.set_skip_taskbar_hint(True)

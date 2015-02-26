@@ -55,11 +55,10 @@ class VentanaBoton(Gtk.Window):
 class Visor(Gtk.Window):
  
     def __init__(self):
-        self.width = 400
-        self.height = 300
 
         #GObject.threads_init()
         Gtk.Window.__init__(self, title="Visor de novedades Ceibal")
+        (self.width, self.height) = get_window_size()
 
         #Evita que aparezca en la lista de ventanas
         self.set_skip_taskbar_hint(True)
