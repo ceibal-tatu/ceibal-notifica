@@ -57,7 +57,7 @@ class Messages:
         if mode == 'unread':
             messages_unread = filter(self._check_notification_is_unread, messages)
             messages = messages_unread
-        for m in messages:
+        for m in reversed(messages):
             if m['id'] == msg['id']:
                 return pos
             pos = pos+1    
@@ -74,8 +74,10 @@ class Messages:
     def get_first_unread(self, args={}):
         messages = filter(self._date_valid,Messages.db.get_messages(args))
         messages_unread = filter(self._check_notification_is_unread, messages)
-        if len(messages_unread) > 0:
-            return messages_unread[0]
+
+        cant = len(messages_unread)
+        if cant > 0:
+            return messages_unread[cant-1]
         else:
             return None 
     
@@ -83,8 +85,8 @@ class Messages:
         if message is None:
             return None
         messages = filter(self._date_valid,Messages.db.get_messages({}))
-        for msg in messages:
-            if msg['id'] > message['id']:
+        for msg in reversed(messages):
+            if msg['id'] < message['id']:
                 return msg
         else:
             return None
@@ -96,8 +98,8 @@ class Messages:
         messages = filter(self._date_valid,Messages.db.get_messages({}))
         messages_unread = filter(self._check_notification_is_unread, messages)
         
-        for msg in messages_unread:
-            if msg['id'] > message['id']:
+        for msg in reversed(messages_unread):
+            if msg['id'] < message['id']:
                 return msg
         else:
             return None 
@@ -108,8 +110,8 @@ class Messages:
         
         messages = filter(self._date_valid,Messages.db.get_messages({}))
         msg_prev = None 
-        for msg in messages:
-            if msg['id'] < message['id']:
+        for msg in reversed(messages):
+            if msg['id'] > message['id']:
                 msg_prev = msg
             else:
                 return msg_prev
@@ -123,8 +125,8 @@ class Messages:
         messages_unread = filter(self._check_notification_is_unread, messages)
 
         msg_prev = None 
-        for msg in messages_unread:
-            if msg['id'] < message['id']:
+        for msg in reversed(messages_unread):
+            if msg['id'] > message['id']:
                 msg_prev = msg
             else:
                 return msg_prev
