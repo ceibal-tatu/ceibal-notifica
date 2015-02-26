@@ -41,6 +41,28 @@ class Messages:
         today = datetime.datetime.strftime(datetime.date.today(), "%Y-%m-%d")
         return today <= expires
 
+    def get_total (self, mode):
+        messages = filter(self._date_valid,Messages.db.get_messages({}))
+        if mode == 'unread':
+            messages_unread = filter(self._check_notification_is_unread, messages)
+            total = len(messages_unread)
+        else:
+            total = len(messages)
+        return total
+
+    def get_pos(self, mode, msg):
+        pos = 1
+        
+        messages = filter(self._date_valid,Messages.db.get_messages({}))
+        if mode == 'unread':
+            messages_unread = filter(self._check_notification_is_unread, messages)
+            messages = messages_unread
+        for m in messages:
+            if m['id'] == msg['id']:
+                return pos
+            pos = pos+1    
+        return pos
+ 
     def get_first (self, args={}):
         messages = filter(self._date_valid,Messages.db.get_messages(args))
         

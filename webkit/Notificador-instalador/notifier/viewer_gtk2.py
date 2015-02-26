@@ -50,8 +50,8 @@ class VentanaBoton(gtk.Window):
 class Visor(gtk.Window):
  
     def __init__(self):
-        self.width  = 400
-        self.height = 300
+        self.width  = 640
+        self.height = 480
         gtk.Window.__init__(self)
 
         #Evita que aparezca en la lista de ventanas
@@ -130,10 +130,11 @@ class WebViewer:
         if current_msg is not None:
             self.current_msg = current_msg
             self.view.load_string(self.current_msg['html'], 'text/html', 'UTF-8','/')
+            self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, current_msg)) , str(self.win.message_mgr.get_total(self.mode)))
        
         self.win.tool_bar.update_next_back_buttons(current_msg)
         self.update_read_button(current_msg)
-
+    
         return current_msg
     
     def set_mode(self, mode):
@@ -172,12 +173,21 @@ class ToolBar(gtk.Toolbar):
 
         sep.props.draw = False
         sep.set_expand(True)
+      
+        msg_counter_item = gtk.ToolItem()
+        self.msg_counter = gtk.Label() 
+        msg_counter_item.add (self.msg_counter)
 
         self.insert(self.back, 0)
-        self.insert(self.next, 1)
-        self.insert(sep, 2)
-        self.insert(check_item,3)
-        self.insert(self.close, 4)
+        self.insert(msg_counter_item, 1)
+        self.insert(self.next, 2)
+        self.insert(sep, 3)
+        self.insert(check_item,4)
+        self.insert(self.close, 5)
+
+    def update_msg_counter(self, id, total):
+        self.msg_counter.set_text(id + '/' + total)
+        
 
     def toggled (self, obj):
         if obj.get_active ():
