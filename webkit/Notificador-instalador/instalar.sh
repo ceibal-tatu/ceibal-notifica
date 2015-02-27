@@ -49,12 +49,6 @@ else
 fi
 echo "*"
 echo "*"
-echo "* VERIFICANDO E INSTALANDO ARCHIVO CRON ..."
-if [[ -d /etc/cron.d/ ]]; then
-	cp cron/notifier /etc/cron.d/
-fi
-echo "*"
-echo "*"
 echo "* VERIFICANDO E INSTALANDO LOS ARCHIVOS DE EJECUCION ..."
 cp sbin/* /usr/sbin/
 chmod 755 /usr/sbin/notificador-mostrar-html
@@ -71,6 +65,18 @@ elif id -u "olpc" >/dev/null 2>&1;then
         usuario=olpc
 else 
     usuario=$SUDO_USER
+fi
+echo "*"
+echo "*"
+echo "* VERIFICANDO E INSTALANDO ARCHIVO CRON ..."
+if [[ -d /etc/cron.d/ ]]; then
+    cat << EOF > /etc/cron.d/notifier
+    SHELL=/bin/sh
+    PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+    DISPLAY=:0
+
+    * */6 * * * $usuario /usr/bin/python /usr/sbin/notificador-obtener
+EOF
 fi
 echo "*"
 echo "*"
