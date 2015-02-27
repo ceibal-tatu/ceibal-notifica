@@ -7,19 +7,19 @@
 #-------------------------------------------------------
 
 import os
-from ceibal import env
+from os.path import expanduser
 
 def get_data_root():
     '''
     @summary: Obtiene la ruta donde esta la DB.
     @return: Retorna la ruta.
     '''
-    return os.path.join(env.get_ceibal_root(),'etc','notifier', 'data')
+    return os.path.join(expanduser('~'),'.notifier', 'data')
 
 def get_images_root():
     '''
     @summary: Obtiene la ruta donde esta la imagen.
     @return: Retorna la ruta.
     '''
-    return os.path.join(env.get_ceibal_root(),'etc','notifier', 'images')
+    return os.path.join(expanduser('~'),'.notifier', 'images')
 

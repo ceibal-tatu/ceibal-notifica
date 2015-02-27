@@ -49,28 +49,9 @@ else
 fi
 echo "*"
 echo "*"
-echo "* VERIFICANDO E INSTALANDO EJECUCION AL ARRANQUE ..."
-if [ "$SO" = "Fedora" ];then
-	if [[ -d /home/olpc/.config/autostart ]]; then
-		cp auto-start/python.desktop /home/olpc/.config/autostart
-		chmod -R 755 /home/olpc/.config/autostart/python.desktop
-		chown olpc:olpc /home/olpc/.config/autostart/python.desktop
-	fi
-fi
-echo "*"
-echo "*"
 echo "* VERIFICANDO E INSTALANDO ARCHIVO CRON ..."
 if [[ -d /etc/cron.d/ ]]; then
 	cp cron/notifier /etc/cron.d/
-fi
-echo "*"
-echo "*"
-echo "* VERIFICANDO E INSTALANDO EL LOGO Y DB..."
-if [[ -d /etc/notifier/ ]]; then
-	cp messages.db /etc/notifier/data/
-	chmod 777 /etc/notifier/data/messages.db
-	cp images/planceibal.png /etc/notifier/images/
-	chmod 777 /etc/notifier/images/planceibal.png
 fi
 echo "*"
 echo "*"
@@ -78,26 +59,6 @@ echo "* VERIFICANDO E INSTALANDO LOS ARCHIVOS DE EJECUCION ..."
 cp sbin/* /usr/sbin/
 chmod 755 /usr/sbin/notificador-mostrar-html
 chmod 755 /usr/sbin/notificador-obtener
-echo "*"
-echo "*"
-echo "* INSTALANDO PROGRAMA CEIBAL NOTIFICA ..."
-if [[ ! -d /usr/local/share/CeibalNotifica ]]; then
-	mkdir /usr/local/share/CeibalNotifica
-fi
-cp -r ceibal_notifica/* /usr/local/share/CeibalNotifica/
-chmod -R 755 /usr/local/share/CeibalNotifica/
-cp CeibalNotifica.desktop /usr/share/applications/
-cp CeibalNotifica /usr/local/bin/
-chmod 755 /usr/local/bin/CeibalNotifica
-echo "*"
-echo "*"
-echo "* INSTALANDO ACTIVIDAD CEIBAL NOTIFICA ..."
-if [[ -d /home/olpc/Activities/CeibalNotifica.activity ]]; then
-	cp ceibal_notifica/CeibalNotifica-for-Sugar.py /home/olpc/Activities/CeibalNotifica.activity/CeibalNotifica.py
-	chmod 755 /home/olpc/Activities/CeibalNotifica.activity/CeibalNotifica.py
-	cp ceibal_notifica/store.py /home/olpc/Activities/CeibalNotifica.activity/
-	chmod 755 /home/olpc/Activities/CeibalNotifica.activity/store.py
-fi
 echo "*"
 echo "*"
 echo "* DETECTO EL NOMBRE DE USUARIO ..."
@@ -109,26 +70,30 @@ elif id -u "estudiante" >/dev/null 2>&1;then
 elif id -u "olpc" >/dev/null 2>&1;then
         usuario=olpc
 else 
-    echo "Nombre de usuario desconocido"
+    usuario=$SUDO_USER
 fi
 echo "*"
 echo "*"
 echo "* AGREGO el notificador-mostrar-html AL ARRANQUE ..."
 echo "*"
-if [[ -d /home/$usuario/.config/autostart ]]; then
-    cp notificador-mostrar.desktop /home/$usuario/.config/autostart
-    chown $usuario:$usuario /home/$usuario/.config/autostart/notificador-mostrar.desktop
-else
+if [[ ! -d /home/$usuario/.config/autostart ]]; then
     mkdir /home/$usuario/.config/autostart
-    cp notificador-mostrar.desktop /home/$usuario/.config/autostart
-    chown $usuario:$usuario /home/$usuario/.config/autostart/notificador-mostrar.desktop
 fi
+cp notificador-mostrar.desktop /home/$usuario/.config/autostart
+chown $usuario:$usuario /home/$usuario/.config/autostart/notificador-mostrar.desktop
 echo "*"
 echo "*"
-echo "* AGREGO la imagen del boton ..."
+echo "* VERIFICANDO E INSTALANDO EL LOGO"
+if [[ ! -d /home/$usuario/.notifier ]]; then
+    mkdir /home/$usuario/.notifier
+    mkdir /home/$usuario/.notifier/data
+    mkdir /home/$usuario/.notifier/images
+fi
+cp images/planceibal.png /home/$usuario/.notifier/images/
+cp boton_notificaciones.png /home/$usuario/.notifier/images/boton_notificaciones.png
+chown -R $usuario:$usuario /home/$usuario/.notifier    
 echo "*"
-    cp boton_notificaciones.png /etc/notifier/images/boton_notificaciones.png
-
+echo "*"
 echo "*****************************************************************************"
 echo "*************************  TERMINO LA INSTALACION  **************************"
 echo "*****************************************************************************"
