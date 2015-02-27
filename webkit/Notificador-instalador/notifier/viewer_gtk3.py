@@ -4,7 +4,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 import os
 import urlparse
-import subprocess
 
 from ceibal.notifier import env
 from ceibal.notifier.data_base import Db
@@ -18,7 +17,7 @@ class VentanaBoton(Gtk.Window):
 
     def __init__(self):
         Gtk.Window.__init__(self, title="Notificador de novedades Ceibal")
-        self.image_btn = os.path.join (get_images_root(),NOTIF_IMG_BTN)
+        self.image_btn = os.path.join (env.get_images_root(),NOTIF_IMG_BTN)
         
         self.message_mgr = Messages()
         
@@ -153,7 +152,7 @@ class WebViewer:
         uri = request.get_uri()
         parts = urlparse.urlsplit(uri)
         if parts.scheme and parts.netloc: 
-            subprocess.call(["gnome-open", uri])
+            open_external_browser(uri)
             return True
 
         return False

@@ -5,6 +5,7 @@ import os
 import subprocess
 import urlparse
 
+from ceibal.notifier  import env
 from ceibal.notifier.message  import * 
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import * 
@@ -15,7 +16,7 @@ class VentanaBoton(gtk.Window):
 
     def __init__(self):
         gtk.Window.__init__(self)
-        self.image_btn = os.path.join (get_images_root(),NOTIF_IMG_BTN)
+        self.image_btn = os.path.join (env.get_images_root(),NOTIF_IMG_BTN)
 
         #Evita que aparezca en la lista de ventanas
         self.set_skip_taskbar_hint(True)
@@ -143,7 +144,7 @@ class WebViewer:
         uri = request.get_uri()
         parts = urlparse.urlsplit(uri)
         if parts.scheme and parts.netloc: 
-            subprocess.call(["gnome-open", uri])
+            open_external_browser(uri)
             return True
 
         return False

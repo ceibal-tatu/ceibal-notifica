@@ -8,6 +8,7 @@
 
 import sys
 import os
+import subprocess
 
 from ceibal.notifier.constantes import CLASSMATE_MODELO,CLASSMATE_BUILD,POSITIVO_BUILD
 from ceibal.notifier.constantes import LISTA_XO,LISTA_CLASSMATE,LISTA_POSITIVO,OFW_MODEL_TREE,PROC_MODEL_TREE
@@ -179,7 +180,7 @@ def get_active_desktop():
     desktop = "sugar"
 
     if "SUGAR_BUNDLE_ID" in os.environ:
-        return "Sugar"
+        return "sugar"
 
     try:
         fd = open(ACTIVE_DESKTOP_FILE, "r")
@@ -191,17 +192,22 @@ def get_active_desktop():
 
     if "DESKTOP_SESSION" in os.environ:
         desktop = os.getenv('DESKTOP_SESSION')
+    else:
+        desktop = 'mate'
 
     if desktop == "sugar":
-        return "Sugar"
+        return "sugar"
     if desktop == "sweets":
-        return "Sugar"
+        return "sugar"
     if desktop == "gnome":
-        return "GNOME"
+        return "gnome"
     if desktop == "gnome-classic":
-        return "GNOME"
+        return "gnome"
     if desktop == "gnome-fallback":
-        return "GNOME"
+        return "gnome"
+    if desktop == 'mate':
+        return "gnome"
+
     return "Unknown"  
 
 def get_window_size():
@@ -219,4 +225,11 @@ def get_window_size():
     
     return (400,300) 
         
-  
+def open_external_browser(uri):
+    desktop = get_active_desktop()
+    if desktop == "gnome":
+        subprocess.call(["xdg-open", uri])
+    elif desktop == "sugar":
+        subprocess.call(["xdg-open", uri])
+    else:
+        subprocess.call(["xdg-open", uri])
