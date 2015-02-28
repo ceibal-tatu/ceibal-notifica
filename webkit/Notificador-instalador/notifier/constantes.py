@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS "notifications" ("id" INTEGER PRIMARY KEY NOT NULL,
 "texto" TEXT NOT NULL DEFAULT '',
 "html" TEXT DEFAULT '',
 "imagen" TEXT DEFAULT '',
+"tstamp" TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
 "estado" TEXT DEFAULT 'unread');
 """
 

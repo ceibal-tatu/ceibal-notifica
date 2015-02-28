@@ -42,28 +42,27 @@ class Messages:
         return today <= expires
 
     def get_total (self, mode):
-        messages = filter(self._date_valid,Messages.db.get_messages({}))
         if mode == 'unread':
-            messages_unread = filter(self._check_notification_is_unread, messages)
-            total = len(messages_unread)
+            args = {'estado': '"unread"'}
         else:
-            total = len(messages)
-        return total
+            args = {}
+        messages = filter(self._date_valid,Messages.db.get_messages(args))
+        return len(messages)
 
     def get_pos(self, mode, msg):
         pos = 1
-        
-        messages = filter(self._date_valid,Messages.db.get_messages({}))
         if mode == 'unread':
-            messages_unread = filter(self._check_notification_is_unread, messages)
-            messages = messages_unread
-        for m in reversed(messages):
+            args = {'estado':'"unread"'}
+        else:
+            args = {}
+        messages = filter(self._date_valid,Messages.db.get_messages(args))
+        for m in messages:
             if m['id'] == msg['id']:
                 return pos
             pos = pos+1    
         return pos
  
-    def get_first (self, args={}):
+    def _get_first (self, args={}):
         messages = filter(self._date_valid,Messages.db.get_messages(args))
         
         if len(messages) > 0:
@@ -71,68 +70,53 @@ class Messages:
         else:
             return None 
 
-    def get_first_unread(self, args={}):
-        messages = filter(self._date_valid,Messages.db.get_messages(args))
-        messages_unread = filter(self._check_notification_is_unread, messages)
-
-        cant = len(messages_unread)
-        if cant > 0:
-            return messages_unread[cant-1]
-        else:
-            return None 
+    def get_first (self):
+        args = {}
+        return self._get_first(args)
     
-    def get_next(self, message):
+    def get_first_unread(self, args={}):
+        args = {'estado':'"unread"'}
+        return self._get_first(args)
+    
+    def _get_next(self, message, args):
         if message is None:
             return None
-        messages = filter(self._date_valid,Messages.db.get_messages({}))
-        for msg in reversed(messages):
-            if msg['id'] < message['id']:
-                return msg
-        else:
-            return None
- 
-    def get_next_unread(self, message):
-        if message is None:
-            return None
-
-        messages = filter(self._date_valid,Messages.db.get_messages({}))
-        messages_unread = filter(self._check_notification_is_unread, messages)
         
-        for msg in reversed(messages_unread):
-            if msg['id'] < message['id']:
+        messages = filter(self._date_valid,Messages.db.get_messages(args))
+        
+        for msg in messages:
+            if msg['tstamp'] < message['tstamp']:
+                print "true"
                 return msg
-        else:
-            return None 
+        
+        return None
+
+    def get_next(self, message):
+        args = {}
+        return self._get_next(message, args)
+         
+    def get_next_unread(self, message):
+        args = {'estado':'"unread"'}
+        return self._get_next(message, args)
+
+    
+    def _get_prev(self, message, args):
+        if message is None:
+            return None
+        messages = filter(self._date_valid,Messages.db.get_messages(args))
+        for msg in reversed(messages):
+            if msg['tstamp'] > message['tstamp']:
+                return msg
+        return None 
     
     def get_prev(self, message):
-        if message is None:
-            return None
-        
-        messages = filter(self._date_valid,Messages.db.get_messages({}))
-        msg_prev = None 
-        for msg in reversed(messages):
-            if msg['id'] > message['id']:
-                msg_prev = msg
-            else:
-                return msg_prev
-        return msg_prev 
+        args = {}
+        return self._get_prev(message, args)
     
     def get_prev_unread(self, message):
-        if message is None:
-            return None
+        args = {'estado':'"unread"'}
+        return self._get_prev(message, args)
         
-        messages = filter(self._date_valid,Messages.db.get_messages({}))
-        messages_unread = filter(self._check_notification_is_unread, messages)
-
-        msg_prev = None 
-        for msg in reversed(messages_unread):
-            if msg['id'] > message['id']:
-                msg_prev = msg
-            else:
-                return msg_prev
- 
-        return msg_prev 
-
     def is_unread(self, msg):
         return self._check_notification_is_unread(msg) 
    

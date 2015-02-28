@@ -130,12 +130,11 @@ class WebViewer:
 
         if current_msg is not None:
             self.current_msg = current_msg
-            self.view.load_string(self.current_msg['html'], 'text/html', 'UTF-8','/')
+            self.view.load_string(current_msg['html'], 'text/html', 'UTF-8','/')
             self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, current_msg)) , str(self.win.message_mgr.get_total(self.mode)))
-       
+ 
         self.win.tool_bar.update_next_back_buttons(current_msg)
         self.update_read_button(current_msg)
-        return current_msg
     
     def set_mode(self, mode):
         self.mode = mode
@@ -200,17 +199,16 @@ class ToolBar(gtk.Toolbar):
             self.win.html_viewer.set_mode('all')
         else: 
             self.win.html_viewer.set_mode('unread')
-        self.update_next_back_buttons(self.win.html_viewer.show_msg('next'))
-        self.update_next_back_buttons(self.win.html_viewer.show_msg('prev'))
+        self.win.html_viewer.show_msg('first')
 
     def on_next_clicked(self, widget):
         print("Siguiente")
-        self.update_next_back_buttons(self.win.html_viewer.show_msg('next'))
+        self.win.html_viewer.show_msg('next')
         
 
     def on_back_clicked(self, widget):
         print("Atras")            
-        self.update_next_back_buttons(self.win.html_viewer.show_msg('prev'))
+        self.win.html_viewer.show_msg('prev')
    
     
     def on_close_clicked(self, widget):
