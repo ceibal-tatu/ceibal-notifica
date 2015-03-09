@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding:utf-8 -*-
 from gi.repository import WebKit
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -96,17 +97,17 @@ class WebViewer:
         self.current_msg = None
         
     def create_btn_leido(self):
-        button = Gtk.ToggleButton(label='Marcar como Leido')
+        button = Gtk.ToggleButton(label='Marcar como leída')
         button.connect("toggled", self.btn_leido_cb, "Boton leido presionado")
         return button
 
     def btn_leido_cb(self, widget, data=None):
         if widget.get_active():
             self.win.message_mgr.set_read(self.current_msg)
-            widget.set_label('Leido')
+            widget.set_label('Marcar como no leída')
         else:
             self.win.message_mgr.set_unread(self.current_msg)
-            widget.set_label ('Marcar como Leido')
+            widget.set_label ('Marcar como leída')
     
     def update_read_button(self, msg):
         if msg is None:
