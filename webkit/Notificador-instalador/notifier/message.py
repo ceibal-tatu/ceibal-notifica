@@ -86,7 +86,6 @@ class Messages:
         
         for msg in messages:
             if msg['id_local'] < message['id_local']:
-                print "true"
                 return msg
         
         return None
