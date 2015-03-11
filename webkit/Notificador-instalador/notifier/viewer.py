@@ -66,6 +66,10 @@ class WebViewerCommon:
  
         self.update_read_button(current_msg)
         self.win.tool_bar.update_next_back_buttons(current_msg)
+            
+
+    def load_no_more_notification(self):
+        self.view.open(os.path.join(env.get_data_root(),'no_more_notifications.html'))
     
     def set_mode(self, mode):
         self.mode = mode
@@ -90,7 +94,6 @@ class ToolBarCommon:
     
     def update_msg_counter(self, id, total):
         self.msg_counter.set_text(id + '/' + total)
-        
 
     def toggled (self, obj):
         if obj.get_active ():
@@ -120,3 +123,6 @@ class ToolBarCommon:
             self.win.html_viewer.set_direction('backward')
         else:
             self.next.set_sensitive(True)
+
+        if not self.next.get_sensitive() and not self.back.get_sensitive():
+            self.win.html_viewer.load_no_more_notification()
