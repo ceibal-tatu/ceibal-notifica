@@ -144,6 +144,6 @@ class ToolBar(ToolBarCommon):
     def on_close_clicked(self, widget):
         print("Goodbye")            
         self.win.destroy() 
-        if self.win.message_mgr.get_first_unread() is None:
+        if self.win.message_mgr.get_first() is None:
             Gtk.main_quit()
 

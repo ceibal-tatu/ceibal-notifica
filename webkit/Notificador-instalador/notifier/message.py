@@ -70,14 +70,13 @@ class Messages:
         else:
             return None 
 
-    def get_first (self):
-        args = {}
+    def get_first (self, mode='unread'):
+        if mode == 'all':
+            args = {}
+        else:
+            args = {'estado': '"unread"'}
         return self._get_first(args)
-    
-    def get_first_unread(self, args={}):
-        args = {'estado':'"unread"'}
-        return self._get_first(args)
-    
+   
     def _get_next(self, message, args):
         if message is None:
             return None
@@ -90,14 +89,13 @@ class Messages:
         
         return None
 
-    def get_next(self, message):
-        args = {}
+    def get_next(self, message, mode):
+        if mode == 'all':
+            args = {}
+        else:
+            args = {'estado': '"unread"'}
+        
         return self._get_next(message, args)
-         
-    def get_next_unread(self, message):
-        args = {'estado':'"unread"'}
-        return self._get_next(message, args)
-
     
     def _get_prev(self, message, args):
         if message is None:
@@ -108,14 +106,13 @@ class Messages:
                 return msg
         return None 
     
-    def get_prev(self, message):
-        args = {}
+    def get_prev(self, message, mode):
+        if mode == 'all':
+            args = {}
+        else:
+            args = {'estado': '"unread"'}
         return self._get_prev(message, args)
     
-    def get_prev_unread(self, message):
-        args = {'estado':'"unread"'}
-        return self._get_prev(message, args)
-        
     def is_unread(self, msg):
         return self._check_notification_is_unread(msg) 
    

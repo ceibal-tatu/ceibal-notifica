@@ -47,14 +47,14 @@ class WebViewerCommon:
     
     def show_msg (self, pos):
         if self.current_msg is None:
-            self.current_msg = self.win.message_mgr.get_first()
+            self.current_msg = self.win.message_mgr.get_first(self.mode)
 
         if pos == 'next':
-            current_msg = self.win.message_mgr.get_next_unread(self.current_msg) if (self.mode == 'unread') else self.win.message_mgr.get_next(self.current_msg)
+            current_msg = self.win.message_mgr.get_next(self.current_msg, self.mode) 
         elif pos == 'prev':
-            current_msg = self.win.message_mgr.get_prev_unread(self.current_msg) if (self.mode == 'unread') else self.win.message_mgr.get_prev(self.current_msg)
+            current_msg = self.win.message_mgr.get_prev(self.current_msg, self.mode) 
         elif pos == 'first':
-            current_msg = self.win.message_mgr.get_first_unread() if (self.mode == 'unread') else self.win.message_mgr.get_first()
+            current_msg = self.win.message_mgr.get_first(self.mode) 
         else:
             current_msg = None
             
@@ -109,27 +109,14 @@ class ToolBarCommon:
         self.win.html_viewer.show_msg('prev')
    
     def update_next_back_buttons(self, msg):
-        if self.win.html_viewer.mode == 'all':
-            if self.win.message_mgr.get_prev(msg) is None:
-                self.back.set_sensitive(False)
-                self.win.html_viewer.set_direction('forward')
-            else:
-                self.back.set_sensitive(True)
-            
-            if self.win.message_mgr.get_next(msg) is None:
-                self.next.set_sensitive(False)
-                self.win.html_viewer.set_direction('backward')
-            else:
-                self.next.set_sensitive(True)
+        if self.win.message_mgr.get_prev(msg, self.win.html_viewer.mode) is None:
+            self.back.set_sensitive(False)
+            self.win.html_viewer.set_direction('forward')
         else:
-            if self.win.message_mgr.get_prev_unread(msg) is None:
-                self.back.set_sensitive(False)
-                self.win.html_viewer.set_direction('forward')
-            else:
-                self.back.set_sensitive(True)
-            
-            if self.win.message_mgr.get_next_unread(msg) is None:
-                self.next.set_sensitive(False)
-                self.win.html_viewer.set_direction('backward')
-            else:
-                self.next.set_sensitive(True)
+            self.back.set_sensitive(True)
+        
+        if self.win.message_mgr.get_next(msg, self.win.html_viewer.mode) is None:
+            self.next.set_sensitive(False)
+            self.win.html_viewer.set_direction('backward')
+        else:
+            self.next.set_sensitive(True)
