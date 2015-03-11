@@ -85,7 +85,7 @@ class Messages:
         messages = filter(self._date_valid,Messages.db.get_messages(args))
         
         for msg in messages:
-            if msg['tstamp'] <= message['tstamp'] and msg['id'] <  message['id']:
+            if msg['id_local'] < message['id_local']:
                 print "true"
                 return msg
         
@@ -105,7 +105,7 @@ class Messages:
             return None
         messages = filter(self._date_valid,Messages.db.get_messages(args))
         for msg in reversed(messages):
-            if msg['tstamp'] >= message['tstamp'] and msg['id'] > message['id']:
+            if msg['id_local'] > message['id_local']:
                 return msg
         return None 
     

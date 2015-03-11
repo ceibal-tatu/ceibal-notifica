@@ -124,7 +124,7 @@ class Db:
                 filters += ' and ' if args else ''
         c = con.cursor()
         c.execute('BEGIN TRANSACTION')
-        c.execute('SELECT * FROM notifications %s order by tstamp desc, id desc;' % filters)
+        c.execute('SELECT * FROM notifications %s order by id_local desc;' % filters)
         output = c.fetchall()
         c.execute('END TRANSACTION')
         self._close_connection(con)

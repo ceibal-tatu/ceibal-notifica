@@ -70,7 +70,7 @@ FUNCIONES_PRIORIDAD=['sin_accion',
 # ------------------------------------------------
 
 INIT_DB = """
-CREATE TABLE IF NOT EXISTS "notifications" ("id" INTEGER PRIMARY KEY NOT NULL,
+CREATE TABLE IF NOT EXISTS "notifications" ("id" INTEGER NOT NULL,
 "vencimiento" DATE NOT NULL DEFAULT CURRENT_DATE,
 "funcion" TEXT DEFAULT '',
 "accion" TEXT DEFAULT '',
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS "notifications" ("id" INTEGER PRIMARY KEY NOT NULL,
 "texto" TEXT NOT NULL DEFAULT '',
 "html" TEXT DEFAULT '',
 "imagen" TEXT DEFAULT '',
-"tstamp" TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+"id_local" INTEGER PRIMARY KEY, 
 "estado" TEXT DEFAULT 'unread');
 """
 
