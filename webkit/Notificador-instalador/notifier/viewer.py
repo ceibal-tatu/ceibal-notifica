@@ -126,3 +126,7 @@ class ToolBarCommon:
 
         if not self.next.get_sensitive() and not self.back.get_sensitive():
             self.win.html_viewer.load_no_more_notification()
+    
+    def on_close_clicked(self, widget):
+        print("Goodbye")            
+        self.win.destroy() 

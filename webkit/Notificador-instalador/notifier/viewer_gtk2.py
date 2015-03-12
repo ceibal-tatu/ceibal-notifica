@@ -138,7 +138,3 @@ class ToolBar(ToolBarCommon):
         self.tbar.insert(check_item,4)
         self.tbar.insert(self.close, 5)
 
-    def on_close_clicked(self, widget):
-        self.win.destroy() 
-        if self.win.message_mgr.get_first() is None:
-            gtk.main_quit()
