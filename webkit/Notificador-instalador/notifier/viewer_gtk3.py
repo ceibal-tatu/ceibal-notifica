@@ -14,51 +14,55 @@ from ceibal.notifier.message  import *
 
 
 
-class VentanaBoton(Gtk.Window):
+class VentanaBoton(VentanaBotonCommon):
 
     def __init__(self):
-        Gtk.Window.__init__(self, title="Notificador de novedades Ceibal")
-        self.image_btn = os.path.join (env.get_images_root(),NOTIF_IMG_BTN)
-        
-        self.message_mgr = Messages()
+        VentanaBotonCommon.__init__(self)
+        self.win = Gtk.Window(title="Notificador de novedades Ceibal")
         
         #Evita que aparezca en la lista de ventanas
-        self.set_skip_taskbar_hint(True)
+        self.win.set_skip_taskbar_hint(True)
         
-        self.set_decorated(False)
+        self.win.set_decorated(False)
 
-        self.set_accept_focus(False)
-        self.connect("delete-event", Gtk.main_quit)
+        self.win.set_accept_focus(False)
+        self.win.connect("delete-event", Gtk.main_quit)
         self.create_button()
-        self.move(Gdk.Screen.get_default().get_width() - self.get_size()[0] ,0)
-        self.show_all()
+        self.win.move(Gdk.Screen.get_default().get_width() - self.win.get_size()[0] ,0)
+        self.win.show_all()
         Gtk.main()
 
     def create_button(self):
         self.button = Gtk.Button()
         self.button.connect("clicked", self.on_button_clicked)
         
-        image = Gtk.Image()
-        image.set_from_file(self.image_btn)
-        image.show()
-        self.button.add(image)
-        
-        self.add(self.button)
+        self.image_btn = Gtk.Image()
+        icon_img = self.get_image_btn()
+        self.image_btn.set_from_file(icon_img)
+        self.image_btn.show()
+        self.button.add(self.image_btn)
+        self.win.add(self.button)
+    
+    def refresh_button(self):
+        icon_img = self.get_image_btn()
+        self.image_btn.set_from_file(icon_img)
+        self.image_btn.show()
     
     def on_button_clicked(self, widget):
-        visor = Visor()
+        visor = Visor(self)
 
 
 
 
 class Visor(Gtk.Window):
  
-    def __init__(self):
+    def __init__(self, parent):
 
         #GObject.threads_init()
         Gtk.Window.__init__(self, title="Visor de novedades Ceibal")
         (self.width, self.height) = get_window_size()
 
+        self.ventana_btn = parent
         #Evita que aparezca en la lista de ventanas
         self.set_skip_taskbar_hint(True)
         
