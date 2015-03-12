@@ -31,6 +31,7 @@ class WebViewerCommon:
                 self.show_msg('prev')
             else: 
                 self.show_msg('next')
+            
         
 
     def update_read_button(self, msg):
@@ -57,13 +58,16 @@ class WebViewerCommon:
             current_msg = self.win.message_mgr.get_first(self.mode) 
         else:
             current_msg = None
-            
 
         if current_msg is not None:
             self.current_msg = current_msg
             self.view.load_string(current_msg['html'], 'text/html', 'UTF-8','/')
             self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, current_msg)) , str(self.win.message_mgr.get_total(self.mode)))
- 
+        else:
+            self.win.tool_bar.update_msg_counter('0', '0')
+            self.load_no_more_notification()
+    
+             
         self.update_read_button(current_msg)
         self.win.tool_bar.update_next_back_buttons(current_msg)
             
@@ -124,9 +128,6 @@ class ToolBarCommon:
         else:
             self.next.set_sensitive(True)
 
-        if not self.next.get_sensitive() and not self.back.get_sensitive():
-            self.win.html_viewer.load_no_more_notification()
-    
     def on_close_clicked(self, widget):
         print("Goodbye")            
         self.win.destroy() 
