@@ -10,6 +10,32 @@ from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import * 
 
 
+
+class VentanaBotonCommon:
+    
+    icon_btn_file_name = {0: 'boton_no_more_notifications.jpeg', 
+                          1: 'boton_1.jpeg',
+                          2: 'boton_2.jpeg',
+                          3: 'boton_3.jpeg',
+                          4: 'boton_4.jpeg',
+                          5: 'boton_5.jpeg', 
+                          6: 'boton_more.jpeg'}
+
+    def __init__(self):
+        self.message_mgr = Messages()
+    
+    def get_image_btn(self):
+
+        total = self.message_mgr.get_total('unread')
+        if total < 6:
+            idx = total
+        else:
+            idx = 6
+        print "file imagen del boton: " +  VentanaBotonCommon.icon_btn_file_name[idx]
+
+        return os.path.join (env.get_images_root(), VentanaBotonCommon.icon_btn_file_name[idx])
+
+
 class WebViewerCommon:
 
     def __init__ (self):
@@ -130,4 +156,5 @@ class ToolBarCommon:
 
     def on_close_clicked(self, widget):
         print("Goodbye")            
+        self.win.ventana_btn.refresh_button()
         self.win.destroy() 

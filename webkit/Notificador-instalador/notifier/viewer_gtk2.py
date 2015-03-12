@@ -14,21 +14,21 @@ from ceibal.notifier.constantes import *
 
 
 
-class VentanaBoton(gtk.Window):
+class VentanaBoton(VentanaBotonCommon):
 
     def __init__(self):
-        gtk.Window.__init__(self)
-        self.image_btn = os.path.join (env.get_images_root(),NOTIF_IMG_BTN)
-
+        VentanaBotonCommon.__init__(self)
+        self.win = gtk.Window()
         #Evita que aparezca en la lista de ventanas
-        self.set_skip_taskbar_hint(True)
+        self.win.set_skip_taskbar_hint(True)
 
-        self.set_decorated(False)
-        self.set_accept_focus(False)
-        self.connect("delete-event", gtk.main_quit)
+        self.win.set_decorated(False)
+        self.win.set_accept_focus(False)
+        self.win.connect("delete-event", gtk.main_quit)
         self.create_button()
-        self.move(gtk.gdk.screen_width()- self.get_size()[0] ,0)
-        self.show_all()
+        self.win.move(gtk.gdk.screen_width()- self.win.get_size()[0] ,0)
+        
+        self.win.show_all()
         gtk.main()
 
 
@@ -36,25 +36,30 @@ class VentanaBoton(gtk.Window):
         self.button = gtk.Button()
         self.button.connect("clicked", self.on_button_clicked)
         
-        image = gtk.Image()
-        image.set_from_file(self.image_btn)
-        image.show()
-        self.button.add(image) 
-        
-        self.add(self.button)
+        self.image_btn = gtk.Image()
+        icon_img = self.get_image_btn()
+        self.image_btn.set_from_file(icon_img)
+        self.image_btn.show()
+        self.button.add(self.image_btn) 
+        self.win.add(self.button)
+
+    def refresh_button(self):
+        icon_img = self.get_image_btn()
+        self.image_btn.set_from_file(icon_img)
+        self.image_btn.show()
 
     def on_button_clicked(self, widget):
-        visor = Visor()
+        Visor(self)
 
 
 
 
 class Visor(gtk.Window):
  
-    def __init__(self):
+    def __init__(self, parent):
         gtk.Window.__init__(self)
         (self.width, self.height) = get_window_size()
-
+        self.ventana_btn = parent
         #Evita que aparezca en la lista de ventanas
         self.set_skip_taskbar_hint(True)
         

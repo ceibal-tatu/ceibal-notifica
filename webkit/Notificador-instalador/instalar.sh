@@ -95,9 +95,8 @@ if [[ ! -d /home/$usuario/.notifier ]]; then
     mkdir /home/$usuario/.notifier/data
     mkdir /home/$usuario/.notifier/images
 fi
-cp images/planceibal.png /home/$usuario/.notifier/images/
+cp images/* /home/$usuario/.notifier/images/
 cp no_more_notifications.html /home/$usuario/.notifier/data/
-cp boton_notificaciones.png /home/$usuario/.notifier/images/boton_notificaciones.png
 chown -R $usuario:$usuario /home/$usuario/.notifier    
 echo "*"
 echo "*"
