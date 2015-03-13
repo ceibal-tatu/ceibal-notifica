@@ -4,6 +4,9 @@ echo "**************************************************************************
 echo "********************* INSTALADOR DEL NOTIFICADOR ****************************"
 echo "*****************************************************************************"
 
+
+
+
 if [[ $UID -ne 0 ]]; then
 echo "* - El script debe ser ejecutado como root." >&2
 exit 1;
@@ -23,13 +26,16 @@ fi
 echo "*"
 echo "*"
 echo "* VERIFICANDO E INSTALANDO SISTEMA DE NOTIFICACIONES ..."
+
 if [ "$SO" = "Fedora" ];then
+                ######    F E D O R A  ######
     if [[ ! -d /usr/lib/python2.7/site-packages/ceibal ]]; then
         cp -r ceibal /usr/lib/python2.7/site-packages
     fi
     cp -r notifier /usr/lib/python2.7/site-packages/ceibal
     chmod -R 755 /usr/lib/python2.7/site-packages/ceibal/notifier
 else
+                ######    U B U N T U  ######
 	if [[ -d /usr/lib/python2.7 ]]; then
 	    if [[ ! -d /usr/lib/python2.7/dist-packages/ceibal ]]; then
     	    cp -r ceibal /usr/lib/python2.7/dist-packages
@@ -47,6 +53,38 @@ else
         echo "* - No se pudieron instalar los archivos del notifier"
 	fi
 fi
+echo "*"
+echo "*"
+echo "* ACTUALIZANDO SUGAR-SESSION ..."
+echo "*"
+SUGAR_VERSION="DESCONOCIDA"
+
+if [ "$SO" = "Fedora" ]; then
+    SUGAR_VERSION=`rpm -iqa | grep "^sugar-[0-9]" | cut -d"." -f 2`
+else
+    if `dpkg -l | grep "python-sugar-0.98"`; then
+        SUGAR_VERSION="98"
+    fi
+fi
+
+if [ "$SUGAR_VERSION" = "DESCONOCIDA" ];then
+    echo "* Sugar no esta instalada en el sistema"
+else 
+    echo "* La version de sugar instalada es: $SUGAR_VERSION"
+
+    if [ "$SUGAR_VERSION" = "94"  ]; then
+        cp sugar/sugar-session-94-f14 /usr/bin/sugar-session
+    elif [ "$SUGAR_VERSION" = "98" -a "$SO" = "Fedora" ]; then
+        cp sugar/sugar-session-98-f18 /usr/bin/sugar-session
+    elif [ "$SUGAR_VERSION" = "98" -a "$SO" = "Ubuntu" ]; then
+        cp sugar/sugar-session-98-ub /usr/bin/sugar-session
+    elif [ "$SUGAR_VERSION" = "104" ]; then
+        cp sugar/main-104-f20.py /usr/lib/python2.7/site-packages/jarabe/main.py
+    else
+        echo "* No hay actualizacion disponible para esta version de Sugar"
+    fi
+fi
+
 echo "*"
 echo "*"
 echo "* VERIFICANDO E INSTALANDO LOS ARCHIVOS DE EJECUCION ..."
