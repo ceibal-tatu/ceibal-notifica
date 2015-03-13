@@ -19,7 +19,11 @@ class VentanaBotonCommon:
                           3: 'boton_3.jpeg',
                           4: 'boton_4.jpeg',
                           5: 'boton_5.jpeg', 
-                          6: 'boton_more.jpeg'}
+                          6: 'boton_6.jpeg', 
+                          7: 'boton_7.jpeg', 
+                          8: 'boton_8.jpeg', 
+                          9: 'boton_9.jpeg', 
+                          10: 'boton_further_more.jpeg'}
 
     def __init__(self):
         self.message_mgr = Messages()
@@ -27,10 +31,10 @@ class VentanaBotonCommon:
     def get_image_btn(self):
 
         total = self.message_mgr.get_total('unread')
-        if total < 6:
+        if total < len(VentanaBotonCommon.icon_btn_file_name)-1:
             idx = total
         else:
-            idx = 6
+            idx = len(VentanaBotonCommon.icon_btn_file_name)-1
         print "file imagen del boton: " +  VentanaBotonCommon.icon_btn_file_name[idx]
 
         return os.path.join (env.get_images_root(), VentanaBotonCommon.icon_btn_file_name[idx])

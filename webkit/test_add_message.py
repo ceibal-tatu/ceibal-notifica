@@ -12,7 +12,11 @@ html =[
 {'id':'4',  'txt': "<html><header><body>texto del mensaje 5...</body></header></html>"},
 {'id':'7',  'txt': "<html><header><body>texto del mensaje 6...<a href='http://www.ceibal.edu.uy'>link</a></body></header></html>"},
 {'id':'5',  'txt': "<html><header><body>texto del mensaje 7...</body></header></html>"},
-{'id':'1',  'txt': "<html><header><body>texto del mensaje 8...</body></header></html>"}
+{'id':'13',  'txt': "<html><header><body>texto del mensaje 8...</body></header></html>"},
+{'id':'33',  'txt': "<html><header><body>texto del mensaje 9...</body></header></html>"},
+{'id':'44',  'txt': "<html><header><body>texto del mensaje 10...</body></header></html>"},
+{'id':'32',  'txt': "<html><header><body>texto del mensaje 11...</body></header></html>"},
+{'id':'12',  'txt': "<html><header><body>texto del mensaje 12...</body></header></html>"}
 ]
 
 """                         ID   VENCIMIENTO  FUNCION     ACCION                       TITULO          TEXTO               TEXTO_HTML  IMAGEN """
