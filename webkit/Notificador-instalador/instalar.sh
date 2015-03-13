@@ -62,7 +62,7 @@ SUGAR_VERSION="DESCONOCIDA"
 if [ "$SO" = "Fedora" ]; then
     SUGAR_VERSION=`rpm -iqa | grep "^sugar-[0-9]" | cut -d"." -f 2`
 else
-    if `dpkg -l | grep "python-sugar-0.98"`; then
+    if [ ! "$(dpkg -l | grep -q "python-sugar-0.98")" ]; then
         SUGAR_VERSION="98"
     fi
 fi

@@ -350,7 +350,7 @@ def configure_mime_types():
 
 
 def start_ceibal_notifier():
-    os.system("/usr/sbin/notificador-mostrar-html")
+    os.system("sudo -u ceibal /usr/sbin/notificador-mostrar-html &")
 
 def heartBeat():
     os.system("sudo sh /usr/local/tdtDoctor/heartBeatChange &")

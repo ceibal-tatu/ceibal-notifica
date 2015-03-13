@@ -346,7 +346,7 @@ def configure_mime_types():
 
 
 def start_ceibal_notifier():
-    os.system("/usr/sbin/notificador-mostrar-html")
+    os.system("sudo -u olpc /usr/sbin/notificador-mostrar-html &")
 
 
 def set_theme():
