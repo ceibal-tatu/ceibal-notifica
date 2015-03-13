@@ -10,7 +10,7 @@ import os
 from os.path import expanduser
 
 def get_path_home():
-    if os.geteuid() == 0:
+    if os.getenv['SUDO_UID'] != '':
         if os.path.isdir("/home/olpc"):
             return '/home/olpc'
         elif os.path.isdir("/home/ceibal"):
