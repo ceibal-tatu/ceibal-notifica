@@ -239,7 +239,7 @@ def show_hidden_wireless_networks():
     from jarabe.journal.misc import get_hidden_ssids
     for ssid in get_hidden_ssids():
         subprocess.call('sudo iwlist eth0 scanning essid ' + ssid, shell=True)
-	subprocess.call('sleep 10', shell=True)
+    subprocess.call('sleep 10', shell=True)
 
 
 def setup_window_manager():
@@ -278,7 +278,7 @@ def osk_appeared_cb(monitor, one_file, other_file, event_type):
 
     if one_file.get_path() == os.path.expanduser(OSK_APPEARENCE_MONITOR_FILE):
         from jarabe.view.keyhandler import get_handle_accumulate_osk_func
-	get_handle_accumulate_osk_func()(None)
+    get_handle_accumulate_osk_func()(None)
 
 def osk_disappeared_cb(monitor, one_file, other_file, event_type):
     if event_type != Gio.FileMonitorEvent.CHANGED:
@@ -286,7 +286,7 @@ def osk_disappeared_cb(monitor, one_file, other_file, event_type):
 
     if one_file.get_path() == os.path.expanduser(OSK_DISAPPEARENCE_MONITOR_FILE):
         from jarabe.view.keyhandler import get_handle_unaccumulate_osk_func
-	get_handle_unaccumulate_osk_func()(None)
+    get_handle_unaccumulate_osk_func()(None)
 
 def arrange_for_osk_appearence_disappearence_hacks():
     osk_appearence_monitor_file_path = \
@@ -340,7 +340,7 @@ def set_fonts():
 def configure_mime_types():
     sugar_mime_file = os.path.join (os.getenv("HOME"), '.local/share/applications/sugar_mimeapps.list')
     mime_file = os.path.join (os.getenv("HOME"), '.local/share/applications/mimeapps.list')
-	if os.path.isfile(sugar_mime_file):
+    if os.path.isfile(sugar_mime_file):
         os.remove(mime_file)
     os.symlink(sugar_mime_file, mime_file)
 
@@ -368,11 +368,11 @@ def set_theme():
             scaling_set = True
 
     if (theme == 'sugar-contrast') and (scaling_set):
-	sugar_theme = 'sugar-100-contrast'
+        sugar_theme = 'sugar-100-contrast'
     elif (theme == 'sugar-contrast') and (not scaling_set):
-	sugar_theme = 'sugar-72-contrast'
+        sugar_theme = 'sugar-72-contrast'
     elif scaling_set:
-	sugar_theme = 'sugar-100'
+        sugar_theme = 'sugar-100'
 
     settings.set_property('gtk-theme-name', sugar_theme)
     settings.set_property('gtk-icon-theme-name', 'sugar')
