@@ -45,6 +45,7 @@ class Db:
         @summary: Abre una conexion a la DB.
         @return: Retorna la conexion.
         '''
+        print self._db_filename
         conn = sqlite3.connect(self._db_filename, isolation_level=None)
         conn.text_factory = str
         return conn
