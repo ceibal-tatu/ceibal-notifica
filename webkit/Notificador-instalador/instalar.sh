@@ -137,6 +137,9 @@ cp images/* /home/$usuario/.notifier/images/
 cp no_more_notifications.html /home/$usuario/.notifier/data/
 chown -R $usuario:$usuario /home/$usuario/.notifier    
 echo "*"
+echo "* ELIMINO BASE DE DATOS INSTALADA messages.db"
+rm /home/$usuario/.notifier/data/messages.db
+echo "*"
 echo "*"
 echo "*****************************************************************************"
 echo "*************************  TERMINO LA INSTALACION  **************************"
