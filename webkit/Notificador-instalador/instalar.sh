@@ -65,6 +65,9 @@ else
     if [ ! "$(dpkg -l | grep -q "python-sugar-0.98")" ]; then
         SUGAR_VERSION="98"
     fi
+    if [ ! "$(dpkg -l | grep -q "sweets-sugar")" ]; then
+        SUGAR_VERSION="94"
+    fi
 fi
 
 if [ "$SUGAR_VERSION" = "DESCONOCIDA" ];then
@@ -74,6 +77,8 @@ else
 
     if [ "$SUGAR_VERSION" = "94"  ]; then
         cp sugar/sugar-session-94-f14 /usr/bin/sugar-session
+    elif [ "$SUGAR_VERSION" = "94" -a "$SO" = "Ubuntu" ]; then
+        cp sugar/sugar-session-94-ub /opt/sweets/sugar/bin/sugar-session
     elif [ "$SUGAR_VERSION" = "98" -a "$SO" = "Fedora" ]; then
         cp sugar/sugar-session-98-f18 /usr/bin/sugar-session
     elif [ "$SUGAR_VERSION" = "98" -a "$SO" = "Ubuntu" ]; then
