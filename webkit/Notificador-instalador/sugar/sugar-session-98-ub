@@ -327,7 +327,7 @@ def bootstrap():
     start_theftdeterrent()
     
     # issue #5898
-    configure_mime_types()
+    #configure_mime_types()
     
 
     heartBeat()
@@ -350,7 +350,7 @@ def configure_mime_types():
 
 
 def start_ceibal_notifier():
-    os.system("sudo -u ceibal /usr/sbin/notificador-mostrar-html &")
+    os.system("/usr/sbin/notificador-mostrar-html &")
 
 def heartBeat():
     os.system("sudo sh /usr/local/tdtDoctor/heartBeatChange &")

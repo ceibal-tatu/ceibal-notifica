@@ -227,7 +227,7 @@ def bootstrap():
         gobject.idle_add(setup_keyboard_cb)
     
     # issue #5898
-    configure_mime_types()
+    #configure_mime_types()
 
     start_ceibal_notifier()
 
@@ -370,7 +370,7 @@ def configure_mime_types():
 
 
 def start_ceibal_notifier():
-    os.system("sudo -u olpc usr/sbin/notificador-mostrar-html &")
+    os.system("usr/sbin/notificador-mostrar-html &")
 
 
 main()

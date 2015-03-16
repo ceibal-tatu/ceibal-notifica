@@ -10,15 +10,12 @@ import os
 from os.path import expanduser
 
 def get_path_home():
-    if os.getenv('SUDO_UID') is None:
-        return expanduser('~')
+    if os.path.isdir("/home/olpc"):
+        return '/home/olpc'
+    elif os.path.isdir("/home/ceibal"):
+        return '/home/ceibal'
     else:
-        if os.path.isdir("/home/olpc"):
-            return '/home/olpc'
-        elif os.path.isdir("/home/ceibal"):
-            return '/home/ceibal'
-        else:
-            return '/root'
+        return expanduser('~')
 
 def get_data_root():
     '''

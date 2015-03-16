@@ -144,7 +144,7 @@ def _complete_desktop_startup():
     testrunner.check_environment()
    
     # issue #5898
-    configure_mime_types()
+    #configure_mime_types()
  
     # Sistema de notificaciones de Ceibal
     start_ceibal_notifier() 
@@ -421,7 +421,7 @@ def main():
     _stop_window_manager()
 
 def start_ceibal_notifier():
-    os.system("/usr/sbin/notificador-mostrar-html")
+    os.system("/usr/sbin/notificador-mostrar-html &")
 
 def configure_mime_types():
     sugar_mime_file = os.path.join (os.getenv("HOME"), '.local/share/applications/sugar_mimeapps.list')
