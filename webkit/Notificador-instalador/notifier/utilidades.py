@@ -230,7 +230,6 @@ def open_external_browser(uri):
     if desktop == "gnome":
         subprocess.call(["xdg-open", uri])
     elif desktop == "sugar":
-        subprocess.call(["sugar-launch", "--uri " + uri ,"org.laptop.WebActivity"]) 
-        #subprocess.call(["xdg-open", uri])
+        subprocess.call(["sugar-launch", "--uri ", uri ,"org.laptop.WebActivity"]) 
     else:
         subprocess.call(["xdg-open", uri])
