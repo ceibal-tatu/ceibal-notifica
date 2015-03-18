@@ -28,7 +28,7 @@ class VentanaBoton(VentanaBotonCommon):
         self.win.set_accept_focus(False)
         self.win.connect("delete-event", Gtk.main_quit)
         self.create_button()
-        self.win.move(Gdk.Screen.get_default().get_width() - self.win.get_size()[0] ,0)
+        self.win.move(Gdk.Screen.get_default().get_width() - self.win.get_size()[0] ,POS_VERTICAL)
         self.win.show_all()
         Gtk.main()
 
@@ -70,7 +70,7 @@ class Visor(Gtk.Window):
         self.set_decorated(False)
 
         self.resize(self.width,self.height)
-        self.move(Gdk.Screen.get_default().get_width() - self.get_size()[0] ,0)
+        self.move(Gdk.Screen.get_default().get_width() - self.get_size()[0] ,POS_VERTICAL)
 
         self.set_accept_focus(False)
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)

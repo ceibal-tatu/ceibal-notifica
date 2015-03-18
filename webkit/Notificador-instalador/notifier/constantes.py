@@ -81,7 +81,9 @@ CREATE TABLE IF NOT EXISTS "notifications" ("id" INTEGER NOT NULL,
 "id_local" INTEGER PRIMARY KEY, 
 "estado" TEXT DEFAULT 'unread');
 """
-
+# ------------------------------------------------
+# Posicion vertical del boton y el visor
+POS_VERTICAL = 55
 #-----------------------------------------------------------------------------------------
 #---------------- Constantes usadas en utilidades.py -------------------------------------
 
