@@ -181,6 +181,10 @@ def get_active_desktop():
 
     if "SUGAR_BUNDLE_ID" in os.environ:
         return "sugar"
+    
+    # Sugar en Ubuntu 10, sweets
+    if "SUGAR_EMULATOR_PID" in os.environ:
+        return "sugar"
 
     try:
         fd = open(ACTIVE_DESKTOP_FILE, "r")
