@@ -61,12 +61,12 @@ class Db:
         """
         @summary: Borro todas las notificaciones que ya expiraron. El historico queda en la bandeja Web.
         """
-        today = datetime.datetime.strftime(datetime.date.today(), "%Y-%m-%d")
+        today = datetime.date.today().isoformat()
         con = self._connect()
         c = con.cursor()
         c.execute('BEGIN TRANSACTION')
         try:
-            c.execute('delete from notifications where vencimiento < date("%s");' % today)
+            c.execute('delete from notifications where vencimiento < "%s";' % today)
         except sqlite3.IntegrityError, e:
             print str(e)
         c.execute('END TRANSACTION')
