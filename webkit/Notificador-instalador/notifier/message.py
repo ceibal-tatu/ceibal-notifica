@@ -38,7 +38,7 @@ class Messages:
         @return: Verdadero si esta vigente el mensaje.
         '''
         expires = message["vencimiento"]
-        today = datetime.datetime.strftime(datetime.date.today(), "%Y-%m-%d")
+        today = datetime.date.today().isoformat()
         return today <= expires
 
     def get_total (self, mode):
