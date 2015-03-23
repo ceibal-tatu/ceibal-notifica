@@ -13,17 +13,18 @@ from ceibal.notifier.constantes import *
 
 class VentanaBotonCommon:
     
-    icon_btn_file_name = {0: 'boton_no_more_notifications.jpeg', 
-                          1: 'boton_1.jpeg',
-                          2: 'boton_2.jpeg',
-                          3: 'boton_3.jpeg',
-                          4: 'boton_4.jpeg',
-                          5: 'boton_5.jpeg', 
-                          6: 'boton_6.jpeg', 
-                          7: 'boton_7.jpeg', 
-                          8: 'boton_8.jpeg', 
-                          9: 'boton_9.jpeg', 
-                          10: 'boton_further_more.jpeg'}
+    icon_btn_file_name = {0: 'not_0.png', 
+                          1: 'not_1.png',
+                          2: 'not_2.png',
+                          3: 'not_3.png',
+                          4: 'not_4.png',
+                          5: 'not_5.png', 
+                          6: 'not_6.png', 
+                          7: 'not_7.png', 
+                          8: 'not_8.png', 
+                          9: 'not_9.png', 
+                          10: 'not_10.png', 
+                          11: 'not_10mas.png'}
 
     def __init__(self):
         self.message_mgr = Messages()
