@@ -28,7 +28,8 @@ class VentanaBoton(VentanaBotonCommon):
         self.win.set_accept_focus(False)
         self.win.connect("delete-event", Gtk.main_quit)
         self.create_button()
-        self.win.move(Gdk.Screen.get_default().get_width() - self.win.get_size()[0] ,POS_VERTICAL)
+        (pos_h, pos_v) = get_window_pos (Gdk.Screen.get_default().get_width() - self.win.get_size()[0])
+        self.win.move(pos_h, pos_v)
         self.win.show_all()
         Gtk.main()
 
@@ -61,7 +62,7 @@ class Visor(Gtk.Window):
         #GObject.threads_init()
         Gtk.Window.__init__(self, title="Visor de novedades Ceibal")
         (self.width, self.height) = get_window_size()
-
+        
         self.ventana_btn = parent
         #Evita que aparezca en la lista de ventanas
         self.set_skip_taskbar_hint(True)
@@ -70,7 +71,8 @@ class Visor(Gtk.Window):
         self.set_decorated(False)
 
         self.resize(self.width,self.height)
-        self.move(Gdk.Screen.get_default().get_width() - self.get_size()[0] ,POS_VERTICAL)
+        (pos_h, pos_v) = get_window_pos (Gdk.Screen.get_default().get_width() - self.width)
+        self.move(pos_h, pos_v)
 
         self.set_accept_focus(False)
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)

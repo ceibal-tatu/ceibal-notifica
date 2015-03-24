@@ -26,7 +26,8 @@ class VentanaBoton(VentanaBotonCommon):
         self.win.set_accept_focus(False)
         self.win.connect("delete-event", gtk.main_quit)
         self.create_button()
-        self.win.move(gtk.gdk.screen_width()- self.win.get_size()[0] , POS_VERTICAL)
+        (pos_h, pos_v) = get_window_pos (gtk.gdk.screen_width() - self.win.get_size()[0])
+        self.win.move(pos_h, pos_v)
         
         self.win.show_all()
         gtk.main()
@@ -73,7 +74,8 @@ class Visor(gtk.Window):
         self.message_mgr = Messages()
         self.tool_bar    = ToolBar(self)
         self.html_viewer = WebViewer(self)
-        self.move(gtk.gdk.screen_width()- self.get_size()[0] ,POS_VERTICAL)
+        (pos_h, pos_v) = get_window_pos (gtk.gdk.screen_width() - self.get_size()[0])
+        self.move(pos_h, pos_v)
         self.html_viewer.show_msg('first')
         self.show_all()
 

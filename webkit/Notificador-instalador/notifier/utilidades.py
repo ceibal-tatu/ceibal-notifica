@@ -214,6 +214,16 @@ def get_active_desktop():
 
     return "Unknown"  
 
+def get_window_pos(pos_h):
+    desktop = get_active_desktop()
+    if desktop == "sugar" or desktop == "sweets":
+        h = 0
+        v = 75
+    else:
+        h = pos_h
+        v = 0
+    return (h,v) 
+
 def get_window_size():
     tipo = get_tipo_laptop()
     
