@@ -178,6 +178,9 @@ def notificacion(texto):
 def get_active_desktop():
     ACTIVE_DESKTOP_FILE = "/home/olpc/.olpc-active-desktop"
     desktop = "sugar"
+    
+    if "SUGAR_HOME" in os.environ:
+        return "sugar"
 
     if "SUGAR_BUNDLE_ID" in os.environ:
         return "sugar"
