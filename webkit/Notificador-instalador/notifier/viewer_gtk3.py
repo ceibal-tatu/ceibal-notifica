@@ -36,6 +36,7 @@ class VentanaBoton(VentanaBotonCommon):
     def create_button(self):
         self.button = Gtk.Button()
         self.button.connect("clicked", self.on_button_clicked)
+        self.button.connect("enter", self.on_button_pointer)
         
         self.image_btn = Gtk.Image()
         icon_img = self.get_image_btn()

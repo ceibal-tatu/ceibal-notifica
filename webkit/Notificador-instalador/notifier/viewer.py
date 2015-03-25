@@ -39,6 +39,9 @@ class VentanaBotonCommon:
         print "file imagen del boton: " +  VentanaBotonCommon.icon_btn_file_name[idx]
 
         return os.path.join (env.get_images_root(), VentanaBotonCommon.icon_btn_file_name[idx])
+    
+    def on_button_pointer(self, widget):
+        print "mouse pointer detected ..."
 
 
 class WebViewerCommon:
