@@ -13,7 +13,20 @@ from ceibal.notifier.constantes import *
 
 class VentanaBotonCommon:
     
-    icons_over={0: 'not_0.png', 
+    icons_over={0: 'not_0hover.png', 
+                1: 'not_1hover.png',
+                2: 'not_2hover.png',
+                3: 'not_3hover.png',
+                4: 'not_4hover.png',
+                5: 'not_5hover.png', 
+                6: 'not_6hover.png', 
+                7: 'not_7hover.png', 
+                8: 'not_8hover.png', 
+                9: 'not_9hover.png', 
+                10: 'not_10hover.png', 
+                11: 'not_10mashover.png'}
+    
+    icons_out ={0: 'not_0.png', 
                 1: 'not_1.png',
                 2: 'not_2.png',
                 3: 'not_3.png',
@@ -25,19 +38,6 @@ class VentanaBotonCommon:
                 9: 'not_9.png', 
                 10: 'not_10.png', 
                 11: 'not_10mas.png'}
-    
-    icons_out ={0: 'not_dark_0.png', 
-                1: 'not_dark_1.png',
-                2: 'not_dark_2.png',
-                3: 'not_dark_3.png',
-                4: 'not_dark_4.png',
-                5: 'not_dark_5.png', 
-                6: 'not_dark_6.png', 
-                7: 'not_dark_7.png', 
-                8: 'not_dark_8.png', 
-                9: 'not_dark_9.png', 
-                10: 'not_dark_10.png', 
-                11: 'not_dark_10mas.png'}
 
     def __init__(self):
         self.message_mgr = Messages()
