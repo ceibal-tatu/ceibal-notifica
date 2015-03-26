@@ -13,35 +13,64 @@ from ceibal.notifier.constantes import *
 
 class VentanaBotonCommon:
     
-    icon_btn_file_name = {0: 'not_0.png', 
-                          1: 'not_1.png',
-                          2: 'not_2.png',
-                          3: 'not_3.png',
-                          4: 'not_4.png',
-                          5: 'not_5.png', 
-                          6: 'not_6.png', 
-                          7: 'not_7.png', 
-                          8: 'not_8.png', 
-                          9: 'not_9.png', 
-                          10: 'not_10.png', 
-                          11: 'not_10mas.png'}
+    icons_over={0: 'not_0.png', 
+                1: 'not_1.png',
+                2: 'not_2.png',
+                3: 'not_3.png',
+                4: 'not_4.png',
+                5: 'not_5.png', 
+                6: 'not_6.png', 
+                7: 'not_7.png', 
+                8: 'not_8.png', 
+                9: 'not_9.png', 
+                10: 'not_10.png', 
+                11: 'not_10mas.png'}
+    
+    icons_out ={0: 'not_dark_0.png', 
+                1: 'not_dark_1.png',
+                2: 'not_dark_2.png',
+                3: 'not_dark_3.png',
+                4: 'not_dark_4.png',
+                5: 'not_dark_5.png', 
+                6: 'not_dark_6.png', 
+                7: 'not_dark_7.png', 
+                8: 'not_dark_8.png', 
+                9: 'not_dark_9.png', 
+                10: 'not_dark_10.png', 
+                11: 'not_dark_10mas.png'}
 
     def __init__(self):
         self.message_mgr = Messages()
     
-    def get_image_btn(self):
+    def get_image_btn(self, mouse_pinter):
+
+        if mouse_pinter == "over":
+            icons = VentanaBotonCommon.icons_over
+        else:
+            icons = VentanaBotonCommon.icons_out
 
         total = self.message_mgr.get_total('unread')
-        if total < len(VentanaBotonCommon.icon_btn_file_name)-1:
+        if total < len(icons)-1:
             idx = total
         else:
-            idx = len(VentanaBotonCommon.icon_btn_file_name)-1
-        print "file imagen del boton: " +  VentanaBotonCommon.icon_btn_file_name[idx]
+            idx = len(icons)-1
+        print "file imagen del boton: " +  icons[idx]
 
-        return os.path.join (env.get_images_root(), VentanaBotonCommon.icon_btn_file_name[idx])
+        return os.path.join (env.get_images_root(), icons[idx])
     
-    def on_button_pointer(self, widget):
-        print "mouse pointer detected ..."
+    def on_button_pointer_enter(self, widget):
+        print "mouse pointer enter detected ..."
+        icon_img = self.get_image_btn("over")        
+        self.refresh_button (icon_img)
+
+    def on_button_pointer_leave(self, widget):
+        print "mouse pointer exit detected ..."
+        icon_img = self.get_image_btn("out")        
+        self.refresh_button (icon_img)
+    
+    def refresh_button(self, icon_img):
+        self.image_btn.set_from_file(icon_img)
+        self.image_btn.show()
 
 
 class WebViewerCommon:
@@ -164,5 +193,6 @@ class ToolBarCommon:
 
     def on_close_clicked(self, widget):
         print("Goodbye")            
-        self.win.ventana_btn.refresh_button()
+        icon_img = self.win.ventana_btn.get_image_btn("out")        
+        self.win.ventana_btn.refresh_button(icon_img)
         self.win.destroy() 

@@ -36,19 +36,15 @@ class VentanaBoton(VentanaBotonCommon):
     def create_button(self):
         self.button = Gtk.Button()
         self.button.connect("clicked", self.on_button_clicked)
-        self.button.connect("enter", self.on_button_pointer)
+        self.button.connect("enter", self.on_button_pointer_enter)
+        self.button.connect("leave", self.on_button_pointer_leave)
         
         self.image_btn = Gtk.Image()
-        icon_img = self.get_image_btn()
+        icon_img = self.get_image_btn("out")
         self.image_btn.set_from_file(icon_img)
         self.image_btn.show()
         self.button.add(self.image_btn)
         self.win.add(self.button)
-    
-    def refresh_button(self):
-        icon_img = self.get_image_btn()
-        self.image_btn.set_from_file(icon_img)
-        self.image_btn.show()
     
     def on_button_clicked(self, widget):
         visor = Visor(self)
