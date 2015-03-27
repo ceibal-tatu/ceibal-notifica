@@ -125,11 +125,6 @@ def setup_notification_service_cb():
     from jarabe.model import notifications
     notifications.init()
 
-def show_notifications_cb():
-    from ceibal.notifier import Notifier
-    n = Notifier()
-    n.show_messages_from_shell()
-
 def setup_file_transfer_cb():
     from jarabe.model import filetransfer
     filetransfer.init()
@@ -198,7 +193,6 @@ def file_monitor_changed_cb(monitor, one_file, other_file, event_type):
        (one_file.get_path() == os.path.expanduser('~/.sugar/journal_created')):
         if event_type == gio.FILE_MONITOR_EVENT_CREATED:
             gobject.idle_add(setup_frame_cb)
-            gobject.idle_add(show_notifications_cb)
             MONITOR_ACTION_TAKEN = True
 
 def arrange_for_setup_frame_cb():
