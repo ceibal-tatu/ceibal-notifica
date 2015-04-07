@@ -24,14 +24,33 @@ class W_S_Conexion:
         '''
         @summary: Conecta los parametros a la URL de la conexion al Web Service.
         '''
+        import laptopFactory import LaptopFactory
+
+        laptop = LaptopFactory()
+
+        noHayParametro = False
+
         try:
-            parametros=obtener_parametros()
-            if parametros[1]:
-                self.url=self.url+"?cedula="+str(parametros[0])+"&serie="+str(parametros[1])+"&modelo="+str(parametros[2])+"&imagen="+str(parametros[3])
+            if laptop.get_ceibal_user is not None and laptop.get_id is not None and laptop.get_model is not None
+                and laptop.get_build is not None and laptop.get_firmware is not None and laptop.get_plazo_bloqueo is not None
+                and laptop.get_boot_count_bloqueo is not None and laptop.get_last_update is not None 
+                and laptop.get_free_space_porc is not None:
+                self.url += "?cedula=" + laptop.get_ceibal_user
+                self.url += "&serie=" + laptop.get_id
+                self.url += "&modelo=" + laptop.get_model
+                self.url += "&imagen=" + laptop.get_build
+                #self.url += "&fechaReporte=" + 
+                self.url += "&firmware=" + laptop.get_firmware
+                self.url += "&plazoBloqueo=" + laptop.get_plazo_bloqueo
+                self.url += "&bootCountBloqueo=" + laptop.get_boot_count_bloqueo
+                self.url += "&fechaUltActualizacion=" + laptop.get_last_update
+                self.url += "&espacioLibrePorcentaje=" + laptop.get_free_space_porc
+                self.url += "&datosExtra=" + "{'datos' : 'clave'}"
             else:
-                notificacion(ALERTA_SN)
+                print ('Faltan parametros para construir la URL')
         except:
             notificacion(ALERTA_ERROR)
+        
     
     def _conectar(self, url):
         """
