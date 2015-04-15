@@ -28,15 +28,23 @@ class Store:
         """
         contenido = json.loads(open(TMP_JSON).read())
         diccionario={}
+        unorder_msgs=[]
+        order_msgs=[]
         
         for x in xrange(int(contenido['cantidad'])):
             for y in xrange(len(JSON_KEYS)):
                 diccionario[DIC_KEYS[y]]=contenido['data'][x][JSON_KEYS[y]]
             # Insertamos la imagen por defecto de la notificacion.
             diccionario[DIC_KEYS[y+1]]=IMAGEN_NOTOFY
-            
-            self._save_message(diccionario)
-    
+            unorder_msgs[x]= diccionario
+
+        # Ordeno las respuestas por fecha de vencimiento
+        order_msgs = sorted(unorder_msgs, key=lambda k: k['vencimiento'])
+
+        for msg in order_msgs:
+            self._save_message(msg)
+
+
     def _save_message(self, msg):
         """
         @param msg: Diccionario de mensajes.

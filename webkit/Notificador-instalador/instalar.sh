@@ -96,7 +96,7 @@ echo "*"
 echo "* VERIFICANDO E INSTALANDO LOS ARCHIVOS DE EJECUCION ..."
 cp sbin/* /usr/sbin/
 chmod 755 /usr/sbin/notificador-mostrar-html
-chmod 755 /usr/sbin/notificador-obtener
+chmod 755 /usr/sbin/notificador.py
 echo "*"
 echo "*"
 echo "* DETECTO EL NOMBRE DE USUARIO ..."
@@ -119,7 +119,7 @@ if [[ -d /etc/cron.d/ ]]; then
     PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
     DISPLAY=:0
 
-    * */6 * * * $usuario /usr/bin/python /usr/sbin/notificador-obtener
+    * */6 * * * $usuario /usr/bin/python /usr/sbin/notificador.py
 EOF
 fi
 echo "*"
