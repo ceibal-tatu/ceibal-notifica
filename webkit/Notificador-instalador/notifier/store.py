@@ -27,16 +27,22 @@ class Store:
         @summary: Cargamos desde un archivo JSON las Notificaciones.
         """
         contenido = json.loads(open(TMP_JSON).read())
-        diccionario={}
+        msgs=[]
         
         for x in xrange(int(contenido['cantidad'])):
+            msgs.append({})
             for y in xrange(len(JSON_KEYS)):
-                diccionario[DIC_KEYS[y]]=contenido['data'][x][JSON_KEYS[y]]
+		        msgs[x][DIC_KEYS[y]]=contenido['data'][x][JSON_KEYS[y]]
             # Insertamos la imagen por defecto de la notificacion.
-            diccionario[DIC_KEYS[y+1]]=IMAGEN_NOTOFY
-            
-            self._save_message(diccionario)
-    
+            msgs[x][DIC_KEYS[y+1]]=IMAGEN_NOTOFY
+
+        # Ordeno las respuestas por fecha de vencimiento
+        msgs.sort(key=lambda k: k['vencimiento'])
+
+        for msg in msgs:
+            self._save_message(msg)
+
+
     def _save_message(self, msg):
         """
         @param msg: Diccionario de mensajes.

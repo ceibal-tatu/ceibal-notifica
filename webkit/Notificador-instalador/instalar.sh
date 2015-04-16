@@ -107,7 +107,8 @@ echo "*"
 echo "* VERIFICANDO E INSTALANDO LOS ARCHIVOS DE EJECUCION ..."
 cp sbin/* /usr/sbin/
 chmod 755 /usr/sbin/notificador-mostrar-html
-chmod 755 /usr/sbin/notificador-obtener
+chmod 755 /usr/sbin/notificador-obtener.py
+chmod 755 /usr/sbin/notificador-chequeo-cron.py
 echo "*"
 echo "*"
 echo "* DETECTO EL NOMBRE DE USUARIO ..."

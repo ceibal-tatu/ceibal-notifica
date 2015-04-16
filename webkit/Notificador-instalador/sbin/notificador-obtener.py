@@ -17,7 +17,7 @@ import json
 
 from ceibal import env
 from ceibal import util
-from ceibalmipc.laptops.laptopFactory import LaptopFactory
+#from ceibalmipc.laptops.laptopFactory import LaptopFactory
 
 def get_work_dir():
     directory = None
