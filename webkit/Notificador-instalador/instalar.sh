@@ -115,11 +115,12 @@ echo "*"
 echo "* VERIFICANDO E INSTALANDO ARCHIVO CRON ..."
 if [[ -d /etc/cron.d/ ]]; then
     cat << EOF > /etc/cron.d/notifier
-    SHELL=/bin/sh
-    PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-    DISPLAY=:0
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DISPLAY=:0
 
-    * */6 * * * $usuario /usr/bin/python /usr/sbin/notificador-obtener
+*/10 * * * * $usuario /usr/bin/python /usr/sbin/notificador-obtener.py $usuario
+@reboot root /usr/bin/python /usr/sbin/notificador-chequeo-cron.py
 EOF
 fi
 echo "*"

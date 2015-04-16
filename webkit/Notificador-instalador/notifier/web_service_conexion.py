@@ -24,16 +24,29 @@ class W_S_Conexion:
         '''
         @summary: Conecta los parametros a la URL de la conexion al Web Service.
         '''
-        import laptopFactory import LaptopFactory
+        try:
+            parametros=obtener_parametros()
+            if parametros[1]:
+                self.url=self.url+"?cedula="+str(parametros[0])+"&serie="+str(parametros[1])+"&modelo="+str(parametros[2])+"&imagen="+str(parametros[3])
+            else:
+                notificacion(ALERTA_SN)
+        except:
+            notificacion(ALERTA_ERROR)
+            
+    def _concatenar_nuevos_parametros_url(self):
+        '''
+        @summary: Conecta los parametros a la URL de la conexion al Web Service.
+        '''
+        from ceibalmipc.laptops.laptopFactory import LaptopFactory
 
         laptop = LaptopFactory()
 
         noHayParametro = False
 
         try:
-            if laptop.get_ceibal_user is not None and laptop.get_id is not None and laptop.get_model is not None
-                and laptop.get_build is not None and laptop.get_firmware is not None and laptop.get_plazo_bloqueo is not None
-                and laptop.get_boot_count_bloqueo is not None and laptop.get_last_update is not None 
+            if laptop.get_ceibal_user is not None and laptop.get_id is not None and laptop.get_model is not None \
+                and laptop.get_build is not None and laptop.get_firmware is not None and laptop.get_plazo_bloqueo is not None \
+                and laptop.get_boot_count_bloqueo is not None and laptop.get_last_update is not None \
                 and laptop.get_free_space_porc is not None:
                 self.url += "?cedula=" + laptop.get_ceibal_user
                 self.url += "&serie=" + laptop.get_id
@@ -105,13 +118,16 @@ class W_S_Conexion:
         self._concatenar_parametros_url()
         
         # Conecta a la URL del web Service y guarda el contenido en un archivo.
-        self._guardar_en_archivo(self._conectar(self.url))
+        json_response = self._conectar(self.url)
+        self._guardar_en_archivo(json_response)
         
         # Conectamos a la Base de Datos.
         base_de_datos = Store()
         
         # Cargamos las Notificaciones a la Base de Datos.
         base_de_datos.Cargar_notificaciones()
+
+        return json_response
 
 if __name__ == "__main__":
     # Creamos la conexion al Web-Service.
