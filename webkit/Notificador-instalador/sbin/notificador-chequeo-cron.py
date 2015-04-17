@@ -31,7 +31,7 @@ def chequear_cambio_cron():
             if usuario is not None:
                 notifier = open('/etc/cron.d/notifier', 'w')
                 texto = 'SHELL=/bin/sh\nPATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/usr/bin\nDISPLAY=:0\n\n*/' + frecuencia_cron + ' * * * * ' + usuario
-                texto += ' /usr/bin/python /usr/sbin/notificador-obtener.py ' + usuario
+                texto += ' /usr/bin/python /usr/sbin/notificador-obtener'
                 texto += '\n@reboot root /usr/bin/python /usr/sbin/notificador-chequeo-cron.py ' + usuario
                 notifier.write(texto)
                 notifier.close()

@@ -15,18 +15,15 @@ import logging
 import logging.handlers
 import json
 
+from ceibal.notifier import env as notif_env
 from ceibal import env
 from ceibal import util
+
+
 #from ceibalmipc.laptops.laptopFactory import LaptopFactory
 
-def get_work_dir():
-    directory = None
-    if len(sys.argv) > 1:
-        usuario = sys.argv[1]
-        directory = os.path.join('/home', usuario, '.notifier')
-    return directory
 
-WORK_DIR = get_work_dir()
+WORK_DIR = notif_env.get_work_dir()
 DIR_SEGURIDAD = env.get_security_root()
 NOTIHOY = os.path.join(WORK_DIR, "notihoy")
 
@@ -43,21 +40,23 @@ def already_running():
 
 class NotificadorObtener:
 
-    def __init__(self):
+    def __init__(self, onDemand=False):
         self.__set_logger()
 
         # Realiza el chequeo de los directorios necesarios para la ejecucion
         self.chk_env()
 
+        self._logger.debug("Inicio proceso de obtencion de notificaciones ...")
+
         self._updated_today = os.path.join(WORK_DIR, "notihoy")
 
-        if self.already_checked_for_noti():
-            self._logger.debug(time.ctime() + ' -AVISO: Ya se chequearon las notificaciones en este periodo. Volvera a chequear cuando comience el siguiente periodo. Saliendo...')
+        if self.already_checked_for_noti(onDemand):
+            self._logger.info(time.ctime() + ' -AVISO: Ya se chequearon las notificaciones en este periodo. Volvera a chequear cuando comience el siguiente periodo. Saliendo...')
             exit()
 
         time_wait = 60
         espera = random.randint(0, time_wait)
-        self._logger.debug('Esperando %i segundos...' %espera)
+        self._logger.info('Esperando %i segundos...' %espera)
         time.sleep(espera)
 
         # Importamos la clase W_S_Conexion para conectarons al Web Service.
@@ -74,13 +73,12 @@ class NotificadorObtener:
 
         if json_response is not None:
             contenido = json.loads(json_response)
-
             frecuencia_obtener = contenido['frecuencia_muestro']
+            # Seteamos la hora en el notihoy
+            self.__set_update_today(frecuencia_obtener)
 
-        self._logger.debug(time.ctime() + '- Se termino el proceso de obtener notificaciones. Saliendo...')
+        self._logger.info(time.ctime() + '- Se termino el proceso de obtener notificaciones. Saliendo...')
 
-        # Seteamos la hora en el notihoy
-        self.__set_update_today(frecuencia_obtener)
 
 
     def __set_update_today(self, frecuencia_obtener):
@@ -98,7 +96,7 @@ class NotificadorObtener:
 
         util.data_2_file(data, self._updated_today)
 
-    def already_checked_for_noti(self):
+    def already_checked_for_noti(self, onDemand):
         '''
         Retorna True si ya se actualizo hoy
         '''
@@ -114,23 +112,30 @@ class NotificadorObtener:
         horaActualizado = int(data.split(';')[0])
         tiempoActualizacion = int(data.split(';')[1])
         f.close()
-        horaActual = int(str(time.time()).split('.')[0])
-        diffHoras = horaActual - horaActualizado
-        if diffHoras < tiempoActualizacion:
-            retorno = True
+
+        if onDemand is False:
+            horaActual = int(str(time.time()).split('.')[0])
+            diffHoras = horaActual - horaActualizado
+            if diffHoras < tiempoActualizacion:
+                retorno = True
         
         return retorno
 
 
     def __set_logger(self):
         FILE_LOG = os.path.join(WORK_DIR, 'notificador.log')
-        logging.basicConfig(filename=FILE_LOG,
-                            level=logging.DEBUG,
-                            format='%(asctime)s - %(levelname)s - %(message)s',
-                            filemode='w')
 
-        self._logger = logging.getLogger('notificador')
+        # create a file handler
+        handler = logging.FileHandler(FILE_LOG)
+        handler.setLevel(logging.DEBUG)
 
+        # create a logging format
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+
+        self._logger = logging.getLogger(__name__)
+        self._logger.setLevel(logging.INFO)
+        self._logger.addHandler(handler)
 
     def chk_env(self):
         '''
@@ -139,7 +144,7 @@ class NotificadorObtener:
         De no existir algun directorio necesario lo crea y le da permisos.
         '''
         if WORK_DIR is None:
-            self._logger.debug(time.ctime() + '- No se encontro el directorio: ' + WORK_DIR + ' - saliendo...')
+            self._logger.error(time.ctime() + '- No se encontro el directorio: ' + WORK_DIR + ' - saliendo...')
             exit()
 
         if not os.path.isdir(WORK_DIR):

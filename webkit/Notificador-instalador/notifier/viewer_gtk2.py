@@ -121,12 +121,15 @@ class ToolBar(ToolBarCommon):
         
         self.close = gtk.ToolButton(gtk.STOCK_CLOSE)
         self.close.connect("clicked", self.on_close_clicked)
+
+        self.get_notif = gtk.ToolButton(gtk.STOCK_REFRESH)
+        self.get_notif.connect("clicked", self.on_get_notif_clicked)
         
-        check_item = gtk.ToolItem ()
-        self.check_btn = gtk.CheckButton ()
+        check_item = gtk.ToolItem()
+        self.check_btn = gtk.CheckButton()
         self.check_btn.set_label ('Mostrar todos')
-        self.check_btn.connect ('toggled' , self.toggled)
-        check_item.add (self.check_btn)
+        self.check_btn.connect('toggled' , self.toggled)
+        check_item.add(self.check_btn)
 
         sep = gtk.SeparatorToolItem()
 
@@ -141,6 +144,7 @@ class ToolBar(ToolBarCommon):
         self.tbar.insert(msg_counter_item, 1)
         self.tbar.insert(self.next, 2)
         self.tbar.insert(sep, 3)
-        self.tbar.insert(check_item,4)
-        self.tbar.insert(self.close, 5)
+        self.tbar.insert(self.get_notif,4)
+        self.tbar.insert(check_item,5)
+        self.tbar.insert(self.close, 6)
 

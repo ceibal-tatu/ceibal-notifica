@@ -1,0 +1,11 @@
+#! /usr/bin/python
+# -*- coding:utf-8 -*-
+# notificador-obtener V2.0
+# Author: Gustavo Duarte <gus.duarte@gmail.com
+#----------------------------------------------------------------------
+# Obtiene los mensajes del backend y los guarda en la DB.
+#----------------------------------------------------------------------
+from ceibal.notifier.notificador_obtener import *
+
+
+NotificadorObtener()

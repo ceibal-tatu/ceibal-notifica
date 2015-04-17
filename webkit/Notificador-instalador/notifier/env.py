@@ -17,6 +17,9 @@ def get_path_home():
     else:
         return expanduser('~')
 
+def get_work_dir():
+    return os.path.join(get_path_home(),'.notifier')
+
 def get_data_root():
     '''
     @summary: Obtiene la ruta donde esta la DB.

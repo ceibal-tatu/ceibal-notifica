@@ -107,7 +107,7 @@ echo "*"
 echo "* VERIFICANDO E INSTALANDO LOS ARCHIVOS DE EJECUCION ..."
 cp sbin/* /usr/sbin/
 chmod 755 /usr/sbin/notificador-mostrar-html
-chmod 755 /usr/sbin/notificador-obtener.py
+chmod 755 /usr/sbin/notificador-obtener
 chmod 755 /usr/sbin/notificador-chequeo-cron.py
 echo "*"
 echo "*"
@@ -131,7 +131,7 @@ SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DISPLAY=:0
 
-*/10 * * * * $usuario /usr/bin/python /usr/sbin/notificador-obtener.py $usuario
+*/10 * * * * $usuario /usr/bin/python /usr/sbin/notificador-obtener
 @reboot root /usr/bin/python /usr/sbin/notificador-chequeo-cron.py
 EOF
 fi

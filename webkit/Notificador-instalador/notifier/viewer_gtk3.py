@@ -121,6 +121,9 @@ class ToolBar(ToolBarCommon):
         
         self.close = Gtk.ToolButton(Gtk.STOCK_CLOSE,label="Cerrar")
         self.close.connect("clicked", self.on_close_clicked)
+
+        self.get_notif = ftk.ToolButton(Gtk.STOCK_REFRESH, label="Actualizar")
+        self.get_notif.connect("clicked", self.on_get_notif_clicked)
         
         check_item = Gtk.ToolItem ()
         self.check_btn = Gtk.CheckButton ()
@@ -141,7 +144,8 @@ class ToolBar(ToolBarCommon):
         self.tbar.insert(msg_counter_item,1)
         self.tbar.insert(self.next, 2)
         self.tbar.insert(sep, 3)
-        self.tbar.insert(check_item,4)
-        self.tbar.insert(self.close, 5)
+        self.tbar.insert(self.get_notif,4)
+        self.tbar.insert(check_item,5)
+        self.tbar.insert(self.close, 6)
 
 

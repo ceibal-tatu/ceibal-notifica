@@ -75,6 +75,7 @@ class W_S_Conexion:
             self.conexion = urllib2.urlopen(url)
         except Exception, e:
             print str(e)
+
         return self.conexion.read()
     
     def _guardar_en_archivo(self,texto):
@@ -119,6 +120,13 @@ class W_S_Conexion:
         
         # Conecta a la URL del web Service y guarda el contenido en un archivo.
         json_response = self._conectar(self.url)
+
+        try:
+            json.loads(json_response)
+        except ValueError, e:
+            print("Respuesta invalida")
+            return None
+
         self._guardar_en_archivo(json_response)
         
         # Conectamos a la Base de Datos.

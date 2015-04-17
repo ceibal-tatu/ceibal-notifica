@@ -5,7 +5,8 @@ import subprocess
 import urlparse
 
 from ceibal.notifier  import env
-from ceibal.notifier.message  import * 
+from ceibal.notifier.notificador_obtener import *
+from ceibal.notifier.message import *
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import * 
 
@@ -56,7 +57,7 @@ class VentanaBotonCommon:
             idx = len(icons)-1
         print "file imagen del boton: " +  icons[idx]
 
-        return os.path.join (env.get_images_root(), icons[idx])
+        return os.path.join(env.get_images_root(), icons[idx])
     
     def on_button_pointer_enter(self, widget):
         print "mouse pointer enter detected ..."
@@ -196,3 +197,7 @@ class ToolBarCommon:
         icon_img = self.win.ventana_btn.get_image_btn("out")        
         self.win.ventana_btn.refresh_button(icon_img)
         self.win.destroy() 
+
+    def on_get_notif_clicked(self, widget):
+        print("Getting new notifications ... ")
+        NotificadorObtener(onDemand=True)
