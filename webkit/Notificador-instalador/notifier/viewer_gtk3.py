@@ -122,7 +122,7 @@ class ToolBar(ToolBarCommon):
         self.close = Gtk.ToolButton(Gtk.STOCK_CLOSE,label="Cerrar")
         self.close.connect("clicked", self.on_close_clicked)
 
-        self.get_notif = ftk.ToolButton(Gtk.STOCK_REFRESH, label="Actualizar")
+        self.get_notif = Gtk.ToolButton(Gtk.STOCK_REFRESH, label="Actualizar")
         self.get_notif.connect("clicked", self.on_get_notif_clicked)
         
         check_item = Gtk.ToolItem ()
