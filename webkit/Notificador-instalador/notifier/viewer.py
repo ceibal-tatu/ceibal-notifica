@@ -111,16 +111,17 @@ class WebViewerCommon:
         self.updating_read_button = False
 
     def refresh_tool_bar(self):
+        if self.current_msg is None:
+            current_msg = self.win.message_mgr.get_first(self.mode)
+        else:
+            current_msg = self.current_msg
+
         # Update NEXT BACK buttons
-        self.win.tool_bar.update_next_back_buttons(self.current_msg)
+        self.win.tool_bar.update_next_back_buttons(current_msg)
 
         # Update Msg counters
-        if self.current_msg is not None:
-            self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, self.current_msg)) ,
-                                                 str(self.win.message_mgr.get_total(self.mode)))
-        else:
-            self.win.tool_bar.update_msg_counter('0', str(self.win.message_mgr.get_total(self.mode)))
-
+        self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, current_msg)),
+                                             str(self.win.message_mgr.get_total(self.mode)))
 
     def show_msg(self, pos):
         if self.current_msg is None:
