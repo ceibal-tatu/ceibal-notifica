@@ -17,11 +17,11 @@ echo "* VERIFICANDO SISTEMA OPERATIVO ..."
 VERSION="/etc/fedora-release"
 SO=""
 if [[ -f $VERSION ]]; then
-	SO="Fedora"
-	echo "* - Su sistema operativo es: Fedora"
+    SO="Fedora"
+    echo "* - Su sistema operativo es: Fedora"
 else
-	SO="Ubuntu"
-	echo "* - Su sistema operativo es: Ubuntu"
+    SO="Ubuntu"
+    echo "* - Su sistema operativo es: Ubuntu"
 fi
 echo "*"
 echo "*"
@@ -40,9 +40,9 @@ if [ "$SO" = "Fedora" ];then
 
 else
                 ######    U B U N T U  ######
-	if [[ -d /usr/lib/python2.7 ]]; then
-	    if [[ ! -d /usr/lib/python2.7/dist-packages/ceibal ]]; then
-    	    cp -r ceibal /usr/lib/python2.7/dist-packages
+    if [[ -d /usr/lib/python2.7 ]]; then
+        if [[ ! -d /usr/lib/python2.7/dist-packages/ceibal ]]; then
+            cp -r ceibal /usr/lib/python2.7/dist-packages
         else
             cp ceibal/* /usr/lib/python2.7/dist-packages/ceibal/
         fi
@@ -50,9 +50,9 @@ else
         cp -r notifier /usr/lib/python2.7/dist-packages/ceibal
         chmod -R 755 /usr/lib/python2.7/dist-packages/ceibal/notifier
 
-	elif [[ -d /usr/lib/python2.6 ]]; then
-    	if [[ ! -d /usr/lib/python2.6/dist-packages/ceibal ]]; then
-    		cp -r ceibal /usr/lib/python2.6/dist-packages
+    elif [[ -d /usr/lib/python2.6 ]]; then
+        if [[ ! -d /usr/lib/python2.6/dist-packages/ceibal ]]; then
+            cp -r ceibal /usr/lib/python2.6/dist-packages
         else
             cp ceibal/* /usr/lib/python2.6/dist-packages/ceibal/
         fi
@@ -62,7 +62,7 @@ else
     else
         echo
         echo "* - No se pudieron instalar los archivos del notifier"
-	fi
+    fi
 fi
 echo "*"
 echo "*"
@@ -124,19 +124,6 @@ else
 fi
 echo "*"
 echo "*"
-echo "* VERIFICANDO E INSTALANDO ARCHIVO CRON ..."
-if [[ -d /etc/cron.d/ ]]; then
-    cat << EOF > /etc/cron.d/notifier
-SHELL=/bin/sh
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DISPLAY=:0
-
-*/10 * * * * $usuario /usr/bin/python /usr/sbin/notificador-obtener
-@reboot root /usr/bin/python /usr/sbin/notificador-chequeo-cron.py
-EOF
-fi
-echo "*"
-echo "*"
 echo "* AGREGO el notificador-mostrar-html AL ARRANQUE ..."
 echo "*"
 if [[ ! -d /home/$usuario/.config/autostart ]]; then
@@ -147,6 +134,7 @@ chown $usuario:$usuario /home/$usuario/.config/autostart/notificador-mostrar.des
 echo "*"
 echo "*"
 echo "* VERIFICANDO E INSTALANDO EL LOGO"
+echo "*"
 if [[ ! -d /home/$usuario/.notifier ]]; then
     mkdir /home/$usuario/.notifier
     mkdir /home/$usuario/.notifier/data
@@ -154,7 +142,19 @@ if [[ ! -d /home/$usuario/.notifier ]]; then
 fi
 cp images/* /home/$usuario/.notifier/images/
 cp no_more_notifications.html /home/$usuario/.notifier/data/
-chown -R $usuario:$usuario /home/$usuario/.notifier    
+echo "*"
+echo "*"
+echo "* VERIFICANDO E INSTALANDO CRON"
+echo "*"
+cat << EOF > /home/$usuario/.notifier/cron-notifier
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DISPLAY=:0
+
+*/10 * * * * $usuario /usr/bin/python /usr/sbin/notificador-obtener
+EOF
+chown -R $usuario:$usuario /home/$usuario/.notifier
+echo "*"
 echo "*"
 echo "* ELIMINO BASE DE DATOS INSTALADA messages.db"
 rm /home/$usuario/.notifier/data/messages.db
