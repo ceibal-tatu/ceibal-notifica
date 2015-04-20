@@ -73,7 +73,7 @@ class NotificadorObtener:
             # Seteamos la hora en el notihoy
             self.__set_update_today(frecuencia_obtener)
 
-            frecuencia = contenido['frecuencia']
+            frecuencia_cron = contenido['frecuencia']
 
             crontab = open(CRONTAB, 'w')
 
@@ -82,7 +82,7 @@ class NotificadorObtener:
 
             crontab.write(texto)
             crontab.close()
-            
+
             # Asigno el cron al usario
             comando = 'crontab -i ' + CRONTAB
             
