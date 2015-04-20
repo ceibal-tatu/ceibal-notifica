@@ -110,12 +110,17 @@ class WebViewerCommon:
                 self.btn_leido.set_active(True)        
         self.updating_read_button = False
 
-    def update_msg_counter(self):
+    def refresh_tool_bar(self):
+        # Update NEXT BACK buttons
+        self.win.tool_bar.update_next_back_buttons(self.current_msg)
+
+        # Update Msg counters
         if self.current_msg is not None:
             self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, self.current_msg)) ,
                                                  str(self.win.message_mgr.get_total(self.mode)))
         else:
-            self.win.tool_bar.update_msg_counter('0', '0')
+            self.win.tool_bar.update_msg_counter('0', str(self.win.message_mgr.get_total(self.mode)))
+
 
     def show_msg(self, pos):
         if self.current_msg is None:
@@ -136,9 +141,8 @@ class WebViewerCommon:
         else:
             self.load_no_more_notification()
 
-        self.update_msg_counter()
         self.update_read_button(current_msg)
-        self.win.tool_bar.update_next_back_buttons(current_msg)
+        self.refresh_tool_bar()
 
     def load_no_more_notification(self):
         self.view.open(os.path.join(env.get_data_root(),'no_more_notifications.html'))
@@ -205,7 +209,7 @@ class ToolBarCommon:
     def on_get_notif_clicked(self, widget):
         print("Getting new notifications ... ")
         self.invoque_thread = threading.Thread(target = NotificadorObtener,
-                                               kwargs={"onDemand":True,"cb":self.win.html_viewer.update_msg_counter})
+                                               kwargs={"onDemand":True,"cb":self.win.html_viewer.refresh_tool_bar})
         self.invoque_thread.start()
 
 
