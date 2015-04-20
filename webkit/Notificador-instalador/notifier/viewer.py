@@ -10,6 +10,8 @@ from ceibal.notifier.message import *
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import * 
 
+import threading
+
 
 
 class VentanaBotonCommon:
@@ -95,8 +97,6 @@ class WebViewerCommon:
                 self.show_msg('prev')
             else: 
                 self.show_msg('next')
-            
-        
 
     def update_read_button(self, msg):
         self.updating_read_button = True
@@ -109,8 +109,15 @@ class WebViewerCommon:
             else:     
                 self.btn_leido.set_active(True)        
         self.updating_read_button = False
-    
-    def show_msg (self, pos):
+
+    def update_msg_counter(self):
+        if self.current_msg is not None:
+            self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, self.current_msg)) ,
+                                                 str(self.win.message_mgr.get_total(self.mode)))
+        else:
+            self.win.tool_bar.update_msg_counter('0', '0')
+
+    def show_msg(self, pos):
         if self.current_msg is None:
             self.current_msg = self.win.message_mgr.get_first(self.mode)
 
@@ -126,15 +133,12 @@ class WebViewerCommon:
         if current_msg is not None:
             self.current_msg = current_msg
             self.view.load_string(current_msg['html'], 'text/html', 'UTF-8','/')
-            self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, current_msg)) , str(self.win.message_mgr.get_total(self.mode)))
         else:
-            self.win.tool_bar.update_msg_counter('0', '0')
             self.load_no_more_notification()
-    
-             
+
+        self.update_msg_counter()
         self.update_read_button(current_msg)
         self.win.tool_bar.update_next_back_buttons(current_msg)
-            
 
     def load_no_more_notification(self):
         self.view.open(os.path.join(env.get_data_root(),'no_more_notifications.html'))
@@ -200,4 +204,9 @@ class ToolBarCommon:
 
     def on_get_notif_clicked(self, widget):
         print("Getting new notifications ... ")
-        NotificadorObtener(onDemand=True)
+        self.invoque_thread = threading.Thread(target = NotificadorObtener,
+                                               kwargs={"onDemand":True,"cb":self.win.html_viewer.update_msg_counter})
+        self.invoque_thread.start()
+
+
+

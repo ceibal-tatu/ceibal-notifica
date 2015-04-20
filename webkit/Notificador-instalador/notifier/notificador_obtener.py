@@ -14,10 +14,12 @@ import random
 import logging
 import logging.handlers
 import json
+import gobject
 
 from ceibal.notifier import env as notif_env
 from ceibal import env
 from ceibal import util
+gobject.threads_init()
 
 
 #from ceibalmipc.laptops.laptopFactory import LaptopFactory
@@ -40,7 +42,7 @@ def already_running():
 
 class NotificadorObtener:
 
-    def __init__(self, onDemand=False):
+    def __init__(self, onDemand=False, cb=None):
         self.__set_logger()
 
         # Realiza el chequeo de los directorios necesarios para la ejecucion
@@ -76,8 +78,12 @@ class NotificadorObtener:
             frecuencia_obtener = contenido['frecuencia_muestro']
             # Seteamos la hora en el notihoy
             self.__set_update_today(frecuencia_obtener)
+            if cb is not None:
+                gobject.idle_add(cb)
 
         self._logger.info(time.ctime() + '- Se termino el proceso de obtener notificaciones. Saliendo...')
+
+
 
 
 
