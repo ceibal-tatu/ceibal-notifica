@@ -29,34 +29,14 @@ echo "* VERIFICANDO E INSTALANDO SISTEMA DE NOTIFICACIONES ..."
 
 if [ "$SO" = "Fedora" ];then
                 ######    F E D O R A  ######
-    if [[ ! -d /usr/lib/python2.7/site-packages/ceibal ]]; then
-        cp -r ceibal /usr/lib/python2.7/site-packages
-    else
-        cp ceibal/* /usr/lib/python2.7/site-packages/ceibal/
-    fi
-
     cp -r notifier /usr/lib/python2.7/site-packages/ceibal
     chmod -R 755 /usr/lib/python2.7/site-packages/ceibal/notifier
-
 else
                 ######    U B U N T U  ######
     if [[ -d /usr/lib/python2.7 ]]; then
-        if [[ ! -d /usr/lib/python2.7/dist-packages/ceibal ]]; then
-            cp -r ceibal /usr/lib/python2.7/dist-packages
-        else
-            cp ceibal/* /usr/lib/python2.7/dist-packages/ceibal/
-        fi
-
         cp -r notifier /usr/lib/python2.7/dist-packages/ceibal
         chmod -R 755 /usr/lib/python2.7/dist-packages/ceibal/notifier
-
     elif [[ -d /usr/lib/python2.6 ]]; then
-        if [[ ! -d /usr/lib/python2.6/dist-packages/ceibal ]]; then
-            cp -r ceibal /usr/lib/python2.6/dist-packages
-        else
-            cp ceibal/* /usr/lib/python2.6/dist-packages/ceibal/
-        fi
-
         cp -r notifier /usr/lib/python2.6/dist-packages/ceibal
         chmod -R 755 /usr/lib/python2.6/dist-packages/ceibal/notifier
     else
@@ -163,4 +143,3 @@ echo "*"
 echo "*****************************************************************************"
 echo "*************************  TERMINO LA INSTALACION  **************************"
 echo "*****************************************************************************"
-
