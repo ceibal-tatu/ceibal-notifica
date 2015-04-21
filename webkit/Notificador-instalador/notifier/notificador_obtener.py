@@ -21,13 +21,9 @@ from ceibal import env
 from ceibal import util
 gobject.threads_init()
 
-
-#from ceibalmipc.laptops.laptopFactory import LaptopFactory
-
-
 WORK_DIR = notif_env.get_work_dir()
-DIR_SEGURIDAD = env.get_security_root()
-NOTIHOY = os.path.join(WORK_DIR, "notihoy")
+NOTIHOY = os.path.join(WORK_DIR, 'notihoy')
+CRONTAB = os.path.join(WORK_DIR, 'cron-notifier')
 
 
 def already_running():
@@ -80,6 +76,23 @@ class NotificadorObtener:
             self.__set_update_today(frecuencia_obtener)
             if cb is not None:
                 gobject.idle_add(cb)
+
+            frecuencia_cron = contenido['frecuencia']
+
+            crontab = open(CRONTAB, 'w')
+
+            texto = 'SHELL=/bin/sh\nPATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/usr/bin\nDISPLAY=:0\n\n*/' + frecuencia_cron
+            texto += ' * * * * /usr/bin/python /usr/sbin/notificador-obtener\n'
+
+            crontab.write(texto)
+            crontab.close()
+
+            # Asigno el cron al usario
+            comando = 'crontab -i ' + CRONTAB
+            
+            os.system(comando)
+
+
 
         self._logger.info(time.ctime() + '- Se termino el proceso de obtener notificaciones. Saliendo...')
 
