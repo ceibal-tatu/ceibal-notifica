@@ -4,18 +4,25 @@ echo "**************************************************************************
 echo "********************* INSTALADOR DEL NOTIFICADOR ****************************"
 echo "*****************************************************************************"
 
-
+die(){
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "              E R R O R                "
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    exit 1
+}
 
 
 if [[ $UID -ne 0 ]]; then
-echo "* - El script debe ser ejecutado como root." >&2
-exit 1;
+    echo "* - El script debe ser ejecutado como root." >&2
+    die
 fi
 echo "*"
 echo "*"
 echo "* VERIFICANDO SISTEMA OPERATIVO ..."
 VERSION="/etc/fedora-release"
 SO=""
+
+
 if [[ -f $VERSION ]]; then
     SO="Fedora"
     echo "* - Su sistema operativo es: Fedora"
@@ -26,22 +33,22 @@ fi
 echo "*"
 echo "*"
 echo "* VERIFICANDO E INSTALANDO SISTEMA DE NOTIFICACIONES ..."
-
 if [ "$SO" = "Fedora" ];then
                 ######    F E D O R A  ######
-    cp -r notifier /usr/lib/python2.7/site-packages/ceibal
-    chmod -R 755 /usr/lib/python2.7/site-packages/ceibal/notifier
+    cp -r notifier /usr/lib/python2.7/site-packages/ceibal || die
+    chmod -R 755 /usr/lib/python2.7/site-packages/ceibal/notifier || die
 else
                 ######    U B U N T U  ######
     if [[ -d /usr/lib/python2.7 ]]; then
-        cp -r notifier /usr/lib/python2.7/dist-packages/ceibal
-        chmod -R 755 /usr/lib/python2.7/dist-packages/ceibal/notifier
+        cp -r notifier /usr/lib/python2.7/dist-packages/ceibal || die
+        chmod -R 755 /usr/lib/python2.7/dist-packages/ceibal/notifier || die
     elif [[ -d /usr/lib/python2.6 ]]; then
-        cp -r notifier /usr/lib/python2.6/dist-packages/ceibal
-        chmod -R 755 /usr/lib/python2.6/dist-packages/ceibal/notifier
+        cp -r notifier /usr/lib/python2.6/dist-packages/ceibal || die
+        chmod -R 755 /usr/lib/python2.6/dist-packages/ceibal/notifier || die
     else
         echo
         echo "* - No se pudieron instalar los archivos del notifier"
+        die
     fi
 fi
 echo "*"
@@ -63,20 +70,21 @@ fi
 
 if [ "$SUGAR_VERSION" = "DESCONOCIDA" ];then
     echo "* Sugar no esta instalada en el sistema"
+    die
 else 
     echo "* La version de sugar instalada es: $SUGAR_VERSION"
 
     if [ "$SUGAR_VERSION" = "94"  ]; then
-        cp sugar/sugar-session-94-f14 /usr/bin/sugar-session
+        cp sugar/sugar-session-94-f14 /usr/bin/sugar-session || die
     elif [ "$SUGAR_VERSION" = "94" -a "$SO" = "Ubuntu" ]; then
-        cp sugar/sugar-session-94-ub /opt/sweets/sugar/bin/sugar-session
+        cp sugar/sugar-session-94-ub /opt/sweets/sugar/bin/sugar-session || die
     elif [ "$SUGAR_VERSION" = "98" -a "$SO" = "Fedora" ]; then
-        cp sugar/sugar-session-98-f18 /usr/bin/sugar-session
-        cp sugar/shell-98-f18.py /usr/lib/python2.7/site-packages/jarabe/model/shell.py
+        cp sugar/sugar-session-98-f18 /usr/bin/sugar-session || die
+        cp sugar/shell-98-f18.py /usr/lib/python2.7/site-packages/jarabe/model/shell.py || die
     elif [ "$SUGAR_VERSION" = "98" -a "$SO" = "Ubuntu" ]; then
-        cp sugar/sugar-session-98-ub /usr/bin/sugar-session
+        cp sugar/sugar-session-98-ub /usr/bin/sugar-session || die
     elif [ "$SUGAR_VERSION" = "104" ]; then
-        cp sugar/main-104-f20.py /usr/lib/python2.7/site-packages/jarabe/main.py
+        cp sugar/main-104-f20.py /usr/lib/python2.7/site-packages/jarabe/main.py || die
     else
         echo "* No hay actualizacion disponible para esta version de Sugar"
     fi
@@ -85,10 +93,9 @@ fi
 echo "*"
 echo "*"
 echo "* VERIFICANDO E INSTALANDO LOS ARCHIVOS DE EJECUCION ..."
-cp sbin/* /usr/sbin/
-chmod 755 /usr/sbin/notificador-mostrar-html
-chmod 755 /usr/sbin/notificador-obtener
-chmod 755 /usr/sbin/notificador-chequeo-cron.py
+cp sbin/* /usr/sbin/ || die
+chmod 755 /usr/sbin/notificador-mostrar-html || die
+chmod 755 /usr/sbin/notificador-obtener || die
 echo "*"
 echo "*"
 echo "* DETECTO EL NOMBRE DE USUARIO ..."
@@ -107,21 +114,21 @@ echo "*"
 echo "* AGREGO el notificador-mostrar-html AL ARRANQUE ..."
 echo "*"
 if [[ ! -d /home/$usuario/.config/autostart ]]; then
-    mkdir /home/$usuario/.config/autostart
+    mkdir /home/$usuario/.config/autostart || die
 fi
-cp notificador-mostrar.desktop /home/$usuario/.config/autostart
-chown $usuario:$usuario /home/$usuario/.config/autostart/notificador-mostrar.desktop
+cp notificador-mostrar.desktop /home/$usuario/.config/autostart || die
+chown $usuario:$usuario /home/$usuario/.config/autostart/notificador-mostrar.desktop || die
 echo "*"
 echo "*"
 echo "* VERIFICANDO E INSTALANDO EL LOGO"
 echo "*"
 if [[ ! -d /home/$usuario/.notifier ]]; then
-    mkdir /home/$usuario/.notifier
-    mkdir /home/$usuario/.notifier/data
-    mkdir /home/$usuario/.notifier/images
+    mkdir /home/$usuario/.notifier || die
+    mkdir /home/$usuario/.notifier/data || die
+    mkdir /home/$usuario/.notifier/images || die
 fi
-cp images/* /home/$usuario/.notifier/images/
-cp no_more_notifications.html /home/$usuario/.notifier/data/
+cp images/* /home/$usuario/.notifier/images/ || die
+cp no_more_notifications.html /home/$usuario/.notifier/data/ || die
 echo "*"
 echo "*"
 echo "* VERIFICANDO E INSTALANDO CRON"
@@ -133,11 +140,13 @@ DISPLAY=:0
 
 */10 * * * * $usuario /usr/bin/python /usr/sbin/notificador-obtener
 EOF
-chown -R $usuario:$usuario /home/$usuario/.notifier
+chown -R $usuario:$usuario /home/$usuario/.notifier || die
 echo "*"
 echo "*"
 echo "* ELIMINO BASE DE DATOS INSTALADA messages.db"
-rm /home/$usuario/.notifier/data/messages.db
+if [[ -f  /home/$usuario/.notifier/data/messages.db ]]; then
+    rm /home/$usuario/.notifier/data/messages.db
+fi
 echo "*"
 echo "*"
 echo "*****************************************************************************"
