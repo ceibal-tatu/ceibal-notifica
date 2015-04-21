@@ -421,7 +421,10 @@ def main():
     _stop_window_manager()
 
 def start_ceibal_notifier():
-    os.system("/usr/sbin/notificador-mostrar-html &")
+    try:
+        os.system("/usr/sbin/notificador-mostrar-html &")
+    except Exception:
+        print "Notificador ceibal fail"
 
 def configure_mime_types():
     sugar_mime_file = os.path.join (os.getenv("HOME"), '.local/share/applications/sugar_mimeapps.list')

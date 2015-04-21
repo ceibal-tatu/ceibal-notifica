@@ -340,10 +340,16 @@ def configure_mime_types():
 
 
 def start_ceibal_notifier():
-    os.system("/usr/sbin/notificador-mostrar-html &")
+    try:
+        os.system("/usr/sbin/notificador-mostrar-html &")
+    except Exception:
+        print "Notificador ceibal fail"
 
 def heartBeat():
-    os.system("sudo sh /usr/local/tdtDoctor/heartBeatChange &")
+    try:
+        os.system("sudo sh /usr/local/tdtDoctor/heartBeatChange &")
+    except Exception:
+        print "heartBeat fail"
 
 def start_theftdeterrent():
     os.system("sudo /usr/bin/theftdeterrent.sh &")

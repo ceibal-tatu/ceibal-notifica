@@ -182,7 +182,10 @@ def setup_window_manager():
         logging.warning('Can not disable metacity keybindings')
 
 def start_ceibal_notifier():
-    os.system("/usr/sbin/notificador-mostrar-html &")
+    try:
+        os.system("/usr/sbin/notificador-mostrar-html &")
+    except Exception:
+        print "Notificador ceibal fail"
 
 def bootstrap():
     setup_window_manager()

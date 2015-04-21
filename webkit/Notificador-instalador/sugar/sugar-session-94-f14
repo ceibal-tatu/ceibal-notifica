@@ -362,9 +362,11 @@ def configure_mime_types():
         os.remove(mime_file)
     os.symlink(sugar_mime_file, mime_file)
 
-
 def start_ceibal_notifier():
-    os.system("/usr/sbin/notificador-mostrar-html &")
+    try:
+        os.system("/usr/sbin/notificador-mostrar-html &")
+    except Exception:
+        print "Notificador ceibal fail"
 
 
 main()
