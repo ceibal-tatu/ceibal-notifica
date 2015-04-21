@@ -111,11 +111,7 @@ class WebViewerCommon:
         self.updating_read_button = False
 
     def refresh_tool_bar(self):
-        if self.current_msg is None:
-            current_msg = self.win.message_mgr.get_first(self.mode)
-        else:
-            current_msg = self.current_msg
-
+        current_msg = self.current_msg
         # Update NEXT BACK buttons
         self.win.tool_bar.update_next_back_buttons(current_msg)
 
@@ -207,10 +203,14 @@ class ToolBarCommon:
         self.win.ventana_btn.refresh_button(icon_img)
         self.win.destroy() 
 
+    def arrive_new_notifications(self):
+        self.win.html_viewer.refresh_tool_bar()
+        self.win.html_viewer.show_msg('first')
+
     def on_get_notif_clicked(self, widget):
         print("Getting new notifications ... ")
         self.invoque_thread = threading.Thread(target = NotificadorObtener,
-                                               kwargs={"onDemand":True,"cb":self.win.html_viewer.refresh_tool_bar})
+                                               kwargs={"onDemand":True,"cb":self.arrive_new_notifications})
         self.invoque_thread.start()
 
 

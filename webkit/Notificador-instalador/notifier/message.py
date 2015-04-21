@@ -50,12 +50,14 @@ class Messages:
         return len(messages)
 
     def get_pos(self, mode, msg):
-        pos = 1
+        if msg is None:
+            return 0
         if mode == 'unread':
             args = {'estado':'"unread"'}
         else:
             args = {}
         messages = filter(self._date_valid,Messages.db.get_messages(args))
+        pos = 1
         for m in messages:
             if m['id'] == msg['id']:
                 return pos
