@@ -60,17 +60,12 @@ SUGAR_VERSION="DESCONOCIDA"
 if [ "$SO" = "Fedora" ]; then
     SUGAR_VERSION=`rpm -iqa | grep "^sugar-[0-9]" | cut -d"." -f 2`
 else
-    if [ ! "$(dpkg -l | grep -q "python-sugar-0.98")" ]; then
-        SUGAR_VERSION="98"
-    fi
-    if [ ! "$(dpkg -l | grep -q "sweets-sugar")" ]; then
-        SUGAR_VERSION="94"
-    fi
+    dpkg -l | grep -q sweets-sugar && SUGAR_VERSION=94
+    dpkg -l | grep -q python-sugar-0.98 && SUGAR_VERSION=98
 fi
 
 if [ "$SUGAR_VERSION" = "DESCONOCIDA" ];then
     echo "* Sugar no esta instalada en el sistema"
-    die
 else 
     echo "* La version de sugar instalada es: $SUGAR_VERSION"
 
@@ -125,9 +120,8 @@ echo "*"
 if [[ ! -d /home/$usuario/.notifier ]]; then
     mkdir /home/$usuario/.notifier || die
     mkdir /home/$usuario/.notifier/data || die
-    mkdir /home/$usuario/.notifier/images || die
 fi
-cp images/* /home/$usuario/.notifier/images/ || die
+cp -r images  /home/$usuario/.notifier/  || die
 cp no_more_notifications.html /home/$usuario/.notifier/data/ || die
 echo "*"
 echo "*"
