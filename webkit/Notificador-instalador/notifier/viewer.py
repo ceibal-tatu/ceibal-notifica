@@ -44,9 +44,19 @@ class VentanaBotonCommon:
 
     def __init__(self):
         self.message_mgr = Messages()
-    
-    def get_image_btn(self, mouse_pinter):
 
+    def get_icon_path(self, icon):
+        LISTA = ['MG1', 'MG2', 'MG3', 'MG4', 'Magallanes2', 'Magallanes 2']
+
+        if(filter(lambda x: x == get_model_laptop(), LISTA) != []):
+            icon_path = os.path.join(env.get_images_root(), 'MG.1-4',icon)
+        else:
+            icon_path = os.path.join(env.get_images_root(), icon)
+
+        print "file imagen del boton: " +  icon_path
+        return icon_path
+
+    def get_image_btn(self, mouse_pinter):
         if mouse_pinter == "over":
             icons = VentanaBotonCommon.icons_over
         else:
@@ -57,9 +67,7 @@ class VentanaBotonCommon:
             idx = total
         else:
             idx = len(icons)-1
-        print "file imagen del boton: " +  icons[idx]
-
-        return os.path.join(env.get_images_root(), icons[idx])
+        return self.get_icon_path(icons[idx])
     
     def on_button_pointer_enter(self, widget):
         print "mouse pointer enter detected ..."

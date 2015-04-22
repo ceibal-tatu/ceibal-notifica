@@ -85,12 +85,17 @@ CREATE TABLE IF NOT EXISTS "notifications" ("id" INTEGER NOT NULL,
 #---------------- Constantes usadas en utilidades.py -------------------------------------
 
 LISTA_XO=["XO-1","XO-1.5","XO-1.5HS","XO-1.5-Lite","XO-1.75","XO-4Touch"]
-LISTA_CLASSMATE=["MG1","MG2","MG3","MG4","MG6","JumPC","Magallanes2"]
-LISTA_POSITIVO=["PositivoBGH"]
+LISTA_CLASSMATE=["MG1","MG2","MG3","MG4","MG6","JumPC","Magallanes2", "Magallanes 2"]
+LISTA_POSITIVO=["PositivoBGH", "Positivo BGH"]
 
+###### INFO del MODELO #######
+# XO-1.5HS
 OFW_MODEL_TREE = '/ofw/mfg-data/MN'
+# XO-1.75 XO-4
 PROC_MODEL_TREE = '/proc/device-tree/mfg-data/MN'
+# Magallanes y Positivo
 CLASSMATE_MODELO = '/etc/laptop_model'
+
 
 CLASSMATE_BUILD = '/etc/image_version'
 POSITIVO_BUILD = '/etc/ceibal-version'
