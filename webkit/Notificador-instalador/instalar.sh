@@ -137,10 +137,6 @@ EOF
 chown -R $usuario:$usuario /home/$usuario/.notifier || die
 echo "*"
 echo "*"
-echo "* ELIMINO BASE DE DATOS INSTALADA messages.db"
-if [[ -f  /home/$usuario/.notifier/data/messages.db ]]; then
-    rm /home/$usuario/.notifier/data/messages.db
-fi
 echo "*"
 echo "*"
 echo "*****************************************************************************"
