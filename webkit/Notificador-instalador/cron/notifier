@@ -1,5 +1,0 @@
-SHELL=/bin/sh
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DISPLAY=:0
-
-*/10 * * * * root /usr/bin/python /usr/sbin/notificador.py

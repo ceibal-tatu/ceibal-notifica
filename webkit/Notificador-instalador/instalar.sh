@@ -134,6 +134,7 @@ DISPLAY=:0
 
 */10 * * * * $usuario /usr/bin/python /usr/sbin/notificador-obtener
 EOF
+crontab -u $usuario /home/$usuario/.notifier/cron-notifier
 chown -R $usuario:$usuario /home/$usuario/.notifier || die
 echo "*"
 echo "*"
