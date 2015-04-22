@@ -1,7 +1,7 @@
-PATH_UPDATE='/home/earias/fuentes/actualizaciones/notificadorv2'
-PATH_NOTIFICADOR='/home/earias/fuentes/ceibal-notifica/instalador-webkit-devel.tar.gz'
-PATH_MIPC='/home/earias/fuentes/mi-laptop/dist/ceibalmipc-1.tar.gz'
-PATH_ACTUALIZADOR='/home/earias/fuentes/generar-actualizaciones'
+PATH_UPDATE=$HOME'/fuentes/actualizaciones/notificadorv2'
+PATH_NOTIFICADOR='instalador-webkit-devel.tar.gz'
+PATH_MIPC=$HOME'/fuentes/mi-laptop/dist/ceibalmipc-1.tar.gz'
+PATH_ACTUALIZADOR=$HOME'/fuentes/generar-actualizaciones'
 
 git pull
 generate-tar.sh
