@@ -82,6 +82,7 @@ class VentanaBotonCommon:
     def refresh_button(self, icon_img):
         self.image_btn.set_from_file(icon_img)
         self.image_btn.show()
+    
 
 
 class WebViewerCommon:
@@ -206,10 +207,8 @@ class ToolBarCommon:
             self.next.set_sensitive(True)
 
     def on_close_clicked(self, widget):
-        print("Goodbye")            
-        icon_img = self.win.ventana_btn.get_image_btn("out")        
-        self.win.ventana_btn.refresh_button(icon_img)
-        self.win.destroy() 
+        print("Close button clicked")
+        self.win.custom_close()            
 
     def arrive_new_notifications(self):
         self.win.html_viewer.refresh_tool_bar()

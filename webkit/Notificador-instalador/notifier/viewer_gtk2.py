@@ -59,6 +59,7 @@ class Visor(gtk.Window):
     def __init__(self, parent):
         gtk.Window.__init__(self)
         (self.width, self.height) = get_window_size()
+        self.connect("key-release-event", self.on_key_release) 
         self.ventana_btn = parent
         #Evita que aparezca en la lista de ventanas
         self.set_skip_taskbar_hint(True)
@@ -67,7 +68,7 @@ class Visor(gtk.Window):
         self.set_decorated(False)
 
         self.resize(self.width,self.height)
-        self.set_accept_focus(False)
+        #self.set_accept_focus(False)
         self.box = gtk.VBox()
         self.add(self.box) 
         self.message_mgr = Messages()
@@ -78,6 +79,16 @@ class Visor(gtk.Window):
         self.html_viewer.show_msg('first')
         self.show_all()
 
+    def custom_close(self):
+        icon_img = self.ventana_btn.get_image_btn("out")        
+        self.ventana_btn.refresh_button(icon_img)
+        self.destroy() 
+
+    def on_key_release(self, widget, ev, data=None):
+        print "Key pressed"
+        if ev.keyval == 65307: #If Escape pressed, reset text
+            print "Escape"
+            self.custom_close()
 
 class WebViewer (WebViewerCommon):
 

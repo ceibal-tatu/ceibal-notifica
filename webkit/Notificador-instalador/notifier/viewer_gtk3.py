@@ -59,6 +59,7 @@ class Visor(Gtk.Window):
         #GObject.threads_init()
         Gtk.Window.__init__(self, title="Visor de novedades Ceibal")
         (self.width, self.height) = get_window_size()
+        self.connect("key-release-event", self.on_key_release) 
         
         self.ventana_btn = parent
         #Evita que aparezca en la lista de ventanas
@@ -71,7 +72,7 @@ class Visor(Gtk.Window):
         (pos_h, pos_v) = get_window_pos (Gdk.Screen.get_default().get_width() - self.width)
         self.move(pos_h, pos_v)
 
-        self.set_accept_focus(False)
+        #self.set_accept_focus(False)
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.message_mgr = Messages()
         self.add(self.box) 
@@ -79,6 +80,17 @@ class Visor(Gtk.Window):
         self.html_viewer = WebViewer(self)
         self.html_viewer.show_msg('first')
         self.show_all()
+    
+    def custom_close(self):
+        icon_img = self.ventana_btn.get_image_btn("out")        
+        self.ventana_btn.refresh_button(icon_img)
+        self.destroy() 
+
+    def on_key_release(self, widget, ev, data=None):
+        print "Key pressed"
+        if ev.keyval == 65307: #If Escape pressed, reset text
+            print "Escape"
+            self.custom_close()
 
 
 
