@@ -19,6 +19,11 @@ import gobject
 from ceibal.notifier import env as notif_env
 from ceibal import env
 from ceibal import util
+
+import dbus
+from dbus.mainloop.glib import DBusGMainLoop
+
+
 gobject.threads_init()
 
 WORK_DIR = notif_env.get_work_dir()
@@ -46,6 +51,8 @@ class NotificadorObtener:
 
         self._logger.debug("Inicio proceso de obtencion de notificaciones ...")
 
+        self.dbus_client = DBusClient()
+
         self._updated_today = os.path.join(WORK_DIR, "notihoy")
 
         if self.already_checked_for_noti(onDemand):
@@ -70,6 +77,8 @@ class NotificadorObtener:
         json_response = web.Obtener_notificaciones(False)
 
         if json_response is not None:
+            self.dbus_client.send_update()
+
             contenido = json.loads(json_response)
             frecuencia_obtener = contenido['frecuencia_muestro']
             # Seteamos la hora en el notihoy
@@ -91,8 +100,6 @@ class NotificadorObtener:
             comando = 'crontab -i ' + CRONTAB
             
             os.system(comando)
-
-
 
         self._logger.info(time.ctime() + '- Se termino el proceso de obtener notificaciones. Saliendo...')
 
@@ -176,6 +183,29 @@ class NotificadorObtener:
 
         os.chmod(NOTIHOY, 0666)
 
+
+
+class DBusClient(object):
+    def __init__(self):
+        # Do before session or system bus is created.
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        self.bus = dbus.SessionBus()
+        self.service_found = False
+
+        try:
+            self.proxy = self.bus.get_object('edu.ceibal.NotificadorService', '/Update')
+            self.control_interface = dbus.Interface(self.proxy,'edu.ceibal.UpdateInterface')
+            self.service_found = True
+        except Exception:
+            print "No se encuentra el servicio"
+
+    def send_update(self):
+        if self.service_found:
+            self.control_interface.update()
+
+    def on_display_message_clicked(self, widget):
+        if self.service_found:
+            print self.control_interface.display_welcome_message()
 
 
 #############################################################
