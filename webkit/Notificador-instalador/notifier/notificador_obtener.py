@@ -91,14 +91,10 @@ class NotificadorObtener:
             comando = 'crontab -i ' + CRONTAB
             
             os.system(comando)
-
-
-
-        self._logger.info(time.ctime() + '- Se termino el proceso de obtener notificaciones. Saliendo...')
-
-
-
-
+            
+            self._logger.info(time.ctime() + '- Se termino el proceso de obtener notificaciones. Saliendo...')
+        else:
+            self._logger.info('No se encuentra la respuesta del servidor en el archivo: notify_json')
 
     def __set_update_today(self, frecuencia_obtener):
         '''
