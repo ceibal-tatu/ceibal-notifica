@@ -233,7 +233,7 @@ class DBusObject(dbus.service.Object):
         self.cb = callback
 
     # Display and message to gtk label and return message to caller
-    @dbus.service.method('eud.ceibal.UpdateInterface',in_signature='', out_signature='s')
+    @dbus.service.method('edu.ceibal.UpdateInterface',in_signature='', out_signature='s')
     def update(self):
         print "Update signal received"
         self.cb()
