@@ -29,11 +29,13 @@ salir(){
 }
 
 #Instala actualizacion solo para fedora 14,18,20 y ubuntu 10,12
+#y borra instalacion vieja
 if isFedora; then
     ! grep -q -e "Fedora 14" -e "Fedora 18" -e "Fedora 20" /etc/fedora-release && salir
     rpm -e ceibal-notifier
 else	
     ! lsb_release -sr | grep -q -e "10.04" -e "12.04" && salir
+    rm -fr /etc/cron.d/notificador
 fi
 
 
