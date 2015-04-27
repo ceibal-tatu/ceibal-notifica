@@ -238,7 +238,7 @@ def get_window_size():
         return (640, 480)
     if tipo == 1:
         # Clasmate
-        return (400,300)
+        return (450,300)
     if tipo == 2:
         # Positivo
         return (400,300)
