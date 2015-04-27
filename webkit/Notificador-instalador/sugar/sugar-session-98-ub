@@ -314,7 +314,7 @@ def bootstrap():
         GObject.idle_add(setup_keyboard_cb)
     
     # issue #5472       
-    start_theftdeterrent()
+    #start_theftdeterrent()
     
     # issue #5898
     #configure_mime_types()
