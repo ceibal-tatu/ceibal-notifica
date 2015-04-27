@@ -4,7 +4,7 @@ PATH_MIPC=$HOME'/fuentes/mi-laptop/dist/ceibalmipc-1.tar.gz'
 PATH_ACTUALIZADOR=$HOME'/fuentes/generar-actualizaciones'
 
 git pull
-generate-tar.sh
+sh generate-tar.sh
 
 #limpia dir
 rm -fr $PATH_UPDATE
@@ -19,7 +19,7 @@ cat <<EOF > $PATH_UPDATE/instalar
 
 #!/bin/bash
 
-'isFedora() {
+isFedora() {
     [ -f /etc/fedora-release ]
 }
 
@@ -31,10 +31,11 @@ salir(){
 #Instala actualizacion solo para fedora 14,18,20 y ubuntu 10,12
 if isFedora; then
     ! grep -q -e "Fedora 14" -e "Fedora 18" -e "Fedora 20" /etc/fedora-release && salir
+    rpm -e ceibal-notifier
 else	
     ! lsb_release -sr | grep -q -e "10.04" -e "12.04" && salir
 fi
-'
+
 
 cd ceibalmipc-1
 sh instalar.sh
@@ -56,9 +57,10 @@ rm -fr ceibalmipc-1.tar.gz instalador-webkit-devel.tar.gz
 #nautilus $PATH_UPDATE
 #Generar Actualizacion
 cd $PATH_ACTUALIZADOR
-DATE=$(date +"%Y%m%d")
+#DATE=$(date +"%Y%m%d")
+DATE='20150422'
 
-listVar="dxo-uy-1.75 1_0a 1_5a 1_75b 4_0b 1_25a CM_Ubuntu_b BGH_Ubuntu_b BGH2_Ubuntu_b MG6_Ubuntu_b"
+listVar="dxo-uy-1.75 1_0a 1_5a 1_75b 4_0b 1_25a uy-mg-1 CM_Ubuntu_a CM_Ubuntu_b BGH_Ubuntu_b BGH2_Ubuntu_b MG6_Ubuntu_b"
 for i in $listVar; do
     sh publicar_actualizacion_biblioteca.sh $i $DATE $PATH_UPDATE
 done
