@@ -75,6 +75,7 @@ class W_S_Conexion:
             self.conexion = urllib2.urlopen(url)
         except Exception, e:
             print str(e)
+            return json.dumps({'error': str(e)})
 
         return self.conexion.read()
     

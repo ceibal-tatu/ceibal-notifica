@@ -56,45 +56,59 @@ class NotificadorObtener:
         espera = random.randint(0, time_wait)
         self._logger.info('Esperando %i segundos...' %espera)
         time.sleep(espera)
+        try:
+            # Importamos la clase W_S_Conexion para conectarons al Web Service.
+            from ceibal.notifier.web_service_conexion import W_S_Conexion
 
-        # Importamos la clase W_S_Conexion para conectarons al Web Service.
-        from ceibal.notifier.web_service_conexion import W_S_Conexion
+            # Importamos las Constantes.
+            from ceibal.notifier.constantes import WEB_SERVICE_URL
 
-        # Importamos las Constantes.
-        from ceibal.notifier.constantes import WEB_SERVICE_URL
+            # Realizamos la coneccion con el Web Service.
+            web = W_S_Conexion(WEB_SERVICE_URL)
 
-        # Realizamos la coneccion con el Web Service.
-        web = W_S_Conexion(WEB_SERVICE_URL)
+            # Obtenemos las notificaciones
+            json_response = web.Obtener_notificaciones(False)
 
-        # Obtenemos las notificaciones
-        json_response = web.Obtener_notificaciones(False)
+            self._logger.info('La respuesta del servidor es: ' + str(json_response))
 
-        if json_response is not None:
-            contenido = json.loads(json_response)
-            frecuencia_obtener = contenido['frecuencia_muestro']
-            # Seteamos la hora en el notihoy
-            self.__set_update_today(frecuencia_obtener)
-            if cb is not None:
-                gobject.idle_add(cb)
+            if json_response is not None:
 
-            frecuencia_cron = contenido['frecuencia']
+                contenido = json.loads(json_response)
 
-            crontab = open(CRONTAB, 'w')
+                if 'error' in contenido:
+                    self._logger.info('Se encontro un error al llamar el servicio: ' + str(contenido['error']))
+                    exit()
 
-            texto = 'SHELL=/bin/sh\nPATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/usr/bin\nDISPLAY=:0\n\n*/' + frecuencia_cron
-            texto += ' * * * * /usr/bin/python /usr/sbin/notificador-obtener\n'
+                frecuencia_obtener = contenido['frecuencia_muestro']
+                # Seteamos la hora en el notihoy
+                self.__set_update_today(frecuencia_obtener)
+                if cb is not None:
+                    gobject.idle_add(cb)
 
-            crontab.write(texto)
-            crontab.close()
+                frecuencia_cron = contenido['frecuencia']
 
-            # Asigno el cron al usario
-            comando = 'crontab -i ' + CRONTAB
-            
-            os.system(comando)
-            
-            self._logger.info(time.ctime() + '- Se termino el proceso de obtener notificaciones. Saliendo...')
-        else:
-            self._logger.info('No se encuentra la respuesta del servidor en el archivo: notify_json')
+                crontab = open(CRONTAB, 'w')
+
+                texto = 'SHELL=/bin/sh\nPATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/usr/bin\nDISPLAY=:0\n\n*/' + frecuencia_cron
+                texto += ' * * * * /usr/bin/python /usr/sbin/notificador-obtener\n'
+
+                crontab.write(texto)
+                crontab.close()
+
+                # Asigno el cron al usario
+                comando = 'crontab -i ' + CRONTAB
+                
+                os.system(comando)
+                
+                self._logger.info('- Se termino el proceso de obtener notificaciones. Saliendo...')
+            else:
+                self._logger.info('No se encuentra la respuesta del servidor en el archivo: notify_json')
+        except Exception as exc:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            self._logger.info(str(exc_type) + ' ' + str(fname) + ' ' + str(exc_tb.tb_lineno))
+            self._logger.info('Hubo un error en el proceso de obtencion de notificaciones: ' + str(exc))
+            exit()
 
     def __set_update_today(self, frecuencia_obtener):
         '''
