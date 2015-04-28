@@ -3,6 +3,9 @@
 import os
 import subprocess
 import urlparse
+import gobject, dbus, dbus.service
+from dbus.mainloop.glib import DBusGMainLoop
+
 
 from ceibal.notifier  import env
 from ceibal.notifier.notificador_obtener import *
@@ -92,7 +95,8 @@ class WebViewerCommon:
         self.current_msg = None
         self.direction = 'forward'
         self.updating_read_button = False
- 
+        self.dbus_service = DBusService(self.refresh_tool_bar)
+
     def btn_leido_cb(self, widget, data=None):
         if widget.get_active():
             self.win.message_mgr.set_read(self.current_msg)
@@ -222,3 +226,24 @@ class ToolBarCommon:
 
 
 
+class DBusObject(dbus.service.Object):
+
+    def __init__(self, bus, name, callback):
+        dbus.service.Object.__init__(self, bus, name)
+        self.cb = callback
+
+    # Display and message to gtk label and return message to caller
+    @dbus.service.method('edu.ceibal.UpdateInterface',in_signature='', out_signature='s')
+    def update(self):
+        print "Update signal received"
+        self.cb()
+
+
+class DBusService:
+
+    def __init__(self, cb):
+        # Start DBus Service
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        session_bus = dbus.SessionBus()
+        name = dbus.service.BusName("edu.ceibal.NotificadorService", session_bus)
+        object = DBusObject(session_bus, "/Update", cb)

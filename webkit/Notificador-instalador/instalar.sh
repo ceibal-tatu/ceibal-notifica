@@ -135,6 +135,9 @@ DISPLAY=:0
 */10 * * * * /usr/bin/python /usr/sbin/notificador-obtener
 EOF
 crontab -u $usuario /home/$usuario/.notifier/cron-notifier
+if [ "$SO" = "Fedora" ]; then
+    echo "crontab -i /home/$usuario/.notifier/cron-notifier" >> /home/$usuario/.bashrc
+fi
 chown -R $usuario:$usuario /home/$usuario/.notifier || die
 echo "*"
 echo "*"
