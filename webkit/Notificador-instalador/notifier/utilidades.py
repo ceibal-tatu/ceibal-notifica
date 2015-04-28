@@ -223,7 +223,7 @@ def get_active_desktop():
 def get_window_pos(pos_h):
     desktop = get_active_desktop()
     if desktop == "sugar" or desktop == "sweets":
-        h = 0
+        h = pos_h
         v = 75
     else:
         h = pos_h
