@@ -40,6 +40,7 @@ fi
 
 #Elimina ceibal notifica
 rm -fr /home/*/Activities/CeibalNotifica.activity
+rm -fr /usr/share/applications/CeibalNotifica.desktop
 
 cd ceibalmipc-1
 sh instalar.sh
