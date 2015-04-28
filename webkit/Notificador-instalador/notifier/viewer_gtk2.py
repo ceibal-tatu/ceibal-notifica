@@ -6,6 +6,8 @@ import os
 import subprocess
 import urlparse
 
+
+
 from ceibal.notifier  import env
 from ceibal.notifier.viewer  import *
 from ceibal.notifier.message  import * 
@@ -16,8 +18,9 @@ from ceibal.notifier.constantes import *
 
 class VentanaBoton(VentanaBotonCommon):
 
-    def __init__(self):
-        VentanaBotonCommon.__init__(self)
+    def __init__(self, bus, path):
+        self.visor = None
+        VentanaBotonCommon.__init__(self, bus, path)
         self.win = gtk.Window()
         #Evita que aparezca en la lista de ventanas
         self.win.set_skip_taskbar_hint(True)
@@ -49,7 +52,7 @@ class VentanaBoton(VentanaBotonCommon):
 
 
     def on_button_clicked(self, widget):
-        Visor(self)
+        self.visor = Visor(self)
 
 
 

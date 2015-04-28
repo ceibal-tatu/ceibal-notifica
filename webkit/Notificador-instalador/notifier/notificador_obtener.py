@@ -76,6 +76,9 @@ class NotificadorObtener:
         # Obtenemos las notificaciones
         json_response = web.Obtener_notificaciones(False)
 
+        ##  TODO QUITAR SOLO PARA PRUEBA
+        self.dbus_client.send_update()
+
         if json_response is not None:
             self.dbus_client.send_update()
 
