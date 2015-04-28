@@ -38,6 +38,8 @@ else
     rm -fr /etc/cron.d/notificador
 fi
 
+#Elimina ceibal notifica
+rm -fr /home/*/Activities/CeibalNotifica.activity
 
 cd ceibalmipc-1
 sh instalar.sh
