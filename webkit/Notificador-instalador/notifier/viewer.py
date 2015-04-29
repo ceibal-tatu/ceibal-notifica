@@ -3,9 +3,6 @@
 import os
 import subprocess
 import urlparse
-import gobject, dbus, dbus.service
-from dbus.mainloop.glib import DBusGMainLoop
-
 
 from ceibal.notifier  import env
 from ceibal.notifier.notificador_obtener import *
@@ -223,27 +220,3 @@ class ToolBarCommon:
         self.invoque_thread = threading.Thread(target = NotificadorObtener,
                                                kwargs={"onDemand":True,"cb":self.arrive_new_notifications})
         self.invoque_thread.start()
-
-
-
-class DBusObject(dbus.service.Object):
-
-    def __init__(self, bus, name, callback):
-        dbus.service.Object.__init__(self, bus, name)
-        self.cb = callback
-
-    # Display and message to gtk label and return message to caller
-    @dbus.service.method('edu.ceibal.UpdateInterface',in_signature='', out_signature='s')
-    def update(self):
-        print "Update signal received"
-        self.cb()
-
-
-class DBusService:
-
-    def __init__(self, cb):
-        # Start DBus Service
-        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-        session_bus = dbus.SessionBus()
-        name = dbus.service.BusName("edu.ceibal.NotificadorService", session_bus)
-        object = DBusObject(session_bus, "/Update", cb)
