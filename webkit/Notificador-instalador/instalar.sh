@@ -132,7 +132,7 @@ SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DISPLAY=:0
 
-*/10 * * * * /usr/bin/python /usr/sbin/notificador-obtener
+*/5 * * * * /usr/bin/python /usr/sbin/notificador-obtener
 EOF
 crontab -u $usuario /home/$usuario/.notifier/cron-notifier
 if [ "$SO" = "Fedora" ]; then

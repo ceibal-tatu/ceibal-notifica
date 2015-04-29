@@ -1,7 +1,7 @@
 PATH_UPDATE=$HOME'/fuentes/actualizaciones/notificadorv2'
 PATH_NOTIFICADOR='instalador-webkit-devel.tar.gz'
-PATH_MIPC=$HOME'/fuentes/mi-laptop/dist/ceibalmipc-1.tar.gz'
-PATH_ACTUALIZADOR=$HOME'/fuentes/generar-actualizaciones'
+PATH_MIPC=$HOME'/Documentos/Notificador/mi-laptop/dist/ceibalmipc-1.tar.gz'
+PATH_ACTUALIZADOR=$HOME'/Documentos/generar-actualizaciones'
 
 git pull
 sh generate-tar.sh
@@ -66,6 +66,7 @@ cd $PATH_ACTUALIZADOR
 DATE='20150422'
 
 listVar="dxo-uy-1.75 1_0a 1_5a 1_75b 4_0b 1_25a uy-mg-1 CM_Ubuntu_a CM_Ubuntu_b BGH_Ubuntu_b BGH2_Ubuntu_b MG6_Ubuntu_b"
+
 for i in $listVar; do
     sh publicar_actualizacion_biblioteca.sh $i $DATE $PATH_UPDATE
 done
