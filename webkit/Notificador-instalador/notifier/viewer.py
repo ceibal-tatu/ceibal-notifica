@@ -92,7 +92,6 @@ class WebViewerCommon:
         self.current_msg = None
         self.direction = 'forward'
         self.updating_read_button = False
-        self.dbus_service = DBusService(self.refresh_tool_bar)
 
     def btn_leido_cb(self, widget, data=None):
         if widget.get_active():
