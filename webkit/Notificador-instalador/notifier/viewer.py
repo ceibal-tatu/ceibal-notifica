@@ -3,6 +3,9 @@
 import os
 import subprocess
 import urlparse
+import gobject, dbus, dbus.service
+from dbus.mainloop.glib import DBusGMainLoop
+
 
 from ceibal.notifier  import env
 from ceibal.notifier.notificador_obtener import *
@@ -14,7 +17,7 @@ import threading
 
 
 
-class VentanaBotonCommon:
+class VentanaBotonCommon(dbus.service.Object):
     
     icons_over={0: 'not_0hover.png', 
                 1: 'not_1hover.png',
@@ -42,8 +45,19 @@ class VentanaBotonCommon:
                 10: 'not_10.png', 
                 11: 'not_10mas.png'}
 
-    def __init__(self):
+    def __init__(self, bus, path):
+        dbus.service.Object.__init__(self, bus, path)
         self.message_mgr = Messages()
+
+
+    @dbus.service.method('edu.ceibal.UpdateInterface',in_signature='', out_signature='')
+    def update(self):
+        print "Update signal received"
+        icon_img = self.get_image_btn("out")        
+        self.refresh_button (icon_img)
+        if self.visor is not None:
+            self.visor.html_viewer.refresh_tool_bar()
+
 
     def get_icon_path(self, icon):
         LISTA = ['MG1', 'MG2', 'MG3', 'MG4', 'Magallanes2', 'Magallanes 2']
@@ -92,7 +106,7 @@ class WebViewerCommon:
         self.current_msg = None
         self.direction = 'forward'
         self.updating_read_button = False
-
+ 
     def btn_leido_cb(self, widget, data=None):
         if widget.get_active():
             self.win.message_mgr.set_read(self.current_msg)
@@ -219,3 +233,6 @@ class ToolBarCommon:
         self.invoque_thread = threading.Thread(target = NotificadorObtener,
                                                kwargs={"onDemand":True,"cb":self.arrive_new_notifications})
         self.invoque_thread.start()
+
+
+

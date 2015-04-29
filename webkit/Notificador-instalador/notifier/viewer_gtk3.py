@@ -16,8 +16,9 @@ from ceibal.notifier.message  import *
 
 class VentanaBoton(VentanaBotonCommon):
 
-    def __init__(self):
-        VentanaBotonCommon.__init__(self)
+    def __init__(self, bus, path):
+        self.visor = None
+        VentanaBotonCommon.__init__(self, bus, path)
         self.win = Gtk.Window(title="Notificador de novedades Ceibal")
         
         #Evita que aparezca en la lista de ventanas
@@ -47,7 +48,7 @@ class VentanaBoton(VentanaBotonCommon):
         self.win.add(self.button)
     
     def on_button_clicked(self, widget):
-        visor = Visor(self)
+        self.visor = Visor(self)
 
 
 
@@ -96,7 +97,7 @@ class Visor(Gtk.Window):
 
 class WebViewer (WebViewerCommon):
 
-    def __init__ (self,win):
+    def __init__(self, win):
         WebViewerCommon.__init__(self)
         self.win = win
         self.view = WebKit.WebView()
