@@ -53,9 +53,10 @@ class VentanaBotonCommon(dbus.service.Object):
     @dbus.service.method('edu.ceibal.UpdateInterface',in_signature='', out_signature='')
     def update(self):
         print "Update signal received"
+        icon_img = self.get_image_btn("out")        
+        self.refresh_button (icon_img)
         if self.visor is not None:
             self.visor.html_viewer.refresh_tool_bar()
-
 
 
     def get_icon_path(self, icon):
