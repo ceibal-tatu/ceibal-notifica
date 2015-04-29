@@ -1,6 +1,6 @@
 PATH_UPDATE=$HOME'/fuentes/actualizaciones/notificadorv2'
 PATH_NOTIFICADOR='instalador-webkit-devel.tar.gz'
-PATH_MIPC=$HOME'/fuentes/mi-laptop/distceibalmipc-1.tar.gz'
+PATH_MIPC=$HOME'/fuentes/mi-laptop/dist/ceibalmipc-1.tar.gz'
 PATH_ACTUALIZADOR=$HOME'/fuentes/generar-actualizaciones'
 
 git pull
