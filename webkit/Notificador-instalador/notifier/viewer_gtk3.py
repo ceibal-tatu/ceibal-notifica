@@ -28,7 +28,7 @@ class VentanaBoton(VentanaBotonCommon):
 
         self.win.set_accept_focus(False)
         self.win.connect("delete-event", Gtk.main_quit)
-        self.win.add_events(Gdk.BUTTON_PRESS_MASK|Gdk.BUTTON_RELEASE_MASK)
+        self.win.add_events(Gdk.EventMask.BUTTON_PRESS_MASK|Gdk.EventMask.BUTTON_RELEASE_MASK)
         self.create_button()
         (pos_h, pos_v) = get_window_pos (Gdk.Screen.get_default().get_width() - self.win.get_size()[0])
         self.win.move(pos_h, pos_v)
