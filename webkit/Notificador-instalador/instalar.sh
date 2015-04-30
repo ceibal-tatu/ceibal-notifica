@@ -76,6 +76,7 @@ else
         cp sugar/shell-98-f18.py /usr/lib/python2.7/site-packages/jarabe/model/shell.py || die
     elif [ "$SUGAR_VERSION" = "98" -a "$SO" = "Ubuntu" ]; then
         cp sugar/sugar-session-98-ub /usr/bin/sugar-session || die
+        cp sugar/shell-98-ub12.py /usr/lib/python2.7/dist-packages/jarabe/model/shell.py || die
     elif [ "$SUGAR_VERSION" = "104" ]; then
         cp sugar/main-104-f20.py /usr/lib/python2.7/site-packages/jarabe/main.py || die
     else
