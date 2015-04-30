@@ -106,12 +106,22 @@ class WebViewer (WebViewerCommon):
         self.sw.set_size_request(0,(self.win.height - 20))
         self.sw.add(self.view)
         self.btn_leido = self.create_btn_leido() 
+        self.check_btn = gtk.CheckButton()
+        self.check_btn.set_label ('Mostrar todos')
+        self.check_btn.connect('toggled' , self.toggled)
+        halign = gtk.Alignment(1, 0, 0, 0)
+        halign.add(self.check_btn)
+
+        table = gtk.Table(1, 3, True)
+        table.attach(self.btn_leido, 1,2,0,1)        
+        table.attach(halign, 2,3,0,1)        
         
         self.win.box.pack_start(self.sw, True, True, 0)
-        self.win.box.pack_start(self.btn_leido, True, True, 0)
-    
+        self.win.box.pack_start(table, True, True, 0)
+ 
     def create_btn_leido(self):
         button = gtk.ToggleButton(label='Marcar como leída')
+        button.set_size_request(10,40)
         button.connect("toggled", self.btn_leido_cb, "Boton leido presionado")
         return button
 
@@ -139,11 +149,8 @@ class ToolBar(ToolBarCommon):
         self.get_notif = gtk.ToolButton(gtk.STOCK_REFRESH)
         self.get_notif.connect("clicked", self.on_get_notif_clicked)
         
-        check_item = gtk.ToolItem()
-        self.check_btn = gtk.CheckButton()
-        self.check_btn.set_label ('Mostrar todos')
-        self.check_btn.connect('toggled' , self.toggled)
-        check_item.add(self.check_btn)
+        self.about = gtk.ToolButton(gtk.STOCK_ABOUT)
+        self.about.connect("clicked", self.on_about_clicked)
 
         sep = gtk.SeparatorToolItem()
 
@@ -159,6 +166,9 @@ class ToolBar(ToolBarCommon):
         self.tbar.insert(self.next, 2)
         self.tbar.insert(sep, 3)
         self.tbar.insert(self.get_notif,4)
-        self.tbar.insert(check_item,5)
+        self.tbar.insert(self.about, 5)
         self.tbar.insert(self.close, 6)
 
+    def on_about_clicked(self, widget):
+        print "about clicked"
+ 
