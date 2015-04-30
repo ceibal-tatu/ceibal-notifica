@@ -17,9 +17,6 @@ cp $PATH_MIPC $PATH_UPDATE
 
 #Crea instalar de la actualizacion
 cat <<EOF > $PATH_UPDATE/instalar
-
-#!/bin/bash
-
 isFedora() {
     [ -f /etc/fedora-release ]
 }
@@ -44,10 +41,10 @@ rm -fr /home/*/Activities/CeibalNotifica.activity
 rm -fr /usr/share/applications/CeibalNotifica.desktop
 
 cd ceibalmipc-1
-sh instalar.sh
+bash instalar.sh
 
 cd ../webkit/Notificador-instalador
-sh instalar.sh
+bash instalar.sh
 
 
 EOF
