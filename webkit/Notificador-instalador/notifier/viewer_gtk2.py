@@ -28,8 +28,9 @@ class VentanaBoton(VentanaBotonCommon):
         self.win.set_decorated(False)
         self.win.set_accept_focus(False)
         self.win.connect("delete-event", gtk.main_quit)
+        self.win.add_events(gtk.gdk.BUTTON_PRESS_MASK|gtk.gdk.BUTTON_RELEASE_MASK)
         self.create_button()
-        (pos_h, pos_v) = get_window_pos (gtk.gdk.screen_width() - self.win.get_size()[0])
+        (pos_h, pos_v) = get_window_pos(gtk.gdk.screen_width() - self.win.get_size()[0])
         self.win.move(pos_h, pos_v)
         
         self.win.show_all()
@@ -38,7 +39,8 @@ class VentanaBoton(VentanaBotonCommon):
 
     def create_button(self):
         self.button = gtk.Button()
-        self.button.connect("clicked", self.on_button_clicked)
+        self.button.connect("button-release-event", self.on_button_clicked)
+        self.button.connect("button-press-event", self.on_button_press)
         self.button.connect("enter", self.on_button_pointer_enter)
         self.button.connect("leave", self.on_button_pointer_leave)
        
@@ -49,10 +51,17 @@ class VentanaBoton(VentanaBotonCommon):
         self.button.add(self.image_btn) 
         self.win.add(self.button)
     
+    def on_button_press(self, widget, event):
+        print "PRESS"
+        if event.button == 2 or event.button == 3:
+            self.win.begin_move_drag(event.button, int(event.x_root), int(event.y_root), event.time)
+        return True
 
-
-    def on_button_clicked(self, widget):
-        self.visor = Visor(self)
+    def on_button_clicked(self, widget, event):
+        print "CLICK"
+        if event.button == 1:
+            Visor(self)
+        return True
 
 
 
