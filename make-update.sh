@@ -17,6 +17,7 @@ cp $PATH_MIPC $PATH_UPDATE
 
 #Crea instalar de la actualizacion
 cat <<EOF > $PATH_UPDATE/instalar
+#!/bin/bash
 isFedora() {
     [ -f /etc/fedora-release ]
 }
