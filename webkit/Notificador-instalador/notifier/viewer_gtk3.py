@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
-from gi.repository import WebKit
-from gi.repository import Gtk
-from gi.repository import Gdk
+from gi.repository import Gtk, Gdk, GdkPixbuf, WebKit
 import os
 import urlparse
 
@@ -105,12 +103,26 @@ class WebViewer (WebViewerCommon):
         self.sw = Gtk.ScrolledWindow()
         self.sw.set_size_request(0,(self.win.height - 20))
         self.sw.add(self.view)
-        
         self.btn_leido = self.create_btn_leido()
-        
+
+        self.check_btn = Gtk.CheckButton()
+        self.check_btn.set_label ('Mostrar todos')
+        self.check_btn.connect('toggled' , self.toggled)
+        # Alineo el check a la derecha
+        self.check_btn.props.halign = Gtk.Align.END
+
+        # Tabla con 3 columnas.
+        # Columna izq: nada
+        # Columna central: Boton maracar como leida
+        # Columna derecha: check de mostar todas
+        table = Gtk.Table(1, 3, True)
+
+        table.attach(self.btn_leido, 1,2,0,1)
+        table.attach(self.check_btn, 2,3,0,1)
+
         self.win.box.pack_start(self.sw, True, True, 0)
-        self.win.box.pack_start(self.btn_leido, True, True, 0)
-        
+        self.win.box.pack_start(table, True, True, 0)
+
     def create_btn_leido(self):
         button = Gtk.ToggleButton(label='Marcar como leída')
         button.connect("toggled", self.btn_leido_cb, "Boton leido presionado")
@@ -137,12 +149,9 @@ class ToolBar(ToolBarCommon):
 
         self.get_notif = Gtk.ToolButton(Gtk.STOCK_REFRESH, label="Actualizar")
         self.get_notif.connect("clicked", self.on_get_notif_clicked)
-        
-        check_item = Gtk.ToolItem ()
-        self.check_btn = Gtk.CheckButton ()
-        self.check_btn.set_label ('Mostrar todos')
-        self.check_btn.connect ('toggled' , self.toggled)
-        check_item.add (self.check_btn)
+
+        self.about = Gtk.ToolButton(Gtk.STOCK_ABOUT, label="Acerca")
+        self.about.connect("clicked", self.on_about_clicked)
 
         sep = Gtk.SeparatorToolItem()
 
@@ -158,7 +167,16 @@ class ToolBar(ToolBarCommon):
         self.tbar.insert(self.next, 2)
         self.tbar.insert(sep, 3)
         self.tbar.insert(self.get_notif,4)
-        self.tbar.insert(check_item,5)
+        self.tbar.insert(self.about ,5)
         self.tbar.insert(self.close, 6)
 
-
+    def on_about_clicked(self, widget):
+        about = Gtk.AboutDialog()
+        about.set_program_name("Notificador de Ceibal")
+        about.set_version("2.0")
+        about.set_copyright("(c) Ceibal")
+        about.set_comments("Recibe y muestra notificaciones enviadas por el Plan Ceibal")
+        about.set_website("http://www.ceibal.edu.uy")
+        about.set_logo(GdkPixbuf.Pixbuf.new_from_file(env.get_images_root()+"/planceibal.png"))
+        about.run()
+        about.destroy()
