@@ -96,8 +96,15 @@ class VentanaBotonCommon(dbus.service.Object):
     def refresh_button(self, icon_img):
         self.image_btn.set_from_file(icon_img)
         self.image_btn.show()
-    
 
+    def custom_close(self):
+        if self.message_mgr.get_total('unread') > 0:
+            icon_img = self.get_image_btn("out")
+            self.refresh_button(icon_img)
+        else:
+            print "Bye Bye"
+            self.win.destroy()
+            self.bye()
 
 class WebViewerCommon:
 

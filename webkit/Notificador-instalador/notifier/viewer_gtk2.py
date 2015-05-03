@@ -49,6 +49,9 @@ class VentanaBoton(VentanaBotonCommon):
     def on_button_clicked(self, widget):
         self.visor = Visor(self)
 
+    def bye(self):
+        gtk.mainquit()
+
 
 class Visor(gtk.Window):
     def __init__(self, parent):
@@ -75,8 +78,7 @@ class Visor(gtk.Window):
         self.show_all()
 
     def custom_close(self):
-        icon_img = self.ventana_btn.get_image_btn("out")
-        self.ventana_btn.refresh_button(icon_img)
+        self.ventana_btn.custom_close()
         self.destroy()
 
     def on_key_release(self, widget, ev, data=None):
