@@ -45,7 +45,6 @@ class Db:
         @summary: Abre una conexion a la DB.
         @return: Retorna la conexion.
         '''
-        print self._db_filename
         conn = sqlite3.connect(self._db_filename, isolation_level=None)
         conn.text_factory = str
         return conn
@@ -88,7 +87,7 @@ class Db:
             try:
                 c.execute('update notifications SET {0[1]}=date("{1[1]}"), {0[2]}="{1[2]}", {0[3]}="{1[3]}", {0[4]}="{1[4]}", {0[5]}="{1[5]}", {0[7]}="{1[7]}" WHERE id="{1[6]}";'.format(keys,values))
             except Exception, e:
-                print str(e)    
+                str(e)
         c.execute('END TRANSACTION')
         self._close_connection(con)
     
