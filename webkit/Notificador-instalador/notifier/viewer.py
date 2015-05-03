@@ -184,6 +184,13 @@ class WebViewerCommon:
             return True
 
         return False
+    
+    def toggled (self, obj):
+        if obj.get_active ():
+            self.set_mode('all')
+        else: 
+            self.set_mode('unread')
+        self.show_msg('first')
 
 
 class ToolBarCommon:
@@ -191,12 +198,6 @@ class ToolBarCommon:
     def update_msg_counter(self, id, total):
         self.msg_counter.set_text(id + '/' + total)
 
-    def toggled (self, obj):
-        if obj.get_active ():
-            self.win.html_viewer.set_mode('all')
-        else: 
-            self.win.html_viewer.set_mode('unread')
-        self.win.html_viewer.show_msg('first')
 
     def on_next_clicked(self, widget):
         self.win.html_viewer.set_direction('forward')
