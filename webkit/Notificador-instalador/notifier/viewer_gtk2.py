@@ -14,21 +14,28 @@ from ceibal.notifier.constantes import *
 
 
 class VentanaBoton(VentanaBotonCommon):
-    def __init__(self, bus, path):
+    def __init__(self, bus, path, mode='boton'):
         self.visor = None
         VentanaBotonCommon.__init__(self, bus, path)
         self.win = gtk.Window()
-        # Evita que aparezca en la lista de ventanas
-        self.win.set_skip_taskbar_hint(True)
+        if (mode == 'visor'):
+            print "En modo visor"
+            self.visor = Visor(self)
+        else:
+            if self.message_mgr.get_total('unread') > 0:
+                # Evita que aparezca en la lista de ventanas
+                self.win.set_skip_taskbar_hint(True)
+                self.win.set_decorated(False)
+                self.win.set_accept_focus(False)
+                self.create_button()
+                (pos_h, pos_v) = get_window_pos(gtk.gdk.screen_width() - self.win.get_size()[0])
+                self.win.move(pos_h, pos_v)
+                self.win.show_all()
+            else:
+                print "En modo boton: no hay notificaciones sin leer"
+                return
 
-        self.win.set_decorated(False)
-        self.win.set_accept_focus(False)
-        self.win.connect("delete-event", gtk.main_quit)
-        self.create_button()
-        (pos_h, pos_v) = get_window_pos(gtk.gdk.screen_width() - self.win.get_size()[0])
-        self.win.move(pos_h, pos_v)
 
-        self.win.show_all()
         gtk.main()
 
 
