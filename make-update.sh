@@ -62,7 +62,7 @@ rm -fr ceibalmipc-1.tar.gz instalador-webkit-devel.tar.gz
 #Generar Actualizacion
 cd $PATH_ACTUALIZADOR
 #DATE=$(date +"%Y%m%d")
-DATE='20150422'
+DATE='20150501'
 
 for i in $LIST_UPDATES; do
     sh publicar_actualizacion_biblioteca.sh $i $DATE $PATH_UPDATE
