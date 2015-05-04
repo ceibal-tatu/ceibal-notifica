@@ -24,7 +24,7 @@ class VentanaBotonCommon(dbus.service.Object):
                 2: 'not_2hover.png',
                 3: 'not_3hover.png',
                 4: 'not_4hover.png',
-                5: 'not_5hover.png', 
+                5: 'not_5hover.png',
                 6: 'not_6hover.png', 
                 7: 'not_7hover.png', 
                 8: 'not_8hover.png', 
@@ -96,6 +96,7 @@ class VentanaBotonCommon(dbus.service.Object):
     def refresh_button(self, icon_img):
         self.image_btn.set_from_file(icon_img)
         self.image_btn.show()
+        self.win.show_all()
 
     def custom_close(self):
         if self.message_mgr.get_total('unread') > 0:
