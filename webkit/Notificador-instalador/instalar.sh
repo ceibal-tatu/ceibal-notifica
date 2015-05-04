@@ -90,6 +90,7 @@ echo "*"
 echo "* VERIFICANDO E INSTALANDO LOS ARCHIVOS DE EJECUCION ..."
 cp sbin/* /usr/sbin/ || die
 chmod 755 /usr/sbin/notificador-mostrar-html || die
+chmod 755 /usr/sbin/notificador-mostrar-visor || die
 chmod 755 /usr/sbin/notificador-obtener || die
 echo "*"
 echo "*"
@@ -115,7 +116,7 @@ cp notificador-mostrar.desktop /home/$usuario/.config/autostart || die
 chown $usuario:$usuario /home/$usuario/.config/autostart/notificador-mostrar.desktop || die
 echo "*"
 echo "*"
-echo "* VERIFICANDO E INSTALANDO EL LOGO"
+echo "* VERIFICANDO E INSTALANDO LOGOS"
 echo "*"
 if [[ ! -d /home/$usuario/.notifier ]]; then
     mkdir /home/$usuario/.notifier || die
@@ -123,6 +124,15 @@ if [[ ! -d /home/$usuario/.notifier ]]; then
 fi
 cp -r images  /home/$usuario/.notifier/  || die
 cp no_more_notifications.html /home/$usuario/.notifier/data/ || die
+
+if [[ ! -d /usr/share/CeibalNotifica ]]; then
+    mkdir /usr/share/CeibalNotifica
+    mkdir /usr/share/CeibalNotifica/Iconos
+fi
+if [[ ! -d /usr/share/CeibalNotifica/Iconos ]]; then
+    mkdir /usr/share/CeibalNotifica/Iconos
+fi
+cp images/ceibal-notifica.png /usr/share/CeibalNotifica/Iconos/
 echo "*"
 echo "*"
 echo "* VERIFICANDO E INSTALANDO CRON"
@@ -139,6 +149,14 @@ if [ "$SO" = "Fedora" ]; then
     echo "crontab -i /home/$usuario/.notifier/cron-notifier" >> /home/$usuario/.bashrc
 fi
 chown -R $usuario:$usuario /home/$usuario/.notifier || die
+echo "*"
+echo "*"
+echo "* INSTALANDO ACCESO DIRECTO DE CEIBAL NOTIFICA EN EL ESCRITORIO"
+echo "*"
+echo "*"
+cp CeibalNotifica.desktop /home/$usuario/Escritorio/
+chown $usuario:$usuario /home/$usuario/Escritorio/CeibalNotifica.desktop
+chmod 755 /home/$usuario/Escritorio/CeibalNotifica.desktop
 echo "*"
 echo "*"
 echo "*"

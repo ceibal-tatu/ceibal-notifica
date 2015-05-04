@@ -6,8 +6,6 @@
 # Muestra los mensajes vigentes dentro de la Base de Datos para Gnome.
 #----------------------------------------------------------------------
 import imp
-import gobject, dbus, dbus.service
-from dbus.mainloop.glib import DBusGMainLoop
 
 def find_module(mod):
     try:
