@@ -123,11 +123,14 @@ class WebViewerCommon:
             self.win.message_mgr.set_unread(self.current_msg)
             widget.set_label ('Marcar como leída')
         
-        if self.updating_read_button == False:      
-            if self.direction == 'backward':
-                self.show_msg('prev')
-            else: 
-                self.show_msg('next')
+        if self.updating_read_button == False:
+            if self.win.message_mgr.get_total('unread') > 1:
+                if self.direction == 'backward':
+                    self.show_msg('prev')
+                else:
+                    self.show_msg('next')
+            else:
+                self.show_msg('first')
 
     def update_read_button(self, msg):
         self.updating_read_button = True
