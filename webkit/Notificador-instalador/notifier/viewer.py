@@ -18,31 +18,31 @@ import threading
 
 
 class VentanaBotonCommon(dbus.service.Object):
-    
-    icons_over={0: 'not_0hover.png', 
+
+    icons_over={0: 'not_0hover.png',
                 1: 'not_1hover.png',
                 2: 'not_2hover.png',
                 3: 'not_3hover.png',
                 4: 'not_4hover.png',
                 5: 'not_5hover.png',
-                6: 'not_6hover.png', 
-                7: 'not_7hover.png', 
-                8: 'not_8hover.png', 
-                9: 'not_9hover.png', 
-                10: 'not_10hover.png', 
+                6: 'not_6hover.png',
+                7: 'not_7hover.png',
+                8: 'not_8hover.png',
+                9: 'not_9hover.png',
+                10: 'not_10hover.png',
                 11: 'not_10mashover.png'}
-    
-    icons_out ={0: 'not_0.png', 
+
+    icons_out ={0: 'not_0.png',
                 1: 'not_1.png',
                 2: 'not_2.png',
                 3: 'not_3.png',
                 4: 'not_4.png',
-                5: 'not_5.png', 
-                6: 'not_6.png', 
-                7: 'not_7.png', 
-                8: 'not_8.png', 
-                9: 'not_9.png', 
-                10: 'not_10.png', 
+                5: 'not_5.png',
+                6: 'not_6.png',
+                7: 'not_7.png',
+                8: 'not_8.png',
+                9: 'not_9.png',
+                10: 'not_10.png',
                 11: 'not_10mas.png'}
 
     def __init__(self, bus, path):
@@ -53,7 +53,7 @@ class VentanaBotonCommon(dbus.service.Object):
     @dbus.service.method('edu.ceibal.UpdateInterface',in_signature='', out_signature='')
     def update(self):
         print "Update signal received"
-        icon_img = self.get_image_btn("out")        
+        icon_img = self.get_image_btn("out")
         self.refresh_button (icon_img)
         if self.visor is not None:
             self.visor.html_viewer.refresh_tool_bar()
@@ -82,30 +82,32 @@ class VentanaBotonCommon(dbus.service.Object):
         else:
             idx = len(icons)-1
         return self.get_icon_path(icons[idx])
-    
+
     def on_button_pointer_enter(self, widget):
         print "mouse pointer enter detected ..."
-        icon_img = self.get_image_btn("over")        
+        icon_img = self.get_image_btn("over")
         self.refresh_button (icon_img)
 
     def on_button_pointer_leave(self, widget):
         print "mouse pointer exit detected ..."
-        icon_img = self.get_image_btn("out")        
+        icon_img = self.get_image_btn("out")
         self.refresh_button (icon_img)
-    
+
     def refresh_button(self, icon_img):
         self.image_btn.set_from_file(icon_img)
         self.image_btn.show()
         self.win.show_all()
 
     def custom_close(self):
-        if self.message_mgr.get_total('unread') > 0:
-            icon_img = self.get_image_btn("out")
-            self.refresh_button(icon_img)
-        else:
-            print "Bye Bye"
+        if self.mode == 'visor':
             self.win.destroy()
             self.bye()
+        else:
+            if self.message_mgr.get_total('unread') > 0:
+                icon_img = self.get_image_btn("out")
+                self.refresh_button(icon_img)
+            else:
+                self.win.hide()
 
 class WebViewerCommon:
 
@@ -124,7 +126,7 @@ class WebViewerCommon:
             widget.set_label ('Marcar como leída')
         
         if self.updating_read_button == False:
-            if self.win.message_mgr.get_total('unread') > 1:
+            if self.win.message_mgr.get_total(self.mode) > 1:
                 if self.direction == 'backward':
                     self.show_msg('prev')
                 else:
@@ -150,7 +152,7 @@ class WebViewerCommon:
         self.win.tool_bar.update_next_back_buttons(current_msg)
 
         # Update Msg counters
-        self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, current_msg)),
+        self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, current_msg)+1),
                                              str(self.win.message_mgr.get_total(self.mode)))
 
     def show_msg(self, pos):
@@ -166,8 +168,8 @@ class WebViewerCommon:
         else:
             current_msg = None
 
+        self.current_msg = current_msg
         if current_msg is not None:
-            self.current_msg = current_msg
             self.view.load_string(current_msg['html'], 'text/html', 'UTF-8','/')
         else:
             self.load_no_more_notification()

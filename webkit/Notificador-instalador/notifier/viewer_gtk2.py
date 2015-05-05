@@ -16,6 +16,7 @@ from ceibal.notifier.constantes import *
 class VentanaBoton(VentanaBotonCommon):
     def __init__(self, bus, path, mode='boton'):
         self.visor = None
+        self.mode = mode
         VentanaBotonCommon.__init__(self, bus, path)
         self.win = gtk.Window()
         # Evita que aparezca en la lista de ventanas
@@ -26,7 +27,7 @@ class VentanaBoton(VentanaBotonCommon):
         (pos_h, pos_v) = get_window_pos(gtk.gdk.screen_width() - self.win.get_size()[0])
         self.win.move(pos_h, pos_v)
 
-        if (mode == 'visor'):
+        if (self.mode == 'visor'):
             print "En modo visor"
             self.visor = Visor(self)
         else:
@@ -34,7 +35,6 @@ class VentanaBoton(VentanaBotonCommon):
                 self.win.show_all()
             else:
                 print "En modo boton: no hay notificaciones sin leer"
-                return
 
         gtk.main()
 
@@ -129,7 +129,6 @@ class WebViewer(WebViewerCommon):
 
     def create_btn_leido(self):
         button = gtk.ToggleButton(label='Marcar como leída')
-        button.set_size_request(10, 40)
         button.connect("toggled", self.btn_leido_cb, "Boton leido presionado")
         return button
 
