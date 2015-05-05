@@ -2,6 +2,8 @@
 # -*- coding:utf-8 -*-
 # web_service_conexion.py V2.0
 # Author: Matias Basso <mbasso@plan.ceibal.edu.uy> 
+# Last Modified by: Francisco Cobas <fcobas@plan.ceibal.edu.uy>
+# Last Modified date: 2015/05
 #---------------------------------------------------------------------------------
 # Genera la conexion al Web service de Ceibal para solicitar las Notificaciones.
 #---------------------------------------------------------------------------------
@@ -39,30 +41,48 @@ class W_S_Conexion:
         '''
         from ceibalmipc.laptops.laptopFactory import LaptopFactory
 
-        laptop = LaptopFactory()
+        l = LaptopFactory().get_laptop()
+        
+        datosLaptop = { 
+            "ceibal-user": str(l.get_ceibal_user()),
+            "id": str(l.get_id()),
+            "model": str(l.get_model()), 
+            "build": str(l.get_build()),
+            "firmware": str(l.get_firmware()),
+            "plazo-bloqueo": str(l.get_plazo_bloqueo()),
+            "boot-count-bloqueo": str(l.get_boot_count_bloqueo()),
+            "last-update": str(l.get_last_update()),
+            "free-space-porc": str(l.get_free_space_porc()),
+            "last-update-especial": str(l.get_last_update_especial())
+        }
 
-        noHayParametro = False
+        registroDatosFaltantes = "Los datos faltantes son los siguientes:\n"
+
+        for dato, valor in datosLaptop.iteritems():
+            if valor is None:
+                datosLaptop[dato] = ""
+                registroDatosFaltantes += " - " + str(dato) + '\n'
+            elif valor is "":
+                registroDatosFaltantes += " - " + str(dato) + "\n"
+            else:
+                datosLaptop[dato] = str.replace(datosLaptop[dato], ' ', '-')
 
         try:
-            if laptop.get_ceibal_user is not None and laptop.get_id is not None and laptop.get_model is not None \
-                and laptop.get_build is not None and laptop.get_firmware is not None and laptop.get_plazo_bloqueo is not None \
-                and laptop.get_boot_count_bloqueo is not None and laptop.get_last_update is not None \
-                and laptop.get_free_space_porc is not None:
-                self.url += "?cedula=" + laptop.get_ceibal_user
-                self.url += "&serie=" + laptop.get_id
-                self.url += "&modelo=" + laptop.get_model
-                self.url += "&imagen=" + laptop.get_build
-                #self.url += "&fechaReporte=" + 
-                self.url += "&firmware=" + laptop.get_firmware
-                self.url += "&plazoBloqueo=" + laptop.get_plazo_bloqueo
-                self.url += "&bootCountBloqueo=" + laptop.get_boot_count_bloqueo
-                self.url += "&fechaUltActualizacion=" + laptop.get_last_update
-                self.url += "&espacioLibrePorcentaje=" + laptop.get_free_space_porc
-                self.url += "&datosExtra=" + "{'datos' : 'clave'}"
-            else:
-                print ('Faltan parametros para construir la URL')
+            self.url += "?cedula=" + datosLaptop["ceibal-user"] #hay que chequear que este sea el dato
+            self.url += "&serie=" + datosLaptop["id"]
+            self.url += "&modelo=" + datosLaptop["model"]
+            self.url += "&imagen=" + datosLaptop["build"]
+            #self.url += "&fechaReporte=" + # Es una fecha que se guarda del lado del servidor 
+            self.url += "&firmware=" + datosLaptop["firmware"]
+            self.url += "&plazo-bloqueo=" + datosLaptop["plazo-bloqueo"]
+            self.url += "&boot-count-bloqueo=" + datosLaptop["boot-count-bloqueo"]
+            self.url += "&fecha-ult-actualizacion=" + datosLaptop["last-update"]
+            self.url += "&espacio-libre-porcentaje=" + datosLaptop["free-space-porc"]
+            self.url += "&datos-extra=" + "{\'last-update-especial\':\'" + datosLaptop["last-update-especial"] + "\'}"
         except:
             notificacion(ALERTA_ERROR)
+
+        return registroDatosFaltantes
         
     
     def _conectar(self, url):
@@ -75,7 +95,7 @@ class W_S_Conexion:
             self.conexion = urllib2.urlopen(url)
         except Exception, e:
             print str(e)
-            return json.dumps({'error': str(e)})
+            return "{'error': " + str(e) + "}"
 
         return self.conexion.read()
     
@@ -117,8 +137,8 @@ class W_S_Conexion:
         @summary: Funcion publica para consumir el Web Service.
         """
         # Concatenamos los parametros a la URL.
-        self._concatenar_parametros_url()
-        
+        datos_faltantes = self._concatenar_nuevos_parametros_url()
+
         # Conecta a la URL del web Service y guarda el contenido en un archivo.
         json_response = self._conectar(self.url)
 
@@ -135,8 +155,10 @@ class W_S_Conexion:
         
         # Cargamos las Notificaciones a la Base de Datos.
         base_de_datos.Cargar_notificaciones()
+        
+        respuesta = { "datos-faltantes": datos_faltantes, "respuesta-servidor": json.loads(json_response) }
 
-        return json_response
+        return respuesta
 
 if __name__ == "__main__":
     # Creamos la conexion al Web-Service.
