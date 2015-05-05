@@ -129,7 +129,6 @@ class WebViewer(WebViewerCommon):
 
     def create_btn_leido(self):
         button = gtk.ToggleButton(label='Marcar como leída')
-        button.set_size_request(10, 40)
         button.connect("toggled", self.btn_leido_cb, "Boton leido presionado")
         return button
 
