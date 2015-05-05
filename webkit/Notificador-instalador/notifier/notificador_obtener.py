@@ -63,7 +63,9 @@ class NotificadorObtener:
         time_wait = 60
         espera = random.randint(0, time_wait)
         self._logger.info('Esperando %i segundos...' % espera)
+        
         time.sleep(espera)
+
         try:
             # Importamos la clase W_S_Conexion para conectarons al Web Service.
             from ceibal.notifier.web_service_conexion import W_S_Conexion
@@ -75,23 +77,27 @@ class NotificadorObtener:
             web = W_S_Conexion(WEB_SERVICE_URL)
 
             # Obtenemos las notificaciones
-            json_response = web.Obtener_notificaciones(False)
+            respuesta = web.Obtener_notificaciones(False)
 
-            self._logger.info('La respuesta del servidor es: ' + str(json_response))
+            if respuesta is not None:
 
-            if json_response is not None:
                 self.dbus_client.send_update()
-                contenido = json.loads(json_response)
-                if 'error' in contenido:
-                    self._logger.info('Se encontro un error al llamar el servicio: ' + str(contenido['error']))
+
+                self._logger.info('La respuesta del servidor es: ' + json.dumps(respuesta))
+
+                if respuesta["datos-faltantes"] is not None:
+                    self._logger.info(respuesta["datos-faltantes"])
+
+                if "error" in respuesta["respuesta-servidor"]:
+                    self._logger.info('Se encontro un error al llamar el servicio: ' + str(respuesta["respuesta-servidor"]["error"]))
                     exit()
 
-                frecuencia_obtener = contenido['frecuencia_muestro']
+                frecuencia_obtener = respuesta['respuesta-servidor']['frecuencia_muestro']
                 # Seteamos la hora en el notihoy
                 self.__set_update_today(frecuencia_obtener)
                 if cb is not None:
                     gobject.idle_add(cb)
-                frecuencia_cron = contenido['frecuencia']
+                frecuencia_cron = respuesta['respuesta-servidor']['frecuencia']
                 crontab = open(CRONTAB, 'w')
                 texto = 'SHELL=/bin/sh\nPATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/usr/bin\nDISPLAY=:0\n\n*/' + frecuencia_cron
                 texto += ' * * * * /usr/bin/python /usr/sbin/notificador-obtener\n'
