@@ -124,7 +124,7 @@ class WebViewerCommon:
             widget.set_label ('Marcar como leída')
         
         if self.updating_read_button == False:
-            if self.win.message_mgr.get_total('unread') > 1:
+            if self.win.message_mgr.get_total(self.mode) > 1:
                 if self.direction == 'backward':
                     self.show_msg('prev')
                 else:
@@ -150,7 +150,7 @@ class WebViewerCommon:
         self.win.tool_bar.update_next_back_buttons(current_msg)
 
         # Update Msg counters
-        self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, current_msg)),
+        self.win.tool_bar.update_msg_counter(str(self.win.message_mgr.get_pos(self.mode, current_msg)+1),
                                              str(self.win.message_mgr.get_total(self.mode)))
 
     def show_msg(self, pos):
@@ -166,8 +166,8 @@ class WebViewerCommon:
         else:
             current_msg = None
 
+        self.current_msg = current_msg
         if current_msg is not None:
-            self.current_msg = current_msg
             self.view.load_string(current_msg['html'], 'text/html', 'UTF-8','/')
         else:
             self.load_no_more_notification()
