@@ -9,7 +9,7 @@ from ceibal.notifier.viewer import *
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import * 
 from ceibal.notifier.message  import * 
-
+from gi.repository import SugarExt
 
 
 class VentanaBoton(VentanaBotonCommon):
@@ -57,13 +57,15 @@ class VentanaBoton(VentanaBotonCommon):
     def bye(self):
         Gtk.main_quit()
 
+    def setup_sugar_activity(self, activity_id):
+        xid = self.window.get_window().get_xid()
+        SugarExt.wm_set_bundle_id(xid, os.environ['SUGAR_BUNDLE_ID'])
+        SugarExt.wm_set_activity_id(xid, activity_id)
 
 
 class Visor(Gtk.Window):
  
     def __init__(self, parent):
-
-        #GObject.threads_init()
         Gtk.Window.__init__(self, title="Visor de novedades Ceibal")
         (self.width, self.height) = get_window_size()
         self.connect("key-release-event", self.on_key_release) 

@@ -19,6 +19,7 @@ class VentanaBoton(VentanaBotonCommon):
         self.mode = mode
         VentanaBotonCommon.__init__(self, bus, path)
         self.win = gtk.Window()
+        #self.win = VentanaBotonWindow(self)
         # Evita que aparezca en la lista de ventanas
         self.win.set_skip_taskbar_hint(True)
         self.win.set_decorated(False)
@@ -35,9 +36,8 @@ class VentanaBoton(VentanaBotonCommon):
                 self.win.show_all()
             else:
                 print "En modo boton: no hay notificaciones sin leer"
-
-        gtk.main()
-
+        self.setup_sugar_activity()
+        self.main()
 
     def create_button(self):
         self.button = gtk.Button()
@@ -52,13 +52,23 @@ class VentanaBoton(VentanaBotonCommon):
         self.button.add(self.image_btn)
         self.win.add(self.button)
 
-
     def on_button_clicked(self, widget):
         self.visor = Visor(self)
 
     def bye(self):
         gtk.mainquit()
 
+    def main(self):
+        gtk.main()
+
+    def setup_sugar_activity(self):
+        for i in range(0, len(sys.argv)):
+            if sys.argv[i] == '-a':
+                activity_id = sys.argv[i+1]
+                break
+        print activity_id
+        #self.win.window.property_change("_SUGAR_ACTIVITY_ID", "STRING", 8, gtk.gdk.PROP_MODE_REPLACE, activity_id)
+        #self.win.window.property_change("_SUGAR_BUNDLE_ID", "STRING", 8, gtk.gdk.PROP_MODE_REPLACE, os.environ['SUGAR_BUNDLE_ID'])
 
 class Visor(gtk.Window):
     def __init__(self, parent):
@@ -183,3 +193,19 @@ class ToolBar(ToolBarCommon):
         about.run()
         about.destroy()
  
+
+
+
+from sugar.graphics.window import Window
+
+class VentanaBotonWindow(Window):
+    def __init__(self, main_instance):
+        Window.__init__(self)
+
+        self.set_title('Notificador Ceibal')
+        self.set_icon_from_file('./ceibal-notifica.svg')
+
+        self._main_instance = main_instance
+        rc = os.path.join(os.environ['SUGAR_ACTIVITY_ROOT'], 'gtkrc-72')
+        gtk.rc_parse(rc)
+
