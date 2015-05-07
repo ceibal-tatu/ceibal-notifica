@@ -35,9 +35,7 @@ class VentanaBoton(VentanaBotonCommon):
                 self.win.show_all()
             else:
                 print "En modo boton: no hay notificaciones sin leer"
-
-        gtk.main()
-
+        self.main()
 
     def create_button(self):
         self.button = gtk.Button()
@@ -52,12 +50,14 @@ class VentanaBoton(VentanaBotonCommon):
         self.button.add(self.image_btn)
         self.win.add(self.button)
 
-
     def on_button_clicked(self, widget):
         self.visor = Visor(self)
 
     def bye(self):
         gtk.mainquit()
+
+    def main(self):
+        gtk.main()
 
 
 class Visor(gtk.Window):
@@ -182,4 +182,4 @@ class ToolBar(ToolBarCommon):
         about.set_logo(gtk.gdk.pixbuf_new_from_file(env.get_images_root() + "/planceibal.png"))
         about.run()
         about.destroy()
- 
+

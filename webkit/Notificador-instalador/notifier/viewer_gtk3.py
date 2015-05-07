@@ -9,7 +9,7 @@ from ceibal.notifier.viewer import *
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import * 
 from ceibal.notifier.message  import * 
-
+from gi.repository import SugarExt
 
 
 class VentanaBoton(VentanaBotonCommon):
@@ -19,6 +19,7 @@ class VentanaBoton(VentanaBotonCommon):
         self.mode = mode
         VentanaBotonCommon.__init__(self, bus, path)
         self.win = Gtk.Window(title="Notificador de novedades Ceibal")
+        #self.win = VentanaBotonWindow(self)
         #Evita que aparezca en la lista de ventanas
         self.win.set_skip_taskbar_hint(True)
         self.win.set_decorated(False)
@@ -35,8 +36,7 @@ class VentanaBoton(VentanaBotonCommon):
                 self.win.show_all()
             else:
                 print "En modo boton: no hay notificaciones sin leer"
-
-        Gtk.main()
+        self.main()
 
     def create_button(self):
         self.button = Gtk.Button()
@@ -57,13 +57,12 @@ class VentanaBoton(VentanaBotonCommon):
     def bye(self):
         Gtk.main_quit()
 
-
+    def main(self):
+        Gtk.main()
 
 class Visor(Gtk.Window):
  
     def __init__(self, parent):
-
-        #GObject.threads_init()
         Gtk.Window.__init__(self, title="Visor de novedades Ceibal")
         (self.width, self.height) = get_window_size()
         self.connect("key-release-event", self.on_key_release) 
@@ -98,7 +97,6 @@ class Visor(Gtk.Window):
         if ev.keyval == 65307: #If Escape pressed, reset text
             print "Escape"
             self.custom_close()
-
 
 
 class WebViewer (WebViewerCommon):

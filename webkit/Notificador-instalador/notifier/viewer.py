@@ -3,7 +3,7 @@
 import os
 import subprocess
 import urlparse
-import gobject, dbus, dbus.service
+import dbus, dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 
 
@@ -12,6 +12,7 @@ from ceibal.notifier.notificador_obtener import *
 from ceibal.notifier.message import *
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import * 
+
 
 import threading
 
