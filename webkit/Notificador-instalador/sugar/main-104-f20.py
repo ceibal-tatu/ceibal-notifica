@@ -422,7 +422,7 @@ def main():
 
 def start_ceibal_notifier():
     try:
-        os.system("/usr/sbin/notificador-mostrar-html &")
+        os.system("/usr/bin/sugar-launch uy.edu.ceibal.Notificador &")
     except Exception:
         print "Notificador ceibal fail"
 

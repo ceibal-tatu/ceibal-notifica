@@ -27,16 +27,17 @@ else:
 
 
 
-class NotificadorActivity(activity.Activity):
+class Notificador(activity.Activity):
+
     def __init__(self, handle):
         _logger.debug('Start NotificadorActivity')
-        super(NotificadorActivity, self).__init__(handle)
+        super(Notificador, self).__init__(handle)
 
         # Start DBus Service
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         session_bus = dbus.SessionBus()
         name = dbus.service.BusName("edu.ceibal.NotificadorService", session_bus)
-        VentanaBoton(session_bus, "/Update", mode='boton')
+        VentanaBoton(session_bus, "/Update")
 
         self.close()
         self.destroy()

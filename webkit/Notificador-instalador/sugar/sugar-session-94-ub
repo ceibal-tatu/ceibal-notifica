@@ -183,7 +183,7 @@ def setup_window_manager():
 
 def start_ceibal_notifier():
     try:
-        os.system("/usr/sbin/notificador-mostrar-html &")
+        os.system("/usr/bin/sugar-launch uy.edu.ceibal.Notificador &")
     except Exception:
         print "Notificador ceibal fail"
 
@@ -298,8 +298,5 @@ def _check_for_window_manager(screen):
         screen.disconnect_by_func(__window_manager_changed_cb)
         bootstrap()
 
-
-def ceibal_start_notifier():
-    os.system("/usr/sbin/notificador-mostrar-html &")
 
 main()
