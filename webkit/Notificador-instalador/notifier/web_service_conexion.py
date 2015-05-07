@@ -9,6 +9,7 @@
 #---------------------------------------------------------------------------------
 
 import urllib2
+import urllib
 import json
 from ceibal.notifier.store import Store
 from ceibal.notifier.utilidades import *
@@ -74,11 +75,11 @@ class W_S_Conexion:
             self.url += "&imagen=" + datosLaptop["build"]
             #self.url += "&fechaReporte=" + # Es una fecha que se guarda del lado del servidor 
             self.url += "&firmware=" + datosLaptop["firmware"]
-            self.url += "&plazo-bloqueo=" + datosLaptop["plazo-bloqueo"]
-            self.url += "&boot-count-bloqueo=" + datosLaptop["boot-count-bloqueo"]
-            self.url += "&fecha-ult-actualizacion=" + datosLaptop["last-update"]
-            self.url += "&espacio-libre-porcentaje=" + datosLaptop["free-space-porc"]
-            self.url += "&datos-extra=" + "{\'last-update-especial\':\'" + datosLaptop["last-update-especial"] + "\'}"
+            self.url += "&plazo_bloqueo=" + datosLaptop["plazo-bloqueo"]
+            self.url += "&boot_count_bloqueo=" + datosLaptop["boot-count-bloqueo"]
+            self.url += "&ult_actualizacion=" + datosLaptop["last-update"]
+            self.url += "&espacio_libre=" + datosLaptop["free-space-porc"]
+            self.url += "&datos_extra=" + urllib.quote_plus(json.dumps({'last_update_especial': datosLaptop["last-update-especial"]}))
         except:
             notificacion(ALERTA_ERROR)
 
