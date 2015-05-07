@@ -79,7 +79,7 @@ class W_S_Conexion:
             self.url += "&boot_count_bloqueo=" + datosLaptop["boot-count-bloqueo"]
             self.url += "&ult_actualizacion=" + datosLaptop["last-update"]
             self.url += "&espacio_libre=" + datosLaptop["free-space-porc"]
-            self.url += "&datos_extra=" + urllib.urlencode({'last_update_especial': datosLaptop["last-update-especial"]})
+            self.url += "&datos_extra=" + urllib.quote_plus(json.dumps({'last_update_especial': datosLaptop["last-update-especial"]}))
         except:
             notificacion(ALERTA_ERROR)
 
