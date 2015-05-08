@@ -92,7 +92,7 @@ class NotificadorObtener:
                     self._logger.info('Se encontro un error al llamar el servicio: ' + str(respuesta["respuesta-servidor"]["error"]))
                     exit()
 
-                frecuencia_obtener = respuesta['respuesta-servidor']['frecuencia_muestro']
+                frecuencia_obtener = respuesta['respuesta-servidor']['turno']
                 # Seteamos la hora en el notihoy
                 self.__set_update_today(frecuencia_obtener)
                 if cb is not None:
