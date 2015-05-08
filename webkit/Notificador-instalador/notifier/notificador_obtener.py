@@ -63,8 +63,8 @@ class NotificadorObtener:
             self._logger.info(
                 time.ctime() + ' -AVISO: Ya se chequearon las notificaciones en este periodo. Volvera a chequear cuando comience el siguiente periodo. Saliendo...')
             exit()
-            
-        if onDemand:
+
+        if not onDemand:
             time_wait = 60
             espera = random.randint(0, time_wait)
             self._logger.info('Esperando %i segundos...' % espera)
