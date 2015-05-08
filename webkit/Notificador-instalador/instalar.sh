@@ -164,6 +164,8 @@ echo "*"
 echo "*"
 cp -r sugar/Notificador.activity /home/$usuario/Activities/
 chown -R $usuario:$usuario /home/$usuario/Activities/Notificador.activity
+cp -r sugar/NotificadorVisor.activity /home/$usuario/Activities/
+chown -R $usuario:$usuario /home/$usuario/Activities/NotificadorVisor.activity
 echo "*"
 echo "*"
 echo "*"
