@@ -11,7 +11,7 @@ from ceibal.notifier.viewer import *
 from ceibal.notifier.message import *
 from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import *
-
+from ceibal.notifier import __version__
 
 class VentanaBoton(VentanaBotonCommon):
     def __init__(self, bus, path, mode='boton'):
@@ -175,7 +175,7 @@ class ToolBar(ToolBarCommon):
     def on_about_clicked(self, widget):
         about = gtk.AboutDialog()
         about.set_program_name("Notificador de Ceibal")
-        about.set_version("2.0")
+        about.set_version(__version__)
         about.set_copyright("(c) Ceibal")
         about.set_comments("Recibe y muestra notificaciones enviadas por el Plan Ceibal")
         about.set_website("http://www.ceibal.edu.uy")
