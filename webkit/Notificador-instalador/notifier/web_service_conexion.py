@@ -26,6 +26,7 @@ class W_S_Conexion:
     def _concatenar_parametros_url(self):
         '''
         @summary: Conecta los parametros a la URL de la conexion al Web Service.
+        @deprecada: Se usa la nueva funcion _concatenar_nuevos_parametros_url
         '''
         try:
             parametros=obtener_parametros()
@@ -144,6 +145,7 @@ class W_S_Conexion:
         json_response = self._conectar(self.url)
 
         try:
+            json_response = str.replace(json_response, '\n', '')
             json.loads(json_response)
         except ValueError, e:
             print("Respuesta invalida")
