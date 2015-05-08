@@ -44,10 +44,14 @@ def already_running():
 
 class NotificadorObtener:
     def __init__(self, onDemand=False, cb=None):
-        self.__set_logger()
 
         # Realiza el chequeo de los directorios necesarios para la ejecucion
         self.chk_env()
+
+        if not onDemand and self.already_checked_for_noti(onDemand):
+            self.__set_logger('a')
+        else:
+            self.__set_logger('w')
 
         self._logger.debug("Inicio proceso de obtencion de notificaciones ...")
 
@@ -60,11 +64,12 @@ class NotificadorObtener:
                 time.ctime() + ' -AVISO: Ya se chequearon las notificaciones en este periodo. Volvera a chequear cuando comience el siguiente periodo. Saliendo...')
             exit()
 
-        time_wait = 60
-        espera = random.randint(0, time_wait)
-        self._logger.info('Esperando %i segundos...' % espera)
-        
-        time.sleep(espera)
+        if not onDemand:
+            time_wait = 60
+            espera = random.randint(0, time_wait)
+            self._logger.info('Esperando %i segundos...' % espera)
+            
+            time.sleep(espera)
 
         try:
             # Importamos la clase W_S_Conexion para conectarons al Web Service.
@@ -162,11 +167,11 @@ class NotificadorObtener:
         return retorno
 
 
-    def __set_logger(self):
+    def __set_logger(self, mode):
         FILE_LOG = os.path.join(WORK_DIR, 'notificador.log')
 
         # create a file handler
-        handler = logging.FileHandler(FILE_LOG)
+        handler = logging.FileHandler(FILE_LOG, mode)
         handler.setLevel(logging.DEBUG)
 
         # create a logging format
