@@ -35,6 +35,7 @@ if isFedora; then
 else	
     ! lsb_release -sr | grep -q -e "10.04" -e "12.04" && salir
     rm -fr /etc/cron.d/notificador
+    apt-get -y remove ceibal-notifier
 fi
 
 #Elimina ceibal notifica
