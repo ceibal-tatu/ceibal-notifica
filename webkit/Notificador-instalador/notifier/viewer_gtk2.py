@@ -13,6 +13,22 @@ from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import *
 from ceibal.notifier import __version__
 
+class WinGtk:
+
+    def quit(self):
+        gtk.mainquit()
+
+    def get_screen_with(self):
+        return gtk.gdk.screen_width()
+
+    def get_screen_height(self):
+        print 'height: '+ str(gtk.gdk.screen_height())
+        return gtk.gdk.screen_height()
+
+    def get_VBox(self):
+        return gtk.VBox()
+
+
 class VentanaBoton(VentanaBotonCommon):
     def __init__(self, bus, path, mode='boton'):
         self.visor = None
@@ -64,6 +80,7 @@ class Visor(gtk.Window):
     def __init__(self, parent):
         gtk.Window.__init__(self)
         (self.width, self.height) = get_window_size()
+        self.web_viewer_height = self.height - 20
         self.connect("key-release-event", self.on_key_release)
         self.ventana_btn = parent
         # Evita que aparezca en la lista de ventanas
@@ -104,7 +121,7 @@ class WebViewer(WebViewerCommon):
         # self.view.set_full_content_zoom(True)
 
         self.sw = gtk.ScrolledWindow()
-        self.sw.set_size_request(0, (self.win.height - 20))
+        self.sw.set_size_request(0,self.win.web_viewer_height)
         self.sw.add(self.view)
         self.btn_leido = self.create_btn_leido()
         self.check_btn = gtk.CheckButton()

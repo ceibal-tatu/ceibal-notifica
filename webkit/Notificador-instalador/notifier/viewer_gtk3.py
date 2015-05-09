@@ -10,7 +10,22 @@ from ceibal.notifier.utilidades import *
 from ceibal.notifier.constantes import * 
 from ceibal.notifier.message  import * 
 from ceibal.notifier import __version__
-from gi.repository import SugarExt
+
+
+class WinGtk:
+
+    def quit(self):
+        Gtk.main_quit()
+
+    def get_screen_with(self):
+        return Gdk.Screen.get_default().get_width()
+
+    def get_screen_height(self):
+        return Gdk.Screen.get_default().get_height()
+
+    def get_VBox(self):
+        return Gtk.VBox()
+
 
 class VentanaBoton(VentanaBotonCommon):
 
@@ -65,6 +80,7 @@ class Visor(Gtk.Window):
     def __init__(self, parent):
         Gtk.Window.__init__(self, title="Visor de novedades Ceibal")
         (self.width, self.height) = get_window_size()
+        self.web_viewer_height = self.height - 20
         self.connect("key-release-event", self.on_key_release) 
         
         self.ventana_btn = parent
@@ -107,7 +123,7 @@ class WebViewer (WebViewerCommon):
         self.view = WebKit.WebView()
         self.view.connect("navigation-policy-decision-requested",self.navigate)
         self.sw = Gtk.ScrolledWindow()
-        self.sw.set_size_request(0,(self.win.height - 20))
+        self.sw.set_size_request(0,self.win.web_viewer_height)
         self.sw.add(self.view)
         self.btn_leido = self.create_btn_leido()
 
