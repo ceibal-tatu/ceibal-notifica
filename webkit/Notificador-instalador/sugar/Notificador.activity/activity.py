@@ -31,6 +31,10 @@ class Notificador(activity.Activity, VentanaBotonCommon):
 
     def __init__(self, handle):
         _logger.debug('Start NotificadorActivity')
+
+        # Evita modificaciones de Sugar en el gtk.Window
+        os.environ.pop('SUGAR_ACTIVITY_ROOT')
+
         activity.Activity.__init__(self,handle)
         self.mode = 'boton'
         self.visor = None
