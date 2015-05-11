@@ -16,7 +16,7 @@ from ceibal.notifier import __version__
 class WinGtk:
 
     def quit(self):
-        gtk.mainquit()
+        gtk.main_quit()
 
     def get_screen_with(self):
         return gtk.gdk.screen_width()
@@ -90,7 +90,7 @@ class VentanaBoton(VentanaBotonCommon, dbus.service.Object):
         return True
 
     def bye(self):
-        gtk.mainquit()
+        gtk.main_quit()
 
     def main(self):
         gtk.main()
