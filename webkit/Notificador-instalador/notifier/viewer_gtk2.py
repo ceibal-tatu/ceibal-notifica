@@ -29,11 +29,13 @@ class WinGtk:
         return gtk.VBox()
 
 
-class VentanaBoton(VentanaBotonCommon):
+class VentanaBoton(VentanaBotonCommon, dbus.service.Object):
+
     def __init__(self, bus, path, mode='boton'):
         self.visor = None
         self.mode = mode
-        VentanaBotonCommon.__init__(self, bus, path)
+        VentanaBotonCommon.__init__(self)
+        dbus.service.Object.__init__(self, bus, path)
         self.win = gtk.Window()
         # Evita que aparezca en la lista de ventanas
         self.win.set_skip_taskbar_hint(True)
@@ -52,6 +54,14 @@ class VentanaBoton(VentanaBotonCommon):
             else:
                 print "En modo boton: no hay notificaciones sin leer"
         self.main()
+
+    @dbus.service.method('edu.ceibal.UpdateInterface',in_signature='', out_signature='')
+    def update(self):
+        print "Update signal received"
+        icon_img = self.get_image_btn("out")
+        self.refresh_button (icon_img)
+        if self.visor is not None:
+            self.visor.html_viewer.refresh_tool_bar()
 
     def create_button(self):
         self.button = gtk.Button()

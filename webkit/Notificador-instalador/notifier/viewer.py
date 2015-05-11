@@ -18,7 +18,7 @@ import threading
 
 
 
-class VentanaBotonCommon(dbus.service.Object):
+class VentanaBotonCommon:
 
     icons_over={0: 'not_0hover.png',
                 1: 'not_1hover.png',
@@ -46,19 +46,8 @@ class VentanaBotonCommon(dbus.service.Object):
                 10: 'not_10.png',
                 11: 'not_10mas.png'}
 
-    def __init__(self, bus, path):
-        dbus.service.Object.__init__(self, bus, path)
+    def __init__(self):
         self.message_mgr = Messages()
-
-
-    @dbus.service.method('edu.ceibal.UpdateInterface',in_signature='', out_signature='')
-    def update(self):
-        print "Update signal received"
-        icon_img = self.get_image_btn("out")
-        self.refresh_button (icon_img)
-        if self.visor is not None:
-            self.visor.html_viewer.refresh_tool_bar()
-
 
     def get_icon_path(self, icon):
         LISTA = ['MG1', 'MG2', 'MG3', 'MG4', 'Magallanes2', 'Magallanes 2']
@@ -109,6 +98,7 @@ class VentanaBotonCommon(dbus.service.Object):
                 self.refresh_button(icon_img)
             else:
                 self.win.hide()
+
 
 class WebViewerCommon:
 

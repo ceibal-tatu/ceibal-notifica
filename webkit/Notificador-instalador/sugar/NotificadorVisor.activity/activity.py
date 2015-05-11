@@ -37,12 +37,8 @@ class NotificadorVisor(activity.Activity):
         self.width  = winGtk.get_screen_with()
         self.height = winGtk.get_screen_height()
         self.web_viewer_height = (self.height - 120)
-
         self.connect("key-release-event", self.on_key_release)
 
-        #self.resize(self.width, self.height)
-        #(pos_h, pos_v) = get_window_pos(winGtk.get_screen_with() - self.get_size()[0])
-        #self.move(pos_h, pos_v)
         self.set_accept_focus(False)
         self.box = winGtk.get_VBox()
         self.message_mgr = Messages()
