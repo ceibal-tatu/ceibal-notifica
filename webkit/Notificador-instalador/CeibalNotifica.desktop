@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Visor de Notificaciones
-GenericName=Viosr de Notificaciones
+GenericName=Visor de Notificaciones
 Exec=/usr/sbin/notificador-mostrar-visor
 Terminal=false
 Type=Application
