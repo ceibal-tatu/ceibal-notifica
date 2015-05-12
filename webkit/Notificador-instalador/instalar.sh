@@ -159,11 +159,9 @@ chown $usuario:$usuario /home/$usuario/Escritorio/CeibalNotifica.desktop
 chmod 755 /home/$usuario/Escritorio/CeibalNotifica.desktop
 echo "*"
 echo "*"
-echo "* INSTALANDO ACTIVIDAD CEIBAL NOTIFICA"
+echo "* INSTALANDO ACTIVIDAD VISOR DE  NOTIFICACIONES"
 echo "*"
 echo "*"
-cp -r sugar/Notificador.activity /home/$usuario/Activities/
-chown -R $usuario:$usuario /home/$usuario/Activities/Notificador.activity
 cp -r sugar/NotificadorVisor.activity /home/$usuario/Activities/
 chown -R $usuario:$usuario /home/$usuario/Activities/NotificadorVisor.activity
 echo "*"
