@@ -92,6 +92,7 @@ cp sbin/* /usr/sbin/ || die
 chmod 755 /usr/sbin/notificador-mostrar-html || die
 chmod 755 /usr/sbin/notificador-mostrar-visor || die
 chmod 755 /usr/sbin/notificador-obtener || die
+chmod 755 /usr/sbin/notificador-sugar-launcher || die
 echo "*"
 echo "*"
 echo "* DETECTO EL NOMBRE DE USUARIO ..."
@@ -162,10 +163,10 @@ echo "*"
 echo "* INSTALANDO ACTIVIDAD CEIBAL NOTIFICA"
 echo "*"
 echo "*"
-cp -r sugar/Notificador.activity /home/$usuario/Activities/
-chown -R $usuario:$usuario /home/$usuario/Activities/Notificador.activity
 cp -r sugar/NotificadorVisor.activity /home/$usuario/Activities/
 chown -R $usuario:$usuario /home/$usuario/Activities/NotificadorVisor.activity
+cp -r sugar/Notificador.activity /home/$usuario/.notifier
+chown -R $usuario:$usuario /home/$usuario/.notifier/Notificador.activity
 echo "*"
 echo "*"
 echo "*"

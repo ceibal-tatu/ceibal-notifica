@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+export SUGAR_BUNDLE_PATH=/home/ceibal/.notifier/Notificador.activity
+sugar-activity -a 1234567890 activity.Notificador

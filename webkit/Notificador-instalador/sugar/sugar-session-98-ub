@@ -341,7 +341,7 @@ def configure_mime_types():
 
 def start_ceibal_notifier():
     try:
-        os.system("/usr/bin/sugar-launch uy.edu.ceibal.Notificador &")
+        os.system("/usr/sbin/notificador-sugar-launcher &")
     except Exception:
         print "Notificador ceibal fail"
 
