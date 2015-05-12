@@ -102,6 +102,8 @@ elif id -u "estudiante" >/dev/null 2>&1;then
         usuario=estudiante
 elif id -u "olpc" >/dev/null 2>&1;then
         usuario=olpc
+elif id -u "profesor" >/dev/null 2>&1;then
+        usuario=profesor
 else 
     usuario=$SUDO_USER
 fi

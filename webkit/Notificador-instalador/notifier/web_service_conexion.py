@@ -67,7 +67,7 @@ class W_S_Conexion:
             elif valor is "":
                 registroDatosFaltantes += " - " + str(dato) + "\n"
             else:
-                datosLaptop[dato] = str.replace(datosLaptop[dato], ' ', '-')
+                datosLaptop[dato] = str.replace(datosLaptop[dato], ' ', '%20')
 
         try:
             self.url += "?cedula=" + datosLaptop["ceibal-user"] #hay que chequear que este sea el dato
