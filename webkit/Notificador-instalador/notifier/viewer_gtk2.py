@@ -28,6 +28,12 @@ class WinGtk:
     def get_VBox(self):
         return gtk.VBox()
 
+    def get_Button(self):
+        return gtk.Button()
+
+    def get_Image(self):
+        return gtk.Image()
+
 
 class VentanaBoton(VentanaBotonCommon, dbus.service.Object):
 

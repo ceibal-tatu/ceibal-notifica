@@ -56,11 +56,11 @@ class Notificador(activity.Activity, VentanaBotonCommon):
         NotificadorClient(self)
 
     def create_button(self):
-        self.button = gtk.Button()
+        self.button = winGtk.get_Button()
         self.button.connect("clicked", self.on_button_clicked)
         self.button.connect("enter", self.on_button_pointer_enter)
         self.button.connect("leave", self.on_button_pointer_leave)
-        self.image_btn = gtk.Image()
+        self.image_btn = winGtk.get_Image()
         icon_img = self.get_image_btn("out")
         self.image_btn.set_from_file(icon_img)
         self.image_btn.show()
