@@ -248,7 +248,10 @@ def get_window_size():
 def open_external_browser(uri):
     desktop = get_active_desktop()
     if desktop == "gnome":
-        subprocess.call(["xdg-open", uri])
+        if get_model_laptop() == 'XO-1.75':
+            subprocess.call(["firefox", "-url", uri])
+        else:
+            subprocess.call(["xdg-open", uri])
     elif desktop == "sugar":
         subprocess.call(["sugar-launch", "-u", uri ,"org.laptop.WebActivity"]) 
     else:
