@@ -166,6 +166,7 @@ echo "*"
 echo "*"
 cp -r sugar/NotificadorVisor.activity /home/$usuario/Activities/
 chown -R $usuario:$usuario /home/$usuario/Activities/NotificadorVisor.activity
+echo uy.edu.ceibal.NotificadorVisor >> /usr/share/sugar/data/activities.defaults
 echo "*"
 echo "*"
 echo "*"
