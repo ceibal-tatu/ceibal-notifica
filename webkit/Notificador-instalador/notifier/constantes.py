@@ -52,7 +52,8 @@ JSON_KEYS=['mensaje_id',
            'mensaje_url_boton',
            'mensaje_nombre',
            'mensaje_corto',
-           'mensaje_html',]
+           'mensaje_html',
+           'mensaje_abrir_como']
 # Traduccion de las claves para la insersion en DB.
 DIC_KEYS=['id',
           'vencimiento',
@@ -61,7 +62,8 @@ DIC_KEYS=['id',
           'titulo',
           'texto',
           'html',
-          'imagen']
+          'imagen',
+          'prioridad']
 # Lista de funciones/propridades.
 FUNCIONES_PRIORIDAD=['sin_accion',
                      'general',
@@ -79,7 +81,8 @@ CREATE TABLE IF NOT EXISTS "notifications" ("id" INTEGER NOT NULL,
 "html" TEXT DEFAULT '',
 "imagen" TEXT DEFAULT '',
 "id_local" INTEGER PRIMARY KEY, 
-"estado" TEXT DEFAULT 'unread');
+"estado" TEXT DEFAULT 'unread',
+"prioridad" INTEGER DEFAULT 2);
 """
 #-----------------------------------------------------------------------------------------
 #---------------- Constantes usadas en utilidades.py -------------------------------------

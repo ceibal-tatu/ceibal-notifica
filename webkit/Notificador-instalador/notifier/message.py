@@ -1,3 +1,5 @@
+#! /usr/bin/python
+# -*- coding:utf-8 -*-
 import json
 import os
 import datetime
@@ -56,7 +58,7 @@ class Messages:
             args = {'estado':'"unread"'}
         else:
             args = {}
-        messages = filter(self._date_valid,Messages.db.get_messages(args))
+        messages = filter(self._date_valid, Messages.db.get_messages(args))
         pos = 0
         for m in messages:
             if m['id'] == msg['id']:
@@ -65,7 +67,7 @@ class Messages:
         return pos
  
     def _get_first (self, args={}):
-        messages = filter(self._date_valid,Messages.db.get_messages(args))
+        messages = filter(self._date_valid, Messages.db.get_messages(args))
         
         if len(messages) > 0:
             return messages[0]
@@ -80,41 +82,64 @@ class Messages:
         return self._get_first(args)
    
     def _get_next(self, message, args):
+        res = None
         if message is None:
             return None
-        
-        messages = filter(self._date_valid,Messages.db.get_messages(args))
-        
+
+        messages = filter(self._date_valid, Messages.db.get_messages(args))
+        print ""
+        print "NEXT-1"
+        print ""
+        print messages
         for msg in messages:
             if msg['id_local'] > message['id_local']:
-                return msg
-        
-        return None
+                res = msg
+
+        if res is None and message['prioridad'] == 1:
+            args['prioridad'] = 2
+            messages = filter(self._date_valid, Messages.db.get_messages(args))
+            print ""
+            print "NEXT-2"
+            print ""
+            print messages
+            res = messages[0]
+        return res
+
 
     def get_next(self, message, mode):
         if mode == 'all':
-            args = {}
+            args = {'prioridad': message['prioridad']}
         else:
-            args = {'estado': '"unread"'}
-        
+            args = {'estado': '"unread"', 'prioridad': message['prioridad']}
         return self._get_next(message, args)
-    
+
+
     def _get_prev(self, message, args):
+        res = None
         if message is None:
             return None
-        messages = filter(self._date_valid,Messages.db.get_messages(args))
-        for msg in reversed(messages):
+
+        messages = filter(self._date_valid, Messages.db.get_messages(args))
+        for msg in messages:
             if msg['id_local'] < message['id_local']:
-                return msg
-        return None 
-    
+                res = msg
+
+        if res is None and message['prioridad'] == 2:
+            args['prioridad'] = 1
+            messages = filter(self._date_valid, Messages.db.get_messages(args))
+            res = messages[0]
+
+        return res
+
+
     def get_prev(self, message, mode):
         if mode == 'all':
-            args = {}
+            args = {'prioridad': message['prioridad']}
         else:
-            args = {'estado': '"unread"'}
+            args = {'estado': '"unread"', 'prioridad': message['prioridad']}
+
         return self._get_prev(message, args)
-    
+
     def is_unread(self, msg):
         return self._check_notification_is_unread(msg) 
    

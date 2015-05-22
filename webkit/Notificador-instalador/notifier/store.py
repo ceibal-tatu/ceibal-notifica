@@ -21,7 +21,17 @@ class Store:
         
         # Eliminamos todas las Notificacions que su fecha de vencimiento sea inferior a la fecha actual.
         self.db.clean_db()
-    
+
+    def _traducir_parametro(self, key, value):
+
+        if key == 'prioridad':
+            if value == 'institucional':
+                return 1
+            else:
+                return 2
+        else:
+            return value
+
     def Cargar_notificaciones(self):
         """
         @summary: Cargamos desde un archivo JSON las Notificaciones.
@@ -32,7 +42,7 @@ class Store:
         for x in xrange(int(contenido['cantidad'])):
             msgs.append({})
             for y in xrange(len(JSON_KEYS)):
-		        msgs[x][DIC_KEYS[y]]=contenido['data'][x][JSON_KEYS[y]]
+		        msgs[x][DIC_KEYS[y]]= self._traducir_parametro (DIC_KEYS[y], contenido['data'][x][JSON_KEYS[y]])
             # Insertamos la imagen por defecto de la notificacion.
             msgs[x][DIC_KEYS[y+1]]=IMAGEN_NOTOFY
 
