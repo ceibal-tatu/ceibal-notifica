@@ -69,7 +69,6 @@ class Messages:
         if len(messages) > 0:
             return messages[0]
         else:
-
             return None
 
     def get_first(self, mode='unread'):
@@ -95,6 +94,8 @@ class Messages:
         return res
 
     def get_next(self, message, mode):
+        if message is None:
+            return None
         if mode == 'all':
             args = {'prioridad': message['prioridad']}
         else:
@@ -116,6 +117,8 @@ class Messages:
         return res
 
     def get_prev(self, message, mode):
+        if message is None:
+            return None
         if mode == 'all':
             args = {'prioridad': message['prioridad']}
         else:
