@@ -43,8 +43,6 @@ class Store:
             msgs.append({})
             for y in xrange(len(JSON_KEYS)):
 		        msgs[x][DIC_KEYS[y]]= self._traducir_parametro (DIC_KEYS[y], contenido['data'][x][JSON_KEYS[y]])
-            # Insertamos la imagen por defecto de la notificacion.
-            msgs[x][DIC_KEYS[y+1]]=IMAGEN_NOTOFY
 
         # Ordeno las respuestas por fecha de vencimiento
         msgs.sort(key=lambda k: k['vencimiento'])

@@ -62,7 +62,6 @@ DIC_KEYS=['id',
           'titulo',
           'texto',
           'html',
-          'imagen',
           'prioridad']
 # Lista de funciones/propridades.
 FUNCIONES_PRIORIDAD=['sin_accion',

@@ -90,7 +90,8 @@ class Messages:
         if res is None and message['prioridad'] == 1:
             args['prioridad'] = 2
             messages = filter(self._date_valid, Messages.db.get_messages(args))
-            res = messages[0]
+            if len(messages) > 0:
+                res = messages[0]
         return res
 
     def get_next(self, message, mode):
@@ -113,7 +114,8 @@ class Messages:
         if res is None and message['prioridad'] == 2:
             args['prioridad'] = 1
             messages = filter(self._date_valid, Messages.db.get_messages(args))
-            res = messages[0]
+            if len(messages) > 0:
+                res = messages[0]
         return res
 
     def get_prev(self, message, mode):
