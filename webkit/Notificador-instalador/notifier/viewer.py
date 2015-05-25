@@ -3,9 +3,6 @@
 import os
 import subprocess
 import urlparse
-import dbus, dbus.service
-from dbus.mainloop.glib import DBusGMainLoop
-
 
 from ceibal.notifier  import env
 from ceibal.notifier.notificador_obtener import *
@@ -15,7 +12,6 @@ from ceibal.notifier.constantes import *
 
 
 import threading
-
 
 
 class VentanaBotonCommon:

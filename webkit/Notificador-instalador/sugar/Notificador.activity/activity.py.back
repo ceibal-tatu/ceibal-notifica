@@ -1,0 +1,175 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
+import os
+import logging
+
+from ceibal.notifier.message import *
+from ceibal.notifier import env
+
+logging.basicConfig(level=logging.DEBUG)
+_logger = logging.getLogger(__name__)
+
+os.environ['SUGAR_ACTIVITY_ROOT'] = os.getcwd() + "/"
+
+
+from ceibal.notifier.viewer_gtk3 import *
+from sugar3.activity import activity
+import gio
+
+winGtk = WinGtk()
+
+class Notificador(activity.Activity):
+
+    icons_over={0: 'not_0hover.png',
+                1: 'not_1hover.png',
+                2: 'not_2hover.png',
+                3: 'not_3hover.png',
+                4: 'not_4hover.png',
+                5: 'not_5hover.png',
+                6: 'not_6hover.png',
+                7: 'not_7hover.png',
+                8: 'not_8hover.png',
+                9: 'not_9hover.png',
+                10: 'not_10hover.png',
+                11: 'not_10mashover.png'}
+
+    icons_out ={0: 'not_0.png',
+                1: 'not_1.png',
+                2: 'not_2.png',
+                3: 'not_3.png',
+                4: 'not_4.png',
+                5: 'not_5.png',
+                6: 'not_6.png',
+                7: 'not_7.png',
+                8: 'not_8.png',
+                9: 'not_9.png',
+                10: 'not_10.png',
+                11: 'not_10mas.png'}
+
+
+
+
+    def __init__(self, handle):
+        _logger.debug('Start NotificadorActivity')
+        # Evita modificaciones de Sugar en el gtk.Window
+        os.environ.pop('SUGAR_ACTIVITY_ROOT')
+
+        activity.Activity.__init__(self,handle)
+        self.message_mgr = Messages()
+        self.mode = 'boton'
+        self.visor = None
+        self.win = self
+
+        DbWatcher(self)
+
+        # Monitoreo cambios en la db
+        # if find_module('gtk') and find_module('webkit'):
+        #     gfile = gio.File(os.path.join(env.get_data_root(), DB_FILE))
+        #     monitor = gfile.monitor(gio.FILE_MONITOR_NONE)
+        # else:
+        #     gfile = Gio.File.new_for_path(os.path.join(env.get_data_root(), DB_FILE))
+        #     monitor = gfile.monitor(Gio.FileMonitorFlags.NONE)
+
+
+        # Evita que aparezca en la lista de ventanas
+        self.set_skip_taskbar_hint(True)
+        self.set_decorated(False)
+        self.set_accept_focus(False)
+        self.box = winGtk.get_VBox()
+        self.create_button()
+        self.set_canvas(self.box)
+        self.resize(60, 80)
+        self.box.show()
+        self.show_all()
+        (pos_h, pos_v) = get_window_pos(winGtk.get_screen_with() - self.get_size()[0])
+        self.move(pos_h, pos_v)
+
+    def create_button(self):
+        self.button = winGtk.get_button()
+        self.button.connect("clicked", self.on_button_clicked)
+        self.button.connect("enter", self.on_button_pointer_enter)
+        self.button.connect("leave", self.on_button_pointer_leave)
+        self.image_btn = winGtk.get_image()
+        icon_img = self.get_image_btn("out")
+        self.image_btn.set_from_file(icon_img)
+        self.image_btn.show()
+        self.button.add(self.image_btn)
+        self.box.pack_start(self.button, True, True, 0)
+
+    def on_button_clicked(self, widget):
+        self.visor = Visor(self)
+
+    def update(self,monitor, file1, file2, evt_type):
+        file_changed = False
+
+        if evt_type in (gio.FILE_MONITOR_EVENT_CHANGED,):
+            file_changed = True
+
+        if file_changed:
+            icon_img = self.get_image_btn("out")
+            self.refresh_button (icon_img)
+            if self.visor is not None:
+                self.visor.html_viewer.refresh_tool_bar()
+
+    def get_icon_path(self, icon):
+        LISTA = ['MG1', 'MG2', 'MG3', 'MG4', 'Magallanes2', 'Magallanes 2']
+
+        if(filter(lambda x: x == get_model_laptop(), LISTA) != []):
+            icon_path = os.path.join(env.get_images_root(), 'MG.1-4',icon)
+        else:
+            icon_path = os.path.join(env.get_images_root(), icon)
+
+        print "file imagen del boton: " +  icon_path
+        return icon_path
+
+    def get_image_btn(self, mouse_pinter):
+        if mouse_pinter == "over":
+            icons = Notificador.icons_over
+        else:
+            icons = Notificador.icons_out
+
+        total = self.message_mgr.get_total('unread')
+        if total < len(icons)-1:
+            idx = total
+        else:
+            idx = len(icons)-1
+        return self.get_icon_path(icons[idx])
+
+    def on_button_pointer_enter(self, widget):
+        print "mouse pointer enter detected ..."
+        icon_img = self.get_image_btn("over")
+        self.refresh_button (icon_img)
+
+    def on_button_pointer_leave(self, widget):
+        print "mouse pointer exit detected ..."
+        icon_img = self.get_image_btn("out")
+        self.refresh_button (icon_img)
+
+    def refresh_button(self, icon_img):
+        self.image_btn.set_from_file(icon_img)
+        self.image_btn.show()
+        self.win.show_all()
+
+    def custom_close(self):
+        if self.mode == 'visor':
+            self.win.destroy()
+            self.bye()
+        else:
+            if self.message_mgr.get_total('unread') > 0:
+                icon_img = self.get_image_btn("out")
+                self.refresh_button(icon_img)
+            else:
+                self.win.hide()
+
+class DbWatcher():
+
+    def __init__(self, boton):
+        gfile = gio.File(os.path.join(env.get_data_root(), DB_FILE))
+        monitor = gfile.monitor(gio.FILE_MONITOR_NONE)
+        #gfile = Gio.File.new_for_path(env.get_data_root())
+        #monitor = gfile.monitor_directory(flags=Gio.FileMonitorFlags.NONE, cancellable=None)
+        monitor.connect("changed", boton.update)
+
+
+

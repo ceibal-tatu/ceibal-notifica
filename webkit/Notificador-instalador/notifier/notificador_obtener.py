@@ -20,9 +20,6 @@ from ceibal.notifier import env as notif_env
 from ceibal import env
 from ceibal import util
 
-import dbus
-from dbus.mainloop.glib import DBusGMainLoop
-
 
 gobject.threads_init()
 
@@ -55,8 +52,6 @@ class NotificadorObtener:
 
         self._logger.debug("Inicio proceso de obtencion de notificaciones ...")
 
-        self.dbus_client = DBusClient()
-
         self._updated_today = os.path.join(WORK_DIR, "notihoy")
 
         if self.already_checked_for_noti(onDemand):
@@ -85,9 +80,6 @@ class NotificadorObtener:
             respuesta = web.Obtener_notificaciones(False)
 
             if respuesta is not None:
-
-                self.dbus_client.send_update()
-
                 self._logger.info('La respuesta del servidor es: ' + json.dumps(respuesta))
 
                 if respuesta["datos-faltantes"] is not None:
@@ -202,25 +194,6 @@ class NotificadorObtener:
             f.close()
 
         os.chmod(NOTIHOY, 0666)
-
-
-class DBusClient(object):
-    def __init__(self):
-        # Do before session or system bus is created.
-        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-        self.bus = dbus.SessionBus()
-        self.service_found = False
-
-        try:
-            self.proxy = self.bus.get_object('edu.ceibal.NotificadorService', '/Update')
-            self.control_interface = dbus.Interface(self.proxy, 'edu.ceibal.UpdateInterface')
-            self.service_found = True
-        except Exception:
-            print "No se encuentra el servicio"
-
-    def send_update(self):
-        if self.service_found:
-            self.control_interface.update()
 
 
 #############################################################

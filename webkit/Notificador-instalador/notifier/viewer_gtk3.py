@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
-from gi.repository import Gtk, Gdk, GdkPixbuf, WebKit
+from gi.repository import Gtk, Gdk, GdkPixbuf, WebKit, Gio
 import os
 import urlparse
 
@@ -26,16 +26,26 @@ class WinGtk:
     def get_VBox(self):
         return Gtk.VBox()
 
+    def get_button(self):
+        return Gtk.Button()
 
-class VentanaBoton(VentanaBotonCommon, dbus.service.Object):
+    def get_image(self):
+        return Gtk.Image()
 
-    def __init__(self, bus, path, mode='boton'):
+class VentanaBoton(VentanaBotonCommon):
+
+    def __init__(self, mode='boton'):
         self.visor = None
         self.mode = mode
         VentanaBotonCommon.__init__(self)
-        dbus.service.Object.__init__(self, bus, path)
         self.win = Gtk.Window(title="Notificador de novedades Ceibal")
-        #self.win = VentanaBotonWindow(self)
+
+        # Monitoreo cambios en la db
+        gfile = Gio.File(os.path.join(env.get_data_root(), DB_FILE))
+        monitor = gfile.monitor(Gio.FileMonitorFlags.NONE)
+        monitor.connect("changed", self.update)
+
+
         #Evita que aparezca en la lista de ventanas
         self.win.set_skip_taskbar_hint(True)
         self.win.set_decorated(False)
@@ -54,14 +64,6 @@ class VentanaBoton(VentanaBotonCommon, dbus.service.Object):
             else:
                 print "En modo boton: no hay notificaciones sin leer"
         self.main()
-
-    @dbus.service.method('edu.ceibal.UpdateInterface',in_signature='', out_signature='')
-    def update(self):
-        print "Update signal received"
-        icon_img = self.get_image_btn("out")
-        self.refresh_button (icon_img)
-        if self.visor is not None:
-            self.visor.html_viewer.refresh_tool_bar()
 
     def create_button(self):
         self.button = Gtk.Button()
@@ -86,7 +88,14 @@ class VentanaBoton(VentanaBotonCommon, dbus.service.Object):
         if event.button == 2 or event.button == 3:
             self.win.begin_move_drag(event.button, int(event.x_root), int(event.y_root), event.time)
         return True
-    
+
+    def update(self,monitor, file1, file2, evt_type):
+        if evt_type in (Gio.FileMonitorEvents.CHANGED,):
+            icon_img = self.get_image_btn("out")
+            self.refresh_button (icon_img)
+            if self.visor is not None:
+                self.visor.html_viewer.refresh_tool_bar()
+
     def bye(self):
         Gtk.main_quit()
 

@@ -25,6 +25,8 @@ else:
     from ceibal.notifier.viewer_gtk3 import *
     from sugar3.activity import activity
 
+import gio
+
 winGtk = WinGtk()
 
 class Notificador(activity.Activity, VentanaBotonCommon):
@@ -53,14 +55,14 @@ class Notificador(activity.Activity, VentanaBotonCommon):
         self.show_all()
         (pos_h, pos_v) = get_window_pos(winGtk.get_screen_with() - self.get_size()[0])
         self.move(pos_h, pos_v)
-        NotificadorClient(self)
+        DbWatcher(self)
 
     def create_button(self):
-        self.button = gtk.Button()
+        self.button = winGtk.get_button()
         self.button.connect("clicked", self.on_button_clicked)
         self.button.connect("enter", self.on_button_pointer_enter)
         self.button.connect("leave", self.on_button_pointer_leave)
-        self.image_btn = gtk.Image()
+        self.image_btn = winGtk.get_image()
         icon_img = self.get_image_btn("out")
         self.image_btn.set_from_file(icon_img)
         self.image_btn.show()
@@ -70,23 +72,21 @@ class Notificador(activity.Activity, VentanaBotonCommon):
     def on_button_clicked(self, widget):
         self.visor = Visor(self)
 
-    def update(self):
-        print "Update signal received"
-        icon_img = self.get_image_btn("out")
-        self.refresh_button (icon_img)
-        if self.visor is not None:
-            self.visor.html_viewer.refresh_tool_bar()
+    def update(self,monitor, file1, file2, evt_type):
+        file_changed = False
+        if evt_type in (gio.FILE_MONITOR_EVENT_CHANGED,):
+            file_changed = True
+        if file_changed:
+            icon_img = self.get_image_btn("out")
+            self.refresh_button (icon_img)
+            if self.visor is not None:
+                self.visor.html_viewer.refresh_tool_bar()
 
 
-class NotificadorClient(dbus.service.Object):
 
-    def __init__(self, act):
-        self.activity = act
-        # Start DBus Service
-        session_bus = dbus.SessionBus()
-        dbus.service.BusName("edu.ceibal.NotificadorService", session_bus)
-        dbus.service.Object.__init__(self, session_bus, '/Update')
+class DbWatcher():
 
-    @dbus.service.method('edu.ceibal.UpdateInterface',in_signature='', out_signature='')
-    def update(self):
-        self.activity.update()
+    def __init__(self, boton):
+        gfile = gio.File(os.path.join(env.get_data_root(), DB_FILE))
+        monitor = gfile.monitor(gio.FILE_MONITOR_NONE)
+        monitor.connect("changed", boton.update)

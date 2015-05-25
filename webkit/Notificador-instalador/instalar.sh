@@ -70,16 +70,25 @@ else
 
     if [ "$SUGAR_VERSION" = "94"  ]; then
         cp sugar/sugar-session-94-f14 /usr/bin/sugar-session || die
+        cp sugar/activitieslist-94-f14.py /usr/lib/python2.7/site-packages/jarabe/desktop/sugaractivitieslist.py || die
+
     elif [ "$SUGAR_VERSION" = "94" -a "$SO" = "Ubuntu" ]; then
         cp sugar/sugar-session-94-ub /opt/sweets/sugar/bin/sugar-session || die
+
     elif [ "$SUGAR_VERSION" = "98" -a "$SO" = "Fedora" ]; then
         cp sugar/sugar-session-98-f18 /usr/bin/sugar-session || die
         cp sugar/shell-98-f18.py /usr/lib/python2.7/site-packages/jarabe/model/shell.py || die
+        cp sugar/activitieslist-98-f18.py /usr/lib/python2.7/site-packages/jarabe/desktop/sugaractivitieslist.py || die
+
     elif [ "$SUGAR_VERSION" = "98" -a "$SO" = "Ubuntu" ]; then
         cp sugar/sugar-session-98-ub /usr/bin/sugar-session || die
         cp sugar/shell-98-ub12.py /usr/lib/python2.7/dist-packages/jarabe/model/shell.py || die
+        cp sugar/activitieslist-98-ub.py /usr/lib/python2.7/dist-packages/jarabe/desktop/sugaractivitieslist.py || die
+
     elif [ "$SUGAR_VERSION" = "104" ]; then
         cp sugar/main-104-f20.py /usr/lib/python2.7/site-packages/jarabe/main.py || die
+        cp sugar/activitieslist-104-f20.py /usr/lib/python2.7/site-packages/jarabe/desktop/sugaractivitieslist.py || die
+
     else
         echo "* No hay actualizacion disponible para esta version de Sugar"
     fi
@@ -169,6 +178,11 @@ chown -R $usuario:$usuario /home/$usuario/Activities/NotificadorVisor.activity
 echo uy.edu.ceibal.NotificadorVisor >> /usr/share/sugar/data/activities.defaults
 echo "*"
 echo "*"
+echo "* INSTALANDO ACTIVIDAD NOTIFICADOR"
+echo "*"
+echo "*"
+cp -r sugar/Notificador.activity /home/$usuario/Activities/
+chown -R $usuario:$usuario /home/$usuario/Activities/Notificador.activity
 echo "*"
 echo "*"
 echo "*****************************************************************************"

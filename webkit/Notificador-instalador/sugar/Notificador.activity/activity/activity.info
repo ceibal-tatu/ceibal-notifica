@@ -4,6 +4,7 @@ activity_version = 2.0
 bundle_id = uy.edu.ceibal.Notificador
 exec = sugar-activity activity.Notificador
 icon = ceibal-notifica
+show_launcher = no
 license = GPLv2+
 
 
