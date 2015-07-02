@@ -52,7 +52,6 @@ NOTIF_IMG_BTN = 'boton_notificaciones.png'
 JSON_KEYS=['mensaje_id',
            'mensaje_vencimiento',
            'mensaje_abrir_como',
-           'mensaje_url_boton',
            'mensaje_nombre',
            'mensaje_corto',
            'mensaje_html',
