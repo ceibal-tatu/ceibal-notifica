@@ -19,7 +19,7 @@ html =[
 {'id':'12',  'txt': "<html><header><body>texto del mensaje 12...</body></header></html>"}
 ]
 
-"""                         ID   VENCIMIENTO  FUNCION     ACCION                       TITULO          TEXTO               TEXTO_HTML  IMAGEN """
+"""                         ID   VENCIMIENTO  FUNCION          TITULO          TEXTO               TEXTO_HTML  IMAGEN """
 idx=1
 for h in html:
     if idx >= 2 and idx <= 4:
