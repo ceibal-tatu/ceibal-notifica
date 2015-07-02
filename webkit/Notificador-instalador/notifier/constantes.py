@@ -7,6 +7,9 @@
 # Actualmente se guardan en una base de datos sqlite3 y los archivos vienen en json
 #-----------------------------------------------------------------------------------
 
+# Version de la aplicacion
+VERSION="1.0"
+
 # Archivo JSON donde estan las notificaciones al descargarlas del Web-Service.
 TMP_JSON="/tmp/notify_json"
 
