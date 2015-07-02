@@ -13,7 +13,8 @@ import urllib
 import json
 from ceibal.notifier.store import Store
 from ceibal.notifier.utilidades import *
-from ceibal.notifier.constantes import TMP_JSON,JSON_KEYS,DIC_KEYS,IMAGEN_NOTOFY,WEB_SERVICE_URL,ALERTA_SN,ALERTA_ERROR
+from ceibal.notifier.constantes import TMP_JSON,JSON_KEYS,DIC_KEYS,IMAGEN_NOTOFY,WEB_SERVICE_URL,ALERTA_SN,ALERTA_ERROR,VERSION
+
 
 class W_S_Conexion:
     def __init__(self, url):
@@ -41,6 +42,8 @@ class W_S_Conexion:
         '''
         @summary: Conecta los parametros a la URL de la conexion al Web Service.
         '''
+        program_version = VERSION
+
         from ceibalmipc.laptops.laptopFactory import LaptopFactory
 
         l = LaptopFactory().get_laptop()
@@ -55,6 +58,8 @@ class W_S_Conexion:
             "boot-count-bloqueo": str(l.get_boot_count_bloqueo()),
             "last-update": str(l.get_last_update()),
             "free-space-porc": str(l.get_free_space_porc()),
+            "version": program_version,
+            "installed-update": str(l.get_date_installed_update()),
             "last-update-especial": str(l.get_last_update_especial())
         }
 
@@ -70,7 +75,7 @@ class W_S_Conexion:
                 datosLaptop[dato] = str.replace(datosLaptop[dato], ' ', '%20')
 
         try:
-            self.url += "?cedula=" + datosLaptop["ceibal-user"] #hay que chequear que este sea el dato
+            self.url += "?cedula=" + datosLaptop["ceibal-user"]
             self.url += "&serie=" + datosLaptop["id"]
             self.url += "&modelo=" + datosLaptop["model"]
             self.url += "&imagen=" + datosLaptop["build"]
@@ -80,6 +85,8 @@ class W_S_Conexion:
             self.url += "&boot_count_bloqueo=" + datosLaptop["boot-count-bloqueo"]
             self.url += "&ult_actualizacion=" + datosLaptop["last-update"]
             self.url += "&espacio_libre=" + datosLaptop["free-space-porc"]
+            self.url += "&version=" + datosLaptop["version"]
+            self.url += "&installed_update=" + datosLaptop["installed-update"]
             self.url += "&datos_extra=" + urllib.quote_plus(json.dumps({'last_update_especial': datosLaptop["last-update-especial"]}))
         except:
             notificacion(ALERTA_ERROR)
