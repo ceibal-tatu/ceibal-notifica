@@ -138,4 +138,4 @@ if __name__ == "__main__":
         base.add_message(DIC_KEYS, [sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5],sys.argv[6],sys.argv[7],"/etc/notifier/images/planceibal.png"])
     else:
         print "Error!"
-        print "El orden de los parametros: ID VENCIMIENTO FUNCION ACCION TITULO TEXTO TEXTO_HTML"
+        print "El orden de los parametros: ID VENCIMIENTO FUNCION TITULO TEXTO TEXTO_HTML"

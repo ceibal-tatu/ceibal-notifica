@@ -74,7 +74,6 @@ INIT_DB = """
 CREATE TABLE IF NOT EXISTS "notifications" ("id" INTEGER NOT NULL,
 "vencimiento" DATE NOT NULL DEFAULT CURRENT_DATE,
 "funcion" TEXT DEFAULT '',
-"accion" TEXT DEFAULT '',
 "titulo" TEXT NOT NULL DEFAULT '',
 "texto" TEXT NOT NULL DEFAULT '',
 "html" TEXT DEFAULT '',
