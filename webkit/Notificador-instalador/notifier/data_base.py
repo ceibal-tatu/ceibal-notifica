@@ -82,7 +82,7 @@ class Db:
         c = con.cursor()
         c.execute('BEGIN TRANSACTION')
         try:
-            c.execute('insert into notifications ({0[0]},{0[1]},{0[2]},{0[3]},{0[4]},{0[5]},{0[6]}) values (date("{1[0]})","{1[1]}","{1[2]}","{1[3]}","{1[4]}","{1[5]}","{1[6]}")'.format(keys,values))
+            c.execute('insert into notifications ({0[0]},{0[1]},{0[2]},{0[3]},{0[4]},{0[5]},{0[6]}) values (date("{1[0]}"),"{1[1]}","{1[2]}","{1[3]}","{1[4]}","{1[5]}","{1[6]}")'.format(keys,values))
         except sqlite3.IntegrityError, e:
             try:
                 c.execute('update notifications SET {0[1]}=date("{1[1]}"), {0[2]}="{1[2]}", {0[3]}="{1[3]}", {0[4]}="{1[4]}", {0[5]}="{1[5]}", {0[7]}="{1[7]}" WHERE id="{1[6]}";'.format(keys,values))
