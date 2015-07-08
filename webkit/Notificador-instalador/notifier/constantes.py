@@ -8,7 +8,7 @@
 #-----------------------------------------------------------------------------------
 
 # Version de la aplicacion
-VERSION="1.0"
+VERSION="2.2"
 
 # Archivo JSON donde estan las notificaciones al descargarlas del Web-Service.
 TMP_JSON="/tmp/notify_json"
