@@ -7,4 +7,3 @@ Terminal=false
 Type=Application
 Icon=/usr/share/CeibalNotifica/Iconos/ceibal-notifica.png
 Categories=GNOME;GTK;Utility
-StartupNotify=true

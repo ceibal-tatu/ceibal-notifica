@@ -5,7 +5,8 @@ import subprocess
 import urlparse
 import dbus, dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
-
+import fcntl
+import stat
 
 from ceibal.notifier  import env
 from ceibal.notifier.notificador_obtener import *
@@ -48,7 +49,20 @@ class VentanaBotonCommon:
 
     def __init__(self):
         self.message_mgr = Messages()
-
+        lf_flags = os.O_WRONLY | os.O_CREAT
+        lf_mode = stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH
+        pid_file = os.path.join(env.get_work_dir(), "notificador.pid") 
+        umask_original = os.umask(0)
+        try:
+            fp = os.open(pid_file, lf_flags, lf_mode)
+        finally:
+            os.umask(umask_original)
+        try:
+            fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except IOError:
+            # another instance is running
+            sys.exit(0)    
+    
     def get_icon_path(self, icon):
         LISTA = ['MG1', 'MG2', 'MG3', 'MG4', 'Magallanes2', 'Magallanes 2']
 
