@@ -47,15 +47,12 @@ class NotificadorObtener:
 
         # Realiza el chequeo de los directorios necesarios para la ejecucion
         self.chk_env()
-
-        if not onDemand and self.already_checked_for_noti(onDemand):
-            self.__set_logger('a')
-        else:
-            self.__set_logger('w')
-
+        
+        self.__set_logger(onDemand)
+        
         self._logger.debug("Inicio proceso de obtencion de notificaciones ...")
 
-        self.dbus_client = DBusClient()
+        self.dbus_client = DBusClient(self._logger)
 
         self._updated_today = os.path.join(WORK_DIR, "notihoy")
 
@@ -85,8 +82,6 @@ class NotificadorObtener:
             respuesta = web.Obtener_notificaciones(False)
 
             if respuesta is not None:
-
-                self.dbus_client.send_update()
 
                 self._logger.info('La respuesta del servidor es: ' + json.dumps(respuesta))
 
@@ -122,8 +117,9 @@ class NotificadorObtener:
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             self._logger.info(str(exc_type) + ' ' + str(fname) + ' ' + str(exc_tb.tb_lineno))
             self._logger.info('Hubo un error en el proceso de obtencion de notificaciones: ' + str(exc))
-            exit()
-
+       
+        self.dbus_client.send_update()
+        exit()
 
     def __set_update_today(self, frecuencia_obtener):
         '''
@@ -143,8 +139,8 @@ class NotificadorObtener:
 
     def already_checked_for_noti(self, onDemand):
         '''
-            Retorna True si ya se actualizo hoy
-            '''
+        Retorna True si ya se actualizo hoy
+        '''
         retorno = False
 
         try:
@@ -167,11 +163,14 @@ class NotificadorObtener:
         return retorno
 
 
-    def __set_logger(self, mode):
-        FILE_LOG = os.path.join(WORK_DIR, 'notificador.log')
+    def __set_logger(self, onDemand):
+        if onDemand:
+            FILE_LOG = os.path.join(WORK_DIR, 'notificador_ondemand.log')
+        else:    
+            FILE_LOG = os.path.join(WORK_DIR, 'notificador.log')
 
         # create a file handler
-        handler = logging.FileHandler(FILE_LOG, mode)
+        handler = logging.FileHandler(FILE_LOG, 'w')
         handler.setLevel(logging.DEBUG)
 
         # create a logging format
@@ -205,23 +204,41 @@ class NotificadorObtener:
 
 
 class DBusClient(object):
-    def __init__(self):
+    def __init__(self, logger):
         # Do before session or system bus is created.
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         self.bus = dbus.SessionBus()
         self.service_found = False
+        self.logger = logger
 
         try:
             self.proxy = self.bus.get_object('edu.ceibal.NotificadorService', '/Update')
-            self.control_interface = dbus.Interface(self.proxy, 'edu.ceibal.UpdateInterface')
             self.service_found = True
         except Exception:
-            print "No se encuentra el servicio"
+            self.logger.warning("No se encuentra el servicio")
 
     def send_update(self):
+        self.logger.info("Sending update to visor")
         if self.service_found:
-            self.control_interface.update()
+            self.proxy.update(dbus_interface='edu.ceibal.UpdateInterface',
+                              reply_handler=self.handler_reply,
+                              error_handler=self.handler_error)
+            iface = dbus.Interface(self.proxy, 'edu.ceibal.UpdateInterface')
+            iface.RaiseException(reply_handler=self.handler_raise_reply,
+                                 error_handler=self.handler_raise_error) 
+        return False   
 
+    def handler_reply(self):
+        self.logger.info("handle reply")
+    
+    def handler_error(self):
+        self.logger.info("handle error")
+    
+    def handler_raise_reply(self, e):
+        self.logger.error("Raise reply")
+    
+    def handler_raise_error(self,e ):
+        self.logger.error("Raise error")
 
 #############################################################
 # main

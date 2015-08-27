@@ -62,6 +62,7 @@ class VentanaBoton(VentanaBotonCommon, dbus.service.Object):
         self.refresh_button (icon_img)
         if self.visor is not None:
             self.visor.html_viewer.refresh_tool_bar()
+            self.visor.tool_bar.get_notif.set_sensitive(True)
 
     def create_button(self):
         self.button = Gtk.Button()
@@ -79,7 +80,7 @@ class VentanaBoton(VentanaBotonCommon, dbus.service.Object):
     
     def on_button_clicked(self, widget, event):
         if event.button == 1:
-            Visor(self)
+            self.visor = Visor(self)
         return True
 
     def on_button_press(self, widget, event):

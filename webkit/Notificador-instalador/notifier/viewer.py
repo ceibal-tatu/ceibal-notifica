@@ -237,6 +237,7 @@ class ToolBarCommon:
         print("Getting new notifications ... ")
         self.invoque_thread = threading.Thread(target = NotificadorObtener,
                                                kwargs={"onDemand":True,"cb":self.arrive_new_notifications})
+        widget.set_sensitive(False)
         self.invoque_thread.start()
 
 
