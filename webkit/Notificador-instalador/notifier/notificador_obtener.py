@@ -89,7 +89,7 @@ class NotificadorObtener:
                     self._logger.info(respuesta["datos-faltantes"])
 
                 if "error" in respuesta["respuesta-servidor"]:
-                    self._logger.info('Se encontro un error al llamar el servicio: ' + str(respuesta["respuesta-servidor"]["error"]))
+                    self._logger.error('Se encontro un error al llamar el servicio: ' + str(respuesta["respuesta-servidor"]["error"]))
                     exit()
 
                 frecuencia_obtener = respuesta['respuesta-servidor']['turno']
@@ -108,7 +108,7 @@ class NotificadorObtener:
 
                 os.system(comando)
 
-                self._logger.info('- Se termino el proceso de obtener notificaciones. Saliendo...')
+                self._logger.info('- Se termino el proceso de obtener notificaciones.')
             else:
                 self._logger.info('No se encuentra la respuesta del servidor en el archivo: notify_json')
 
@@ -119,7 +119,8 @@ class NotificadorObtener:
             self._logger.info('Hubo un error en el proceso de obtencion de notificaciones: ' + str(exc))
        
         self.dbus_client.send_update()
-        exit()
+        self._logger.info('Fin.')
+        
 
     def __set_update_today(self, frecuencia_obtener):
         '''
@@ -218,8 +219,9 @@ class DBusClient(object):
             self.logger.warning("No se encuentra el servicio")
 
     def send_update(self):
-        self.logger.info("Sending update to visor")
+        self.logger.info("Update to visor")
         if self.service_found:
+            self.logger.info("Service found sending ...")
             self.proxy.update(dbus_interface='edu.ceibal.UpdateInterface',
                               reply_handler=self.handler_reply,
                               error_handler=self.handler_error)

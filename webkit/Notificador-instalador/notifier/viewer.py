@@ -7,6 +7,7 @@ import dbus, dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 import fcntl
 import stat
+import gio
 
 from ceibal.notifier  import env
 from ceibal.notifier.notificador_obtener import *
@@ -62,6 +63,20 @@ class VentanaBotonCommon:
         except IOError:
             # another instance is running
             sys.exit(0)    
+        
+        gfile = gio.File(os.path.join(env.get_data_root(), DB_FILE))
+        monitor = gfile.monitor(gio.FILE_MONITOR_NONE)
+        monitor.connect("changed", self.db_update)
+
+    def db_update(self,monitor, file1, file2, evt_type):
+        print "DB changed"
+        if evt_type in (gio.FILE_MONITOR_EVENT_CHANGED,):
+            icon_img = self.get_image_btn("out")
+            self.refresh_button (icon_img)
+            if self.visor is not None:
+                print "Refreshing toolbar"
+                self.visor.html_viewer.refresh_tool_bar()
+                self.visor.tool_bar.get_notif.set_sensitive(True)
     
     def get_icon_path(self, icon):
         LISTA = ['MG1', 'MG2', 'MG3', 'MG4', 'Magallanes2', 'Magallanes 2']

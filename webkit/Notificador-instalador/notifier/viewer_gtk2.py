@@ -62,6 +62,7 @@ class VentanaBoton(VentanaBotonCommon, dbus.service.Object):
         icon_img = self.get_image_btn("out")
         self.refresh_button (icon_img)
         if self.visor is not None:
+            print "Refreshing toolbar"
             self.visor.html_viewer.refresh_tool_bar()
             self.visor.tool_bar.get_notif.set_sensitive(True)
 
