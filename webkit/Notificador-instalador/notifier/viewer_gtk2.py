@@ -191,7 +191,7 @@ class ToolBar(ToolBarCommon):
         self.get_notif = gtk.ToolButton(gtk.STOCK_REFRESH)
         self.get_notif.connect("clicked", self.on_get_notif_clicked)
 
-        self.about = gtk.ToolButton(gtk.STOCK_ABOUT)
+        self.about = gtk.ToolButton(gtk.STOCK_INFO)
         self.about.connect("clicked", self.on_about_clicked)
 
         sep = gtk.SeparatorToolItem()
